@@ -1,0 +1,13 @@
+{
+  "name": "asi-group-btp",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . ASI_GROUP --platform=win32 --arch=x64 --out=dist --overwrite"
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-packager": "^17.1.1"
+  }
+}

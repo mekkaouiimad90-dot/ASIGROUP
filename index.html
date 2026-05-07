@@ -972,6 +972,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:var(--b50)}
 </div>
 <div id="nav-projets" class="NI" onclick="go('projets')"><svg class="NIC" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>Projets</div>
 <div id="nav-realises" style="display:none"></div>
+<div id="nav-classement" class="NI" onclick="go('classement')"><svg class="NIC" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 14V8l4-4 4 4V14"/><path d="M6 14v-4h4v4"/><path d="M8 4V2"/><circle cx="13" cy="5" r="2"/><path d="M13 7v7"/></svg>Classement Concurrents</div>
 <div class="SSC" id="ssc-commerce">Commerce</div>
 <div id="nav-factures" class="NI" onclick="go('factures')"><svg class="NIC" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/><path d="M5 8h6M5 11h4"/></svg>Factures</div>
 <div id="nav-bc" class="NI" onclick="go('bc')"><svg class="NIC" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2h10l1 2H2L3 2z"/><rect x="2" y="4" width="12" height="9" rx="1"/><path d="M5 8h6M5 11h4"/></svg>Bons de commande</div>
@@ -2246,7 +2247,7 @@ function updNav(){
     "nav-clients":"clients","nav-materiels":"materiels","nav-vehicules":"vehicules",
     "nav-pointage_ouvriers":"pointage_ouvriers","nav-depenses":"depenses",
     "nav-societe":"societe","nav-users":"users",
-    "nav-contact":"contact","nav-stockage":"stockage"
+    "nav-contact":"contact","nav-stockage":"stockage","nav-classement":"classement"
   };
   var acc=_getAccess(CU);
   Object.keys(navMap).forEach(function(navId){
@@ -2272,7 +2273,7 @@ function updNav(){
   if(stb)stb.style.display=(CU.role==="admin"||acc.indexOf("stockage")>=0)?"flex":"none";
   /* Masquer les titres de groupe si aucun sous-élément n'est visible */
   var _groups={
-    "ssc-principal":["nav-accueil","nav-alertes","nav-projets","nav-realises"],
+    "ssc-principal":["nav-accueil","nav-alertes","nav-projets","nav-realises","nav-classement"],
     "ssc-commerce":["nav-factures","nav-bc","nav-bl","nav-reglement","nav-clients"],
     "ssc-equipement":["nav-materiels","nav-vehicules","nav-pointage_ouvriers","nav-depenses"],
     "ssc-administration":["nav-societe","nav-users","nav-contact","nav-stockage"]
@@ -2319,7 +2320,7 @@ function go(p){
       return;
     }
   }
-  var ps={accueil:pgHome,projets:function(){pgProjUnified('en_cours');},realises:function(){pgProjUnified('acheve');},bc:pgBC,bl:pgBL,factures:pgFact,clients:pgCli,societe:pgSoc,users:pgUsers,contact:pgCont,materiels:pgMat,vehicules:pgMatVeh,stockage:pgStorage,pointage_ouvriers:pgPointageOuvriers,depenses:pgDepensesGlobales,alertes:pgAlertes,reglement:pgReglement};
+  var ps={accueil:pgHome,classement:pgClassement,projets:function(){pgProjUnified('en_cours');},realises:function(){pgProjUnified('acheve');},bc:pgBC,bl:pgBL,factures:pgFact,clients:pgCli,societe:pgSoc,users:pgUsers,contact:pgCont,materiels:pgMat,vehicules:pgMatVeh,stockage:pgStorage,pointage_ouvriers:pgPointageOuvriers,depenses:pgDepensesGlobales,alertes:pgAlertes,reglement:pgReglement};
   if(ps[p])ps[p]();
 }
 function setC(h){
@@ -14002,6 +14003,1197 @@ var _origSetC=typeof setC==='function'?setC:null;
   document.addEventListener('DOMContentLoaded',function(){setTimeout(_initCDToggles,300);});
   setTimeout(_initCDToggles,800);
 })();
+
+
+function pgClassement(){
+  setC('<div id="cc-page-wrap"></div>');
+  setTimeout(function(){
+    var wrap = document.getElementById('cc-page-wrap');
+    if(!wrap) return;
+    if(!document.getElementById('cc-styles')){
+      var st = document.createElement('style');
+      st.id = 'cc-styles';
+      st.textContent = "\n  :root {\n    --navy: #0D2240; --navy-mid: #1A3A5C; --navy-light: #2A5180;\n    --gold: #C9922A; --gold-light: #E8B84B; --gold-pale: #FDF3E0;\n    --green: #1A6B3A; --red: #8B1A1A; --red-light: #FDEAEA;\n    --bg: #F5F7FA; --surface: #FFFFFF; --border: #D8DDE6;\n    --border-strong: #B0BAC9; --text: #0D2240; --text-mid: #3A4F6B;\n    --text-muted: #6B7FA0; --radius: 8px; --radius-lg: 14px;\n  }\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n  body { font-family: 'IBM Plex Sans Arabic','Segoe UI',sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; min-height: 100vh; }\n\n  /* \u2500\u2500 HEADER \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .header { background: var(--navy); padding: 0; position: relative; overflow: hidden; }\n  .header-stripe { background: var(--gold); height: 4px; }\n  .header-inner { padding: 28px 40px 24px; position: relative; }\n  .header-emblem { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }\n  .emblem-star { width: 38px; height: 38px; flex-shrink: 0; }\n  .header-badge { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-light); font-weight: 500; }\n  .header h1 { font-size: 22px; font-weight: 600; color: #FFF; line-height: 1.25; }\n  .header-sub { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 4px; }\n  .header-ref { position: absolute; right: 40px; top: 50%; transform: translateY(-50%); text-align: right; }\n  .ref-label { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; text-transform: uppercase; }\n  .ref-value { font-family: 'IBM Plex Mono',monospace; font-size: 12px; color: var(--gold-light); margin-top: 2px; }\n\n  /* \u2500\u2500 LAYOUT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 60px; }\n  .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }\n  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }\n  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }\n  .config-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }\n  .config-grid-2 { grid-template-columns: 1fr 1fr; }\n\n  /* \u2500\u2500 FIELDS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .field label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }\n  .field select, .field input[type=\"number\"], .field input[type=\"text\"] { width: 100%; padding: 9px 12px; border: 1px solid var(--border-strong); border-radius: var(--radius); font-family: inherit; font-size: 14px; color: var(--text); background: var(--surface); transition: border-color 0.15s; -webkit-appearance: none; }\n  .field select:focus, .field input:focus { outline: none; border-color: var(--navy-light); box-shadow: 0 0 0 3px rgba(42,81,128,0.12); }\n  .ref-method-info { font-size: 11px; color: var(--text-muted); margin-top: 6px; }\n\n  /* \u2500\u2500 FEATURE 1 : CHECKBOXES M\u00c9THODES (liste masqu\u00e9e / d\u00e9pliable) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n\n  /* Bouton toggle */\n  .methode-toggle {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    width: 100%;\n    padding: 9px 12px;\n    border: 1px solid var(--border-strong);\n    border-radius: var(--radius);\n    background: var(--surface);\n    cursor: pointer;\n    font-family: inherit;\n    font-size: 13px;\n    color: var(--text);\n    transition: border-color 0.15s, background 0.15s;\n    text-align: left;\n  }\n  .methode-toggle:hover { border-color: var(--navy-light); background: #F8FAFE; }\n  .methode-toggle.open  { border-color: var(--navy-light); border-radius: var(--radius) var(--radius) 0 0; background: #F8FAFE; }\n\n  .methode-toggle-left  { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }\n  .methode-toggle-arrow {\n    width: 16px; height: 16px; flex-shrink: 0;\n    color: var(--text-muted);\n    transition: transform 0.2s ease;\n  }\n  .methode-toggle.open .methode-toggle-arrow { transform: rotate(180deg); }\n\n  .methode-summary {\n    font-size: 11px;\n    color: var(--text-muted);\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    max-width: 200px;\n  }\n  .methode-summary.has-selection { color: var(--navy-light); font-weight: 600; }\n\n  /* Liste d\u00e9pliable */\n  .methode-list-wrap {\n    overflow: hidden;\n    max-height: 0;\n    transition: max-height 0.25s ease;\n  }\n  .methode-list-wrap.open { max-height: 320px; }\n\n  .methode-list {\n    border: 1px solid var(--navy-light);\n    border-top: none;\n    border-radius: 0 0 var(--radius) var(--radius);\n    background: var(--surface);\n    overflow: hidden;\n  }\n  .methode-item {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    padding: 9px 12px;\n    cursor: pointer;\n    font-size: 13px;\n    color: var(--text);\n    transition: background 0.12s, color 0.12s;\n    border-bottom: 1px solid var(--border);\n    user-select: none;\n  }\n  .methode-item:last-child { border-bottom: none; }\n  .methode-item:hover { background: #EEF2F8; }\n  .methode-item input[type=\"checkbox\"] {\n    appearance: none; -webkit-appearance: none;\n    width: 16px; height: 16px; min-width: 16px;\n    border: 2px solid var(--border-strong);\n    border-radius: 4px;\n    background: var(--surface);\n    cursor: pointer;\n    transition: all 0.15s;\n    position: relative;\n  }\n  .methode-item input[type=\"checkbox\"]:checked {\n    background: var(--navy);\n    border-color: var(--navy);\n  }\n  .methode-item input[type=\"checkbox\"]:checked::after {\n    content: '';\n    position: absolute;\n    left: 3px; top: 1px;\n    width: 6px; height: 9px;\n    border: 2px solid #FFF;\n    border-top: none; border-left: none;\n    transform: rotate(45deg);\n  }\n  .methode-item:has(input:checked) {\n    background: var(--navy);\n    color: #FFF;\n  }\n  .methode-item:has(input:checked):hover { background: var(--navy-mid); }\n\n  /* \u2500\u2500 SOUMISSIONNAIRES TABLE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .soumissionnaires-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }\n  .soumissionnaires-table th { background: var(--navy); color: rgba(255,255,255,0.85); font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 12px; text-align: left; }\n  .soumissionnaires-table th:first-child { border-radius: 6px 0 0 6px; }\n  .soumissionnaires-table th:last-child { border-radius: 0 6px 6px 0; }\n  .soumissionnaires-table td { padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: middle; }\n  .soumissionnaires-table tr:last-child td { border-bottom: none; }\n  .soumissionnaires-table td input { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 13px; background: var(--bg); color: var(--text); transition: border-color 0.15s; }\n  .soumissionnaires-table td input:focus { outline: none; border-color: var(--navy-light); background: var(--surface); box-shadow: 0 0 0 2px rgba(42,81,128,0.1); }\n  .num-input { text-align: right; font-family: 'IBM Plex Mono',monospace; }\n  .row-num { font-size: 11px; font-weight: 600; color: var(--text-muted); font-family: 'IBM Plex Mono',monospace; padding: 0 4px; min-width: 24px; text-align: center; }\n\n  /* \u2500\u2500 BUTTONS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .btn-del { background: none; border: 1px solid var(--border-strong); border-radius: 6px; padding: 5px 8px; cursor: pointer; color: var(--text-muted); font-size: 12px; transition: all 0.15s; display: flex; align-items: center; }\n  .btn-del:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }\n  .btn-del svg { width: 12px; height: 12px; }\n  /* \u2500\u2500 ARCHIVES LOCALES \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .archives-card { padding: 20px 24px; }\n\n  .folder-row {\n    display: flex; align-items: center; gap: 10px;\n    padding: 10px 14px;\n    border: 1.5px dashed var(--border-strong);\n    border-radius: var(--radius);\n    background: var(--bg);\n    margin-bottom: 14px;\n  }\n  .folder-row.connected {\n    border-style: solid; border-color: var(--green);\n    background: #F0FBF4;\n  }\n  .folder-icon { font-size: 20px; flex-shrink: 0; }\n  .folder-info { flex: 1; min-width: 0; }\n  .folder-label { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); }\n  .folder-path  { font-family: 'IBM Plex Mono',monospace; font-size: 12px; color: var(--navy); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n  .folder-path.empty { color: var(--text-muted); font-style: italic; font-family: inherit; }\n\n  .btn-choose-folder {\n    display: inline-flex; align-items: center; gap: 6px;\n    padding: 8px 14px; border: 1px solid var(--border-strong);\n    border-radius: var(--radius); background: var(--surface);\n    color: var(--text-mid); font-family: inherit; font-size: 12px; font-weight: 500;\n    cursor: pointer; white-space: nowrap; transition: all 0.15s; flex-shrink: 0;\n  }\n  .btn-choose-folder:hover { border-color: var(--navy-light); color: var(--navy); }\n\n  .btn-archive {\n    display: inline-flex; align-items: center; gap: 7px;\n    width: 100%; padding: 10px 16px; margin-bottom: 16px;\n    border: none; border-radius: var(--radius);\n    background: var(--navy); color: #FFF;\n    font-family: inherit; font-size: 13px; font-weight: 600;\n    cursor: pointer; transition: background 0.15s; justify-content: center;\n  }\n  .btn-archive:hover:not(:disabled) { background: var(--navy-light); }\n  .btn-archive:disabled { background: var(--border-strong); cursor: not-allowed; color: rgba(255,255,255,0.5); }\n\n  .archives-list-title {\n    font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;\n    color: var(--text-muted); margin-bottom: 8px;\n    display: flex; align-items: center; justify-content: space-between;\n  }\n  .archive-count-badge {\n    background: var(--navy); color: #FFF;\n    font-size: 9px; padding: 1px 7px; border-radius: 10px; font-weight: 700; letter-spacing: 0;\n  }\n\n  .archive-list-empty {\n    text-align: center; padding: 24px 16px;\n    font-size: 12px; color: var(--text-muted); font-style: italic;\n    border: 1px dashed var(--border); border-radius: var(--radius);\n  }\n\n  .archive-items { display: flex; flex-direction: column; gap: 6px; max-height: 280px; overflow-y: auto; }\n\n  .archive-item {\n    display: grid; grid-template-columns: auto 1fr auto auto;\n    align-items: center; gap: 10px;\n    padding: 9px 12px;\n    border: 1px solid var(--border); border-radius: var(--radius);\n    background: var(--surface); transition: border-color 0.12s, background 0.12s;\n  }\n  .archive-item:hover { border-color: var(--navy-light); background: #F8FAFE; }\n  .archive-item-icon { font-size: 18px; line-height: 1; }\n  .archive-item-info { min-width: 0; }\n  .archive-item-name { font-size: 12px; font-weight: 600; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n  .archive-item-meta { font-size: 10px; color: var(--text-muted); margin-top: 1px; }\n\n  .btn-restore {\n    display: inline-flex; align-items: center; gap: 4px;\n    padding: 5px 10px; border: 1px solid var(--navy-light);\n    border-radius: 6px; background: none;\n    color: var(--navy-light); font-family: inherit; font-size: 11px; font-weight: 600;\n    cursor: pointer; white-space: nowrap; transition: all 0.15s;\n  }\n  .btn-restore:hover { background: var(--navy); color: #FFF; border-color: var(--navy); }\n\n  .btn-del-archive {\n    display: inline-flex; align-items: center;\n    padding: 5px 8px; border: 1px solid var(--border-strong);\n    border-radius: 6px; background: none;\n    color: var(--text-muted); cursor: pointer; transition: all 0.15s;\n  }\n  .btn-del-archive:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }\n\n  .api-not-supported {\n    padding: 12px 16px; background: #FFF8EC;\n    border: 1px solid #F0D090; border-radius: var(--radius);\n    font-size: 12px; color: #7A5000;\n    display: flex; align-items: flex-start; gap: 8px;\n  }\n\n  .archive-saving {\n    display: none; align-items: center; gap: 8px;\n    padding: 8px 12px; background: var(--gold-pale);\n    border: 1px solid #E8C97A; border-radius: var(--radius);\n    font-size: 12px; color: #7A5000; margin-bottom: 10px;\n  }\n  .archive-saving.visible { display: flex; }\n\n  .btn-add { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border: 1.5px dashed var(--navy-light); border-radius: var(--radius); background: none; color: var(--navy-light); font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; margin-right: 8px; }\n  .btn-add:hover { background: rgba(42,81,128,0.06); }\n  .btn-import {\n    display: inline-flex; align-items: center; gap: 6px;\n    padding: 9px 18px;\n    border: 1.5px solid var(--navy-light);\n    border-radius: var(--radius);\n    background: rgba(42,81,128,0.07);\n    color: var(--navy-light);\n    font-family: inherit; font-size: 13px; font-weight: 500;\n    cursor: pointer; transition: all 0.15s;\n  }\n  .btn-import:hover { background: rgba(42,81,128,0.14); border-color: var(--navy); color: var(--navy); }\n\n  /* \u2500\u2500 IMPORT MODAL \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .import-overlay {\n    position: fixed; inset: 0;\n    background: rgba(8,20,42,0.65);\n    z-index: 1100;\n    display: none; align-items: center; justify-content: center;\n    padding: 24px 16px;\n    backdrop-filter: blur(2px);\n  }\n  .import-overlay.open { display: flex; animation: fadeIn 0.2s ease; }\n\n  .import-box {\n    background: var(--surface);\n    border-radius: var(--radius-lg);\n    width: 100%; max-width: 680px;\n    box-shadow: 0 32px 80px rgba(0,0,0,0.35);\n    overflow: hidden;\n    animation: slideUp 0.22s ease;\n  }\n\n  .import-header {\n    background: var(--navy);\n    padding: 16px 22px;\n    display: flex; align-items: center; justify-content: space-between;\n  }\n  .import-header h3 { font-size: 14px; font-weight: 600; color: #FFF; display: flex; align-items: center; gap: 8px; }\n  .import-body { padding: 22px; }\n\n  /* Format guide */\n  .import-guide {\n    display: flex; gap: 10px; flex-wrap: wrap;\n    margin-bottom: 16px;\n  }\n  .import-col-badge {\n    display: flex; align-items: center; gap: 6px;\n    padding: 5px 10px;\n    border-radius: 6px;\n    font-size: 11px; font-weight: 600;\n    border: 1px solid;\n  }\n  .import-col-badge.col-name    { background: #EEF5FF; color: var(--navy); border-color: #B8CCE8; }\n  .import-col-badge.col-admin   { background: #F0FFF4; color: var(--green); border-color: #A8DDB8; }\n  .import-col-badge.col-open    { background: #F8F8F8; color: var(--text-muted); border-color: var(--border); }\n  .import-col-badge.col-amount  { background: #FFF8EC; color: #7A5000; border-color: #F0D090; }\n  .import-col-badge.col-opt     { background: #F8F8F8; color: var(--text-muted); border-color: var(--border); font-style: italic; }\n  .import-col-arrow { color: var(--text-muted); font-size: 13px; align-self: center; }\n\n  .import-textarea {\n    width: 100%; height: 220px;\n    padding: 12px 14px;\n    border: 1.5px solid var(--border-strong);\n    border-radius: var(--radius);\n    font-family: 'IBM Plex Mono', monospace; font-size: 12px;\n    color: var(--text); background: #FAFBFC;\n    resize: vertical; line-height: 1.6;\n    transition: border-color 0.15s;\n  }\n  .import-textarea:focus { outline: none; border-color: var(--navy-light); background: #FFF; }\n  .import-textarea::placeholder { color: var(--text-muted); font-style: italic; }\n\n  .import-options {\n    display: flex; align-items: center; gap: 20px;\n    margin: 14px 0;\n    padding: 10px 14px;\n    background: var(--bg);\n    border-radius: var(--radius);\n    font-size: 12px;\n  }\n  .import-options label { display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-mid); }\n  .import-options input[type=\"radio\"] { accent-color: var(--navy); cursor: pointer; }\n  .import-options strong { font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; margin-right: 4px; }\n\n  .import-preview {\n    display: none;\n    margin-top: 14px;\n    border: 1px solid var(--border);\n    border-radius: var(--radius);\n    overflow: hidden;\n  }\n  .import-preview-header {\n    background: var(--bg); padding: 8px 14px;\n    font-size: 11px; font-weight: 600; color: var(--text-muted);\n    letter-spacing: 0.07em; text-transform: uppercase;\n    display: flex; justify-content: space-between;\n  }\n  .import-preview-body { max-height: 160px; overflow-y: auto; }\n  .import-preview-row {\n    display: grid; grid-template-columns: 1fr auto auto;\n    gap: 12px; align-items: center;\n    padding: 7px 14px;\n    border-bottom: 1px solid var(--border);\n    font-size: 12px;\n  }\n  .import-preview-row:last-child { border-bottom: none; }\n  .import-preview-row.row-ok   { background: #FFF; }\n  .import-preview-row.row-skip { background: #FAFAFA; color: var(--text-muted); }\n  .ipv-name   { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }\n  .ipv-amount { font-family: 'IBM Plex Mono',monospace; font-size: 11px; color: var(--navy); text-align: right; }\n  .ipv-status { font-size: 9px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; white-space: nowrap; }\n  .ipv-status.ok    { background: #E6F4EC; color: var(--green); }\n  .ipv-status.skip  { background: #F5F5F5; color: var(--text-muted); border: 1px solid var(--border); }\n  .ipv-status.noamt { background: #FFF3E0; color: #8B4A00; }\n\n  .import-footer {\n    display: flex; justify-content: flex-end; gap: 10px;\n    margin-top: 16px;\n  }\n  .btn-import-cancel {\n    padding: 9px 18px; border: 1px solid var(--border-strong);\n    border-radius: var(--radius); background: none;\n    color: var(--text-muted); font-family: inherit; font-size: 13px;\n    cursor: pointer; transition: all 0.15s;\n  }\n  .btn-import-cancel:hover { color: var(--text); border-color: var(--text-muted); }\n  .btn-import-confirm {\n    display: inline-flex; align-items: center; gap: 7px;\n    padding: 9px 22px; border: none;\n    border-radius: var(--radius); background: var(--navy);\n    color: #FFF; font-family: inherit; font-size: 13px; font-weight: 600;\n    cursor: pointer; transition: background 0.15s;\n  }\n  .btn-import-confirm:hover { background: var(--navy-light); }\n  .btn-import-confirm:disabled { background: var(--border-strong); cursor: not-allowed; }\n\n  .import-error {\n    display: none; padding: 8px 12px; margin-top: 10px;\n    background: var(--red-light); color: var(--red);\n    border: 1px solid #ECA8A8; border-radius: var(--radius);\n    font-size: 12px;\n  }\n  .import-error.visible { display: block; }\n  .btn-calc { display: inline-flex; align-items: center; gap: 8px; padding: 11px 28px; background: var(--navy); border: none; border-radius: var(--radius); color: #FFF; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }\n  .btn-calc:hover { background: var(--navy-light); }\n  .btn-reset { display: inline-flex; align-items: center; gap: 6px; padding: 11px 18px; background: none; border: 1px solid var(--border-strong); border-radius: var(--radius); color: var(--text-muted); font-family: inherit; font-size: 13px; cursor: pointer; transition: all 0.15s; }\n  .btn-reset:hover { border-color: var(--text-muted); color: var(--text); }\n  .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }\n\n  /* \u2500\u2500 ALERTS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .alert { padding: 10px 14px; border-radius: var(--radius); font-size: 12px; margin-bottom: 12px; display: none; }\n  .alert.error { background: var(--red-light); color: var(--red); border: 1px solid #ECA8A8; }\n  .alert.info  { background: var(--gold-pale); color: #7A5A10; border: 1px solid #E8C97A; }\n  .alert.visible { display: block; }\n\n  /* \u2500\u2500 AUTO-CALC INDICATOR \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .calc-indicator {\n    display: none;\n    align-items: center;\n    gap: 8px;\n    font-size: 12px;\n    color: var(--gold);\n    font-style: italic;\n  }\n  .calc-indicator.visible { display: flex; }\n  .calc-dot {\n    width: 7px; height: 7px;\n    background: var(--gold);\n    border-radius: 50%;\n    animation: pulse 1s ease-in-out infinite;\n  }\n  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }\n\n  /* \u2500\u2500 FEATURE 3 : MODAL FEN\u00caTRE S\u00c9PAR\u00c9E \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .modal-overlay {\n    position: fixed;\n    inset: 0;\n    background: rgba(8, 20, 42, 0.70);\n    z-index: 1000;\n    display: none;\n    align-items: flex-start;\n    justify-content: center;\n    padding: 28px 16px 40px;\n    overflow-y: auto;\n    backdrop-filter: blur(2px);\n    -webkit-backdrop-filter: blur(2px);\n  }\n  .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }\n  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }\n\n  .modal-box {\n    background: var(--bg);\n    border-radius: var(--radius-lg);\n    width: 100%;\n    max-width: 940px;\n    box-shadow: 0 32px 100px rgba(0,0,0,0.4);\n    overflow: hidden;\n    animation: slideUp 0.25s ease;\n  }\n  @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }\n\n  .modal-toolbar {\n    background: var(--navy-mid);\n    padding: 12px 20px;\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    gap: 12px;\n  }\n  .modal-title { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); }\n  .modal-actions { display: flex; gap: 8px; }\n\n  .btn-modal-close {\n    display: inline-flex; align-items: center; gap: 6px;\n    padding: 7px 14px;\n    border: 1px solid rgba(255,255,255,0.25);\n    border-radius: 6px;\n    background: none;\n    color: rgba(255,255,255,0.75);\n    font-family: inherit; font-size: 12px;\n    cursor: pointer; transition: all 0.15s;\n  }\n  .btn-modal-close:hover { background: rgba(255,255,255,0.1); color: #FFF; }\n\n  .btn-modal-print {\n    display: inline-flex; align-items: center; gap: 6px;\n    padding: 7px 16px;\n    border: none;\n    border-radius: 6px;\n    background: var(--gold);\n    color: #FFF;\n    font-family: inherit; font-size: 12px; font-weight: 600;\n    cursor: pointer; transition: background 0.15s;\n  }\n  .btn-modal-print:hover { background: var(--gold-light); }\n\n  .modal-body { padding: 24px; }\n\n  /* \u2500\u2500 RESULTS INTERNALS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .results-header { background: var(--navy); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between; }\n  .results-header h2 { font-size: 15px; font-weight: 600; color: #FFF; }\n  .prix-ref-badge { background: var(--gold); color: #FFF; font-family: 'IBM Plex Mono',monospace; font-size: 16px; font-weight: 600; padding: 6px 18px; border-radius: 20px; letter-spacing: 0.03em; }\n  .metrics-row { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: var(--border); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }\n  .metric-box { background: var(--surface); padding: 16px 20px; text-align: center; }\n  .metric-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }\n  .metric-value { font-size: 20px; font-weight: 600; font-family: 'IBM Plex Mono',monospace; color: var(--navy); }\n  .metric-value.gold { color: var(--gold); }\n  .metric-value.green { color: var(--green); }\n\n  .results-table-wrap { border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); overflow: hidden; }\n  .results-table { width: 100%; border-collapse: collapse; }\n  .results-table thead th { background: #F0F3F8; color: var(--text-mid); font-size: 10px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; padding: 10px 14px; text-align: center; border-bottom: 1px solid var(--border); }\n  .results-table thead th:first-child { text-align: left; }\n  .results-table tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border); text-align: center; font-size: 13px; }\n  .results-table tbody td:first-child { text-align: left; }\n  .results-table tbody tr:last-child td { border-bottom: none; }\n  .results-table tbody tr:hover { background: #F8FAFE; }\n\n  /* \u2500\u2500 FEATURE 4 : CLASSEMENT (rank badges) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-size: 12px; font-weight: 600; font-family: 'IBM Plex Mono',monospace; }\n  .rank-1 { background: var(--gold); color: #FFF; }\n  .rank-2 { background: #B0BAC9; color: #FFF; }\n  .rank-3 { background: #C4884A; color: #FFF; }\n  .rank-n { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }\n  .winner-row { background: var(--gold-pale) !important; }\n  .winner-row td { font-weight: 500; }\n\n  /* Rank column highlight stripe */\n  .results-table tbody tr td:last-child { background: rgba(0,0,0,0.015); }\n\n  .tag { display: inline-block; font-size: 9px; border-radius: 4px; padding: 2px 6px; margin-left: 4px; vertical-align: middle; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }\n  .tag-exclu   { background: var(--red-light); color: var(--red); border: 1px solid #ECA8A8; }\n  .tag-inadmis { background: #F5F5F5; color: var(--text-muted); border: 1px solid var(--border); }\n  .tag-dessus  { background: #FFF3E0; color: #8B4A00; border: 1px solid #F4C06A; }\n\n  .formula-box { background: #EEF2F8; border-left: 3px solid var(--navy-mid); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; margin: 16px 0 0; font-size: 12px; color: var(--text-mid); }\n  .formula-box strong { color: var(--navy); }\n  .formula-code { font-family: 'IBM Plex Mono',monospace; font-size: 12px; color: var(--navy-mid); margin-top: 4px; display: block; }\n\n  .winner-banner { background: var(--green); color: #FFF; padding: 16px 24px; border-radius: var(--radius-lg); margin-bottom: 20px; display: flex; align-items: center; gap: 16px; }\n  .winner-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }\n  .winner-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }\n  .winner-name  { font-size: 20px; font-weight: 600; margin-top: 2px; }\n  .winner-score { margin-left: auto; text-align: right; }\n  .winner-score-val   { font-size: 20px; font-weight: 600; font-family: 'IBM Plex Mono',monospace; }\n  .winner-score-label { font-size: 10px; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.08em; }\n\n  /* \u2500\u2500 STORAGE BAR \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .storage-bar {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: var(--radius-lg);\n    padding: 14px 20px;\n    margin-bottom: 20px;\n    display: flex;\n    align-items: center;\n    gap: 16px;\n    flex-wrap: wrap;\n    transition: border-color 0.3s;\n  }\n  .storage-bar.active  { border-color: var(--green); }\n  .storage-bar.saving  { border-color: var(--gold); }\n  .storage-bar.disabled { opacity: 0.65; }\n\n  .storage-label {\n    display: flex; align-items: center; gap: 7px;\n    font-size: 12px; font-weight: 600;\n    color: var(--text-mid);\n    letter-spacing: 0.04em;\n    white-space: nowrap;\n  }\n  .storage-label svg { color: var(--navy-mid); }\n\n  /* Toggle switch */\n  .storage-toggle-wrap { display: flex; align-items: center; gap: 8px; }\n  .storage-toggle-track {\n    position: relative; width: 40px; height: 22px;\n    background: var(--border-strong);\n    border-radius: 11px;\n    cursor: pointer;\n    transition: background 0.2s;\n    flex-shrink: 0;\n  }\n  .storage-toggle-track.on { background: var(--green); }\n  .storage-toggle-track input { opacity: 0; width: 0; height: 0; position: absolute; }\n  .storage-toggle-thumb {\n    position: absolute;\n    left: 3px; top: 3px;\n    width: 16px; height: 16px;\n    border-radius: 50%;\n    background: #FFF;\n    box-shadow: 0 1px 3px rgba(0,0,0,0.25);\n    transition: transform 0.2s;\n    pointer-events: none;\n  }\n  .storage-toggle-track.on .storage-toggle-thumb { transform: translateX(18px); }\n  .storage-toggle-label { font-size: 12px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }\n  .storage-toggle-label.on { color: var(--green); }\n\n  /* Divider */\n  .storage-divider { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }\n\n  /* Countdown ring */\n  .storage-countdown {\n    display: flex; align-items: center; gap: 8px;\n    font-size: 12px; color: var(--text-muted);\n    white-space: nowrap;\n  }\n  .countdown-ring-wrap { position: relative; width: 28px; height: 28px; flex-shrink: 0; }\n  .countdown-ring-wrap svg { position: absolute; inset: 0; transform: rotate(-90deg); }\n  .countdown-track { fill: none; stroke: var(--border); stroke-width: 3; }\n  .countdown-fill  { fill: none; stroke: var(--green); stroke-width: 3; stroke-linecap: round;\n                     stroke-dasharray: 66; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }\n  .countdown-num {\n    position: absolute; inset: 0;\n    display: flex; align-items: center; justify-content: center;\n    font-size: 9px; font-weight: 700;\n    font-family: 'IBM Plex Mono', monospace;\n    color: var(--navy);\n  }\n\n  /* Last saved */\n  .storage-lastsave {\n    font-size: 11px; color: var(--text-muted); white-space: nowrap;\n    display: flex; align-items: center; gap: 5px;\n  }\n  .lastsave-time { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--navy-light); font-weight: 600; }\n\n  /* Flash saved */\n  .save-flash {\n    font-size: 11px; font-weight: 600; color: var(--green);\n    display: none; align-items: center; gap: 4px;\n    white-space: nowrap;\n  }\n  .save-flash.show { display: flex; animation: flashIn 0.3s ease; }\n  @keyframes flashIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }\n\n  /* Buttons */\n  .btn-save-now {\n    display: inline-flex; align-items: center; gap: 5px;\n    padding: 6px 13px;\n    background: var(--navy);\n    border: none; border-radius: 6px;\n    color: #FFF; font-family: inherit; font-size: 11px; font-weight: 600;\n    cursor: pointer; transition: background 0.15s; white-space: nowrap; margin-left: auto;\n  }\n  .btn-save-now:hover { background: var(--navy-light); }\n  .btn-save-now:disabled { background: var(--border-strong); cursor: default; }\n\n  .btn-clear-storage {\n    display: inline-flex; align-items: center; gap: 5px;\n    padding: 6px 11px;\n    background: none;\n    border: 1px solid var(--border-strong); border-radius: 6px;\n    color: var(--text-muted); font-family: inherit; font-size: 11px;\n    cursor: pointer; transition: all 0.15s; white-space: nowrap;\n  }\n  .btn-clear-storage:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }\n\n  /* \u2500\u2500 STOCKAGE : BARRE FLOTTANTE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  .storage-bar {\n    position: fixed;\n    bottom: 0; left: 0; right: 0;\n    z-index: 500;\n    background: var(--navy);\n    border-top: 3px solid var(--navy-mid);\n    padding: 0 24px;\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    gap: 20px;\n    min-height: 52px;\n    box-shadow: 0 -4px 24px rgba(0,0,0,0.18);\n    transition: transform 0.3s ease;\n  }\n  .storage-bar.saved-flash { background: #0f4a28; }\n\n  .storage-left  { display: flex; align-items: center; gap: 12px; }\n  .storage-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }\n\n  /* Toggle switch */\n  .storage-switch-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; }\n  .storage-switch-wrap input { display: none; }\n  .switch-track {\n    width: 38px; height: 21px;\n    background: #3A4F6B;\n    border-radius: 11px;\n    position: relative;\n    transition: background 0.2s;\n    cursor: pointer;\n    flex-shrink: 0;\n  }\n  .switch-track::after {\n    content: '';\n    position: absolute;\n    left: 3px; top: 3px;\n    width: 15px; height: 15px;\n    background: #FFF;\n    border-radius: 50%;\n    transition: transform 0.2s, background 0.2s;\n  }\n  .storage-switch-wrap input:checked + .switch-track { background: var(--gold); }\n  .storage-switch-wrap input:checked + .switch-track::after { transform: translateX(17px); }\n\n  .storage-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.9); white-space: nowrap; }\n  .storage-sublabel { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 1px; }\n\n  /* Countdown */\n  .storage-countdown {\n    display: none;\n    align-items: center;\n    gap: 8px;\n    font-size: 11px;\n    color: rgba(255,255,255,0.55);\n  }\n  .countdown-ring {\n    width: 32px; height: 32px;\n    flex-shrink: 0;\n    position: relative;\n  }\n  .countdown-ring svg { transform: rotate(-90deg); }\n  .countdown-ring circle.track { stroke: rgba(255,255,255,0.12); fill: none; }\n  .countdown-ring circle.fill  { stroke: var(--gold); fill: none; stroke-linecap: round;\n    stroke-dasharray: 82; stroke-dashoffset: 82; transition: stroke-dashoffset 1s linear; }\n  .countdown-num {\n    position: absolute; inset: 0;\n    display: flex; align-items: center; justify-content: center;\n    font-family: 'IBM Plex Mono',monospace; font-size: 10px; font-weight: 600;\n    color: rgba(255,255,255,0.85);\n  }\n  .countdown-text { line-height: 1.3; }\n\n  /* Last save */\n  .storage-lastsave {\n    display: none;\n    flex-direction: column;\n    font-size: 10px;\n    color: rgba(255,255,255,0.45);\n    line-height: 1.3;\n  }\n  .storage-lastsave span { color: rgba(255,255,255,0.75); font-family: 'IBM Plex Mono',monospace; }\n\n  /* Action buttons */\n  .btn-save-now {\n    display: none;\n    align-items: center; gap: 5px;\n    padding: 6px 12px;\n    background: var(--gold);\n    border: none; border-radius: 6px;\n    color: #FFF; font-family: inherit; font-size: 11px; font-weight: 600;\n    cursor: pointer; transition: background 0.15s; white-space: nowrap;\n  }\n  .btn-save-now:hover { background: var(--gold-light); }\n  .btn-clear-store {\n    display: none;\n    align-items: center; gap: 5px;\n    padding: 6px 10px;\n    background: none;\n    border: 1px solid rgba(255,255,255,0.2); border-radius: 6px;\n    color: rgba(255,255,255,0.5); font-family: inherit; font-size: 11px;\n    cursor: pointer; transition: all 0.15s; white-space: nowrap;\n  }\n  .btn-clear-store:hover { border-color: var(--red); color: #FF7070; }\n\n  /* Saved toast */\n  .storage-toast {\n    position: fixed; bottom: 64px; right: 24px;\n    background: var(--green); color: #FFF;\n    padding: 8px 16px; border-radius: 8px;\n    font-size: 12px; font-weight: 600;\n    opacity: 0; transform: translateY(8px);\n    transition: opacity 0.25s, transform 0.25s;\n    pointer-events: none; z-index: 600;\n    display: flex; align-items: center; gap: 6px;\n  }\n  .storage-toast.show { opacity: 1; transform: translateY(0); }\n\n  /* Body padding so content isn't hidden under bar */\n  body { padding-bottom: 56px; }\n\n  /* \u2500\u2500 FEATURE 2 : PRINT ONLY RESULTS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\n  @media print {\n    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }\n    body { background: #FFF; }\n    /* Hide everything \u2014 the print window only contains results content */\n  }\n";
+      document.head.appendChild(st);
+    }
+    wrap.innerHTML = "\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 HEADER -->\n<div class=\"header\">\n  <div class=\"header-stripe\"></div>\n  <div class=\"header-inner\">\n    <div class=\"header-emblem\">\n      <svg class=\"emblem-star\" viewBox=\"0 0 38 38\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n        <circle cx=\"19\" cy=\"19\" r=\"18\" stroke=\"#C9922A\" stroke-width=\"1.5\" fill=\"none\"/>\n        <polygon points=\"19,5 22.5,15 33,15 24.5,21 27.5,32 19,26 10.5,32 13.5,21 5,15 15.5,15\" fill=\"none\" stroke=\"#C9922A\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n      </svg>\n      <div>\n        <div class=\"header-badge\">Royaume du Maroc \u2014 March\u00e9s Publics</div>\n        <h1>Calcul Prix de R\u00e9f\u00e9rence &amp; Offre Mieux-Disante</h1>\n        <div class=\"header-sub\">D\u00e9cret n\u00b0 2-12-349 relatif aux march\u00e9s publics</div>\n      </div>\n    </div>\n    <div class=\"header-ref\" id=\"headerRef\" style=\"display:none\">\n      <div class=\"ref-label\">Objet du march\u00e9</div>\n      <div class=\"ref-value\" id=\"headerRefValue\">\u2014</div>\n      <div class=\"ref-label\" style=\"margin-top:8px\">R\u00e9f. appel d'offres</div>\n      <div class=\"ref-value\" id=\"headerRefAO\">\u2014</div>\n    </div>\n  </div>\n</div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 MAIN -->\n<div class=\"container\">\n\n  <!-- Configuration g\u00e9n\u00e9rale -->\n  <div class=\"section-title\">Configuration g\u00e9n\u00e9rale</div>\n  <div class=\"card\">\n    <div class=\"config-grid\">\n      <div class=\"field\">\n        <label>Objet du march\u00e9</label>\n        <input type=\"text\" id=\"objetMarche\" placeholder=\"ex: Fourniture de mat\u00e9riel informatique\">\n      </div>\n      <div class=\"field\">\n        <label>R\u00e9f. appel d'offres</label>\n        <input type=\"text\" id=\"refAO\" placeholder=\"ex: AO-2024-001\">\n      </div>\n      <div class=\"field\">\n        <label>Monnaie</label>\n        <select id=\"monnaie\">\n          <option value=\"Dhs\">Dhs \u2014 Dirham marocain</option>\n          <option value=\"EUR\">EUR \u2014 Euro</option>\n          <option value=\"USD\">USD \u2014 Dollar</option>\n        </select>\n      </div>\n    </div>\n\n    <div class=\"config-grid config-grid-2\" style=\"margin-bottom:0\">\n      <div class=\"field\">\n        <label>Prix d'estimation du march\u00e9 (HT)</label>\n        <input type=\"number\" id=\"prixEstimation\" placeholder=\"0.00\" min=\"0\" step=\"0.01\" style=\"border-color:var(--gold); background:#FFFDF5\">\n      </div>\n      <div class=\"field\" style=\"display:flex; flex-direction:column; justify-content:flex-end\">\n        <div id=\"estimPreview\" style=\"display:none; background:var(--gold-pale); border:1px solid #E8C97A; border-radius:var(--radius); padding:10px 14px; font-size:13px\">\n          <span style=\"font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:2px\">Prix d'estimation saisi</span>\n          <span id=\"estimDisplay\" style=\"font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:600; color:var(--navy)\">\u2014</span>\n        </div>\n      </div>\n    </div>\n\n    <div style=\"height:16px\"></div>\n\n    <!-- FEATURE 1 : M\u00e9thode Prix de r\u00e9f\u00e9rence \u2014 Liste \u00e0 cocher -->\n    <div class=\"config-grid config-grid-2\">\n      <div class=\"field\">\n        <label>M\u00e9thode Prix de r\u00e9f\u00e9rence</label>\n        <!-- Bouton toggle \u2014 liste masqu\u00e9e par d\u00e9faut -->\n        <button type=\"button\" class=\"methode-toggle\" id=\"methodeToggle\" onclick=\"toggleMethodeList()\">\n          <span class=\"methode-toggle-left\">\n            <svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\"><circle cx=\"8\" cy=\"8\" r=\"6.5\" stroke=\"currentColor\" stroke-width=\"1.3\"/><path d=\"M8 5v3.5M8 10.5v.5\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linecap=\"round\"/></svg>\n            <span class=\"methode-summary\" id=\"methodeSummary\">Aucune m\u00e9thode s\u00e9lectionn\u00e9e</span>\n          </span>\n          <svg class=\"methode-toggle-arrow\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M4 6l4 4 4-4\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>\n        </button>\n        <!-- Liste d\u00e9pliable (masqu\u00e9e par d\u00e9faut) -->\n        <div class=\"methode-list-wrap\" id=\"methodeListWrap\">\n          <div class=\"methode-list\" id=\"methodeCheckboxes\">\n            <label class=\"methode-item\">\n              <input type=\"checkbox\" value=\"ecart25\"> Exclusion \u00e9carts &gt; 25%\n            </label>\n            <label class=\"methode-item\">\n              <input type=\"checkbox\" value=\"ecart20\"> Exclusion \u00e9carts &gt; 20%\n            </label>\n            <label class=\"methode-item\">\n              <input type=\"checkbox\" value=\"ecart15\"> Exclusion \u00e9carts &gt; 15%\n            </label>\n            <label class=\"methode-item\">\n              <input type=\"checkbox\" value=\"ecartinf20\"> Exclusion \u00e9carts &lt; 20% (offres anorm. basses)\n            </label>\n            <label class=\"methode-item\">\n              <input type=\"checkbox\" value=\"estimation\"> Mixte : (P. estimation + Moy. concurrents) / 2\n            </label>\n          </div>\n        </div>\n        <div class=\"ref-method-info\" style=\"margin-top:6px\">Base : Moyenne simple. Plusieurs conditions cumulables.</div>\n        <div class=\"ref-method-info\" id=\"estimInfo\" style=\"color:var(--gold); display:none; margin-top:4px\">&#9888; Le prix d'estimation doit \u00eatre saisi ci-dessus.</div>\n      </div>\n      <div class=\"field\" style=\"display:flex; flex-direction:column; justify-content:center\">\n        <div style=\"background:#EEF2F8; border-left:3px solid var(--navy-mid); border-radius:0 var(--radius) var(--radius) 0; padding:10px 14px; font-size:12px; color:var(--text-mid); line-height:1.5\">\n          <strong style=\"color:var(--navy); display:block; margin-bottom:3px\">Crit\u00e8re de classement</strong>\n          Offre la plus proche et <strong>inf\u00e9rieure ou \u00e9gale</strong> au prix de r\u00e9f\u00e9rence. \u00c0 d\u00e9faut, l'offre la plus proche <strong>sup\u00e9rieure</strong>.\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <!-- \u2550\u2550 Archives locales \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 -->\n  <div class=\"section-title\">Archives locales</div>\n  <div class=\"card archives-card\" id=\"archivesCard\">\n\n    <!-- API non support\u00e9e -->\n    <div class=\"api-not-supported\" id=\"archivesNoApi\" style=\"display:none\">\n      <span style=\"font-size:18px\">\u26a0\ufe0f</span>\n      <div>\n        <strong>Navigateur non compatible.</strong><br>\n        L'acc\u00e8s aux dossiers locaux n\u00e9cessite Chrome ou Edge version 86+.\n        Firefox et Safari ne supportent pas encore cette fonctionnalit\u00e9.\n      </div>\n    </div>\n\n    <!-- S\u00e9lecteur de dossier racine -->\n    <div class=\"folder-row\" id=\"folderRow\">\n      <span class=\"folder-icon\">\ud83d\udcc1</span>\n      <div class=\"folder-info\">\n        <div class=\"folder-label\">Dossier de stockage</div>\n        <div class=\"folder-path empty\" id=\"folderPathDisplay\">Aucun dossier s\u00e9lectionn\u00e9 \u2014 cliquez sur \"Choisir\"</div>\n      </div>\n      <button type=\"button\" class=\"btn-choose-folder\" onclick=\"selectRootFolder()\">\n        <svg width=\"13\" height=\"13\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M2 4a1 1 0 011-1h4l1.5 2H13a1 1 0 011 1v6a1 1 0 01-1 1H3a1 1 0 01-1-1V4z\" stroke=\"currentColor\" stroke-width=\"1.3\"/></svg>\n        Choisir\n      </button>\n    </div>\n\n    <!-- Structure du dossier cr\u00e9\u00e9 -->\n    <div id=\"folderStructure\" style=\"display:none; margin-bottom:14px; padding:10px 14px; background:#F0FBF4; border:1px solid #A8DDB8; border-radius:var(--radius); font-size:11px; color:#1A4A2A; line-height:1.8\">\n      <strong style=\"display:block; margin-bottom:4px; font-size:10px; letter-spacing:0.07em; text-transform:uppercase\">Structure cr\u00e9\u00e9e</strong>\n      <span id=\"folderStructureText\"></span>\n    </div>\n\n    <!-- Indicateur de sauvegarde en cours -->\n    <div class=\"archive-saving\" id=\"archiveSaving\">\n      <span style=\"animation:pulse 1s infinite; font-size:16px\">\u23f3</span>\n      Archivage en cours\u2026\n    </div>\n\n    <!-- Bouton archiver -->\n    <button type=\"button\" class=\"btn-archive\" id=\"btnArchive\" onclick=\"archiveCurrentOffer()\" disabled>\n      <svg width=\"15\" height=\"15\" viewBox=\"0 0 16 16\" fill=\"none\"><rect x=\"2\" y=\"2\" width=\"12\" height=\"12\" rx=\"1.5\" stroke=\"currentColor\" stroke-width=\"1.3\"/><path d=\"M5 2v5h6V2M5 10h6\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\"/></svg>\n      Archiver l'offre calcul\u00e9e\n    </button>\n\n    <!-- Liste des archives -->\n    <div class=\"archives-list-title\">\n      <span>Archives enregistr\u00e9es</span>\n      <span class=\"archive-count-badge\" id=\"archiveCountBadge\">0</span>\n    </div>\n    <div id=\"archiveListWrap\">\n      <div class=\"archive-list-empty\" id=\"archiveListEmpty\">\n        S\u00e9lectionnez un dossier pour afficher les archives existantes.\n      </div>\n      <div class=\"archive-items\" id=\"archiveItems\" style=\"display:none\"></div>\n    </div>\n\n  </div>\n\n  <!-- Soumissionnaires -->\n  <div class=\"section-title\">Soumissionnaires &amp; Offres</div>\n  <div class=\"card\">\n    <div class=\"alert error\" id=\"alertError\"></div>\n    <div class=\"alert info\"  id=\"alertInfo\"></div>\n\n    <table class=\"soumissionnaires-table\" id=\"soumTable\">\n      <thead>\n        <tr>\n          <th style=\"width:32px\">#</th>\n          <th>Soumissionnaire</th>\n          <th style=\"width:200px; text-align:right\">Montant offre (HT)</th>\n          <th style=\"width:60px; text-align:center\">Admis</th>\n          <th style=\"width:40px\"></th>\n        </tr>\n      </thead>\n      <tbody id=\"soumBody\"></tbody>\n    </table>\n\n    <div class=\"actions\">\n      <button type=\"button\" class=\"btn-add\" id=\"btnAdd\">\n        <svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M8 2v12M2 8h12\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>\n        Ajouter un soumissionnaire\n      </button>\n      <button type=\"button\" class=\"btn-import\" id=\"btnImport\" onclick=\"openImportModal()\">\n        <svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M2 11v2a1 1 0 001 1h10a1 1 0 001-1v-2M8 2v8M5 7l3 3 3-3\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>\n        Importer tableau\n      </button>\n      <button type=\"button\" class=\"btn-calc\" id=\"btnCalc\">\n        <svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M2 4h12M2 8h8M2 12h10\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg>\n        Calculer &amp; Afficher\n      </button>\n      <button type=\"button\" class=\"btn-reset\" id=\"btnReset\">\n        <svg width=\"13\" height=\"13\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M2 8a6 6 0 1 0 1.5-4L2 2v4h4L4.5 4.5\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>\n        R\u00e9initialiser\n      </button>\n      <!-- Auto-calc indicator -->\n      <div class=\"calc-indicator\" id=\"calcIndicator\">\n        <span class=\"calc-dot\"></span>\n        Calcul automatique en cours\u2026\n      </div>\n    </div>\n  </div>\n\n</div><!-- /.container -->\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 MODAL IMPORT TABLEAU -->\n<div class=\"import-overlay\" id=\"importOverlay\">\n  <div class=\"import-box\">\n    <div class=\"import-header\">\n      <h3>\n        <svg width=\"15\" height=\"15\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M2 11v2a1 1 0 001 1h10a1 1 0 001-1v-2M8 2v8M5 7l3 3 3-3\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>\n        Importer depuis un tableau\n      </h3>\n      <button type=\"button\" class=\"btn-modal-close\" onclick=\"closeImportModal()\">\n        <svg width=\"11\" height=\"11\" viewBox=\"0 0 12 12\" fill=\"none\"><path d=\"M2 2l8 8M10 2l-8 8\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg>\n        Fermer\n      </button>\n    </div>\n    <div class=\"import-body\">\n      <!-- Guide colonnes -->\n      <div style=\"font-size:11px; font-weight:700; color:var(--text-muted); letter-spacing:0.07em; text-transform:uppercase; margin-bottom:8px\">Format attendu des colonnes</div>\n      <div class=\"import-guide\">\n        <span class=\"import-col-badge col-name\">1 \u00b7 Entreprise</span>\n        <span class=\"import-col-arrow\">\u203a</span>\n        <span class=\"import-col-badge col-admin\">2 \u00b7 Admissible / Non admissible</span>\n        <span class=\"import-col-arrow\">\u203a</span>\n        <span class=\"import-col-badge col-open\">3 \u00b7 Ouverte <em>(ignor\u00e9e)</em></span>\n        <span class=\"import-col-arrow\">\u203a</span>\n        <span class=\"import-col-badge col-amount\">4 \u00b7 Montant HT (Avant Correction)</span>\n        <span class=\"import-col-arrow\">\u203a</span>\n        <span class=\"import-col-badge col-opt\">5 \u00b7 Apr\u00e8s Correction <em>(optionnelle)</em></span>\n      </div>\n      <div style=\"font-size:11px; color:var(--text-muted); margin-bottom:12px\">\n        S\u00e9lectionnez et copiez (Ctrl+C) les lignes du tableau, puis collez ici (Ctrl+V). Compatible Excel, LibreOffice et tableaux web.\n      </div>\n\n      <!-- Zone de collage -->\n      <textarea class=\"import-textarea\" id=\"importTextarea\"\n        placeholder=\"Collez ici le contenu copi\u00e9 depuis votre tableau...&#10;&#10;Exemple :&#10;SONATIS&#9;Admissible&#9;Ouverte&#9;2 059 112,40&#9;-&#10;STE MED GC&#9;Admissible&#9;Ouverte&#9;2 042 478,00&#9;-&#10;LA ROUTE VERTE&#9;Non admissible&#9;Ouverte&#9;2 136 273,60\"\n        oninput=\"onImportInput()\"></textarea>\n\n      <div class=\"import-error\" id=\"importError\"></div>\n\n      <!-- Options -->\n      <div class=\"import-options\">\n        <strong>Mode :</strong>\n        <label><input type=\"radio\" name=\"importMode\" value=\"replace\" checked> Remplacer les donn\u00e9es existantes</label>\n        <label><input type=\"radio\" name=\"importMode\" value=\"append\"> Ajouter aux donn\u00e9es existantes</label>\n      </div>\n\n      <!-- Aper\u00e7u -->\n      <div class=\"import-preview\" id=\"importPreview\">\n        <div class=\"import-preview-header\">\n          <span>Aper\u00e7u des lignes d\u00e9tect\u00e9es</span>\n          <span id=\"importPreviewCount\" style=\"color:var(--navy-light); font-weight:700\">\u2014</span>\n        </div>\n        <div class=\"import-preview-body\" id=\"importPreviewBody\"></div>\n      </div>\n\n      <!-- Footer -->\n      <div class=\"import-footer\">\n        <button type=\"button\" class=\"btn-import-cancel\" onclick=\"closeImportModal()\">Annuler</button>\n        <button type=\"button\" class=\"btn-import-confirm\" id=\"btnImportConfirm\" onclick=\"confirmImport()\" disabled>\n          <svg width=\"13\" height=\"13\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3 8l4 4 6-6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>\n          Importer <span id=\"importBtnCount\"></span>\n        </button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 STORAGE BAR -->\n<div style=\"max-width:960px; margin:0 auto; padding:0 24px 16px\">\n  <div class=\"storage-bar\" id=\"storageBar\">\n\n    <div class=\"storage-label\">\n      <svg width=\"14\" height=\"14\" viewBox=\"0 0 16 16\" fill=\"none\"><rect x=\"1.5\" y=\"2\" width=\"13\" height=\"12\" rx=\"1.5\" stroke=\"currentColor\" stroke-width=\"1.3\"/><rect x=\"4\" y=\"2\" width=\"8\" height=\"4.5\" rx=\"0.5\" stroke=\"currentColor\" stroke-width=\"1.2\"/><rect x=\"5.5\" y=\"8.5\" width=\"5\" height=\"4\" rx=\"0.5\" stroke=\"currentColor\" stroke-width=\"1.2\"/></svg>\n      Stockage automatique\n    </div>\n\n    <div class=\"storage-divider\"></div>\n\n    <div class=\"storage-toggle-wrap\">\n      <div class=\"storage-toggle-track on\" id=\"storageToggleTrack\" onclick=\"toggleStorage()\">\n        <span class=\"storage-toggle-thumb\"></span>\n      </div>\n      <span class=\"storage-toggle-label on\" id=\"storageToggleLabel\">Activ\u00e9</span>\n    </div>\n\n    <div class=\"storage-divider\"></div>\n\n    <div class=\"storage-countdown\" id=\"storageCountdown\">\n      <div class=\"countdown-ring-wrap\">\n        <svg viewBox=\"0 0 24 24\" width=\"28\" height=\"28\">\n          <circle class=\"countdown-track\" cx=\"12\" cy=\"12\" r=\"10.5\"/>\n          <circle class=\"countdown-fill\" cx=\"12\" cy=\"12\" r=\"10.5\" id=\"countdownFill\"/>\n        </svg>\n        <div class=\"countdown-num\" id=\"countdownNum\">30</div>\n      </div>\n      <span>Prochain enreg. dans <strong id=\"countdownSec\">30</strong>s</span>\n    </div>\n\n    <div class=\"storage-divider\"></div>\n\n    <div class=\"storage-lastsave\" id=\"lastsaveWrap\">\n      <svg width=\"12\" height=\"12\" viewBox=\"0 0 16 16\" fill=\"none\"><circle cx=\"8\" cy=\"8\" r=\"6.5\" stroke=\"currentColor\" stroke-width=\"1.3\"/><path d=\"M8 5v3.5l2 1.5\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\"/></svg>\n      <span>Dernier enreg. :</span>\n      <span class=\"lastsave-time\" id=\"lastsaveTime\">\u2014</span>\n    </div>\n\n    <div class=\"save-flash\" id=\"saveFlash\">\n      <svg width=\"12\" height=\"12\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3 8l3.5 3.5L13 4\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>\n      Enregistr\u00e9\n    </div>\n\n    <div style=\"display:flex; gap:8px; margin-left:auto; flex-shrink:0\">\n      <button type=\"button\" class=\"btn-save-now\" id=\"btnSaveNow\" onclick=\"manualSave()\">\n        <svg width=\"11\" height=\"11\" viewBox=\"0 0 16 16\" fill=\"none\"><rect x=\"1.5\" y=\"2\" width=\"13\" height=\"12\" rx=\"1.5\" stroke=\"currentColor\" stroke-width=\"1.4\"/><rect x=\"4\" y=\"2\" width=\"8\" height=\"4.5\" rx=\"0.5\" stroke=\"currentColor\" stroke-width=\"1.3\"/><rect x=\"5.5\" y=\"8.5\" width=\"5\" height=\"4\" rx=\"0.5\" stroke=\"currentColor\" stroke-width=\"1.3\"/></svg>\n        Sauvegarder\n      </button>\n      <button type=\"button\" class=\"btn-clear-storage\" onclick=\"clearStorage()\">\n        <svg width=\"11\" height=\"11\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3 4h10M6 4V2.5h4V4M5.5 4l.5 9M10.5 4l-.5 9M8 4v9\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\"/></svg>\n        Effacer\n      </button>\n    </div>\n  </div>\n</div>\n\n\n\n<!-- \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 FEATURE 3 : MODAL FEN\u00caTRE S\u00c9PAR\u00c9E -->\n<div class=\"modal-overlay\" id=\"resultsModal\" role=\"dialog\" aria-modal=\"true\">\n  <div class=\"modal-box\" id=\"modalBox\">\n\n    <!-- Toolbar -->\n    <div class=\"modal-toolbar\">\n      <div class=\"modal-title\">R\u00e9sultats \u2014 Tableau de d\u00e9pouillement</div>\n      <div class=\"modal-actions\">\n        <!-- FEATURE 2 : Imprimer seulement les r\u00e9sultats -->\n        <button type=\"button\" class=\"btn-modal-print\" id=\"btnPrint\" onclick=\"printResults()\">\n          <svg width=\"13\" height=\"13\" viewBox=\"0 0 16 16\" fill=\"none\"><rect x=\"2\" y=\"5\" width=\"12\" height=\"8\" rx=\"1.5\" stroke=\"currentColor\" stroke-width=\"1.2\"/><path d=\"M4 5V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M4 13v-3h8v3\" stroke=\"currentColor\" stroke-width=\"1.2\"/></svg>\n          Imprimer\n        </button>\n        <button type=\"button\" class=\"btn-modal-close\" onclick=\"closeModal()\">\n          <svg width=\"11\" height=\"11\" viewBox=\"0 0 12 12\" fill=\"none\"><path d=\"M2 2l8 8M10 2l-8 8\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg>\n          Fermer\n        </button>\n      </div>\n    </div>\n\n    <!-- Modal body (results content) -->\n    <div class=\"modal-body\" id=\"modalBody\">\n\n      <!-- Winner banner -->\n      <div id=\"winnerBanner\" class=\"winner-banner\" style=\"display:none\">\n        <div class=\"winner-icon\">&#9733;</div>\n        <div>\n          <div class=\"winner-label\">Offre mieux-disante</div>\n          <div class=\"winner-name\" id=\"winnerName\">\u2014</div>\n        </div>\n        <div class=\"winner-score\">\n          <div class=\"winner-score-val\" id=\"winnerMontant\">\u2014</div>\n          <div class=\"winner-score-label\">Montant de l'offre</div>\n          <div id=\"winnerEcart\" style=\"font-size:12px; margin-top:3px; opacity:0.85\">\u2014</div>\n        </div>\n      </div>\n\n      <!-- Results header -->\n      <div class=\"results-header\">\n        <h2>Tableau de d\u00e9pouillement des offres</h2>\n        <div style=\"display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:flex-end\">\n          <div id=\"estimBadgeWrap\" style=\"display:none; align-items:center; gap:8px\">\n            <span style=\"font-size:11px; color:rgba(255,255,255,0.55)\">P. estimation</span>\n            <span class=\"prix-ref-badge\" style=\"background:var(--navy-mid); border:1px solid rgba(255,255,255,0.2)\" id=\"prixEstimDisplay\">\u2014</span>\n          </div>\n          <div style=\"display:flex; align-items:center; gap:8px\">\n            <span style=\"font-size:11px; color:rgba(255,255,255,0.6)\">Prix de r\u00e9f\u00e9rence</span>\n            <span class=\"prix-ref-badge\" id=\"prixRefDisplay\">\u2014</span>\n          </div>\n        </div>\n      </div>\n\n      <!-- Metrics -->\n      <div class=\"metrics-row\">\n        <div class=\"metric-box\"><div class=\"metric-label\">Offres admises</div><div class=\"metric-value\" id=\"mNbAdmis\">\u2014</div></div>\n        <div class=\"metric-box\"><div class=\"metric-label\">Offre min. admise</div><div class=\"metric-value gold\" id=\"mPrixMin\">\u2014</div></div>\n        <div class=\"metric-box\"><div class=\"metric-label\">Offre max. admise</div><div class=\"metric-value\" id=\"mPrixMax\">\u2014</div></div>\n        <div class=\"metric-box\"><div class=\"metric-label\">P. estimation march\u00e9</div><div class=\"metric-value\" id=\"mPrixEstim\" style=\"color:var(--navy-mid); font-size:15px\">\u2014</div></div>\n        <div class=\"metric-box\"><div class=\"metric-label\">Prix de r\u00e9f\u00e9rence</div><div class=\"metric-value green\" id=\"mPrixRef\">\u2014</div></div>\n      </div>\n\n      <!-- FEATURE 4 : Results table \u2014 sorted by rank -->\n      <div class=\"results-table-wrap\">\n        <table class=\"results-table\">\n          <thead>\n            <tr>\n              <th style=\"width:70px\">Classement</th>\n              <th style=\"text-align:left\">Soumissionnaire</th>\n              <th>Montant offre HT</th>\n              <th id=\"thEstim\" style=\"background:#FFFBF0; color:#7A5000; border-bottom:2px solid #E8C97A\">P. estimation<br><small style=\"font-weight:400;font-size:9px;letter-spacing:0\">% &amp; \u00c9cart</small></th>\n              <th>% &amp; \u00c9cart / P. r\u00e9f.</th>\n              <th>Statut</th>\n            </tr>\n          </thead>\n          <tbody id=\"resultsBody\"></tbody>\n        </table>\n      </div>\n\n      <div class=\"formula-box\" style=\"margin-top:16px; display:none\" id=\"resultFormula\"></div>\n\n    </div><!-- /.modal-body -->\n  </div><!-- /.modal-box -->\n</div><!-- /.modal-overlay -->\n\n\n<script>\nvar rowId = 0;\n\n/* \u2500\u2500 ROWS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\nfunction addRow(name, montant, admis) {\n  name    = (name    !== undefined) ? name    : '';\n  montant = (montant !== undefined) ? montant : '';\n  admis   = (admis   !== undefined) ? admis   : true;\n  rowId++;\n  var id = rowId;\n  var tbody = document.getElementById('soumBody');\n  var tr = document.createElement('tr');\n  tr.id = 'row_' + id;\n  tr.innerHTML =\n    '<td class=\"row-num\">' + (tbody.rows.length + 1) + '</td>' +\n    '<td><input type=\"text\" placeholder=\"Nom du soumissionnaire\" value=\"' + escHtml(name) + '\" id=\"name_' + id + '\"></td>' +\n    '<td><input type=\"number\" class=\"num-input\" placeholder=\"0.00\" min=\"0\" step=\"0.01\" value=\"' + montant + '\" id=\"mont_' + id + '\"></td>' +\n    '<td style=\"text-align:center\"><input type=\"checkbox\" ' + (admis ? 'checked' : '') + ' id=\"admis_' + id + '\" style=\"accent-color:var(--navy);width:15px;height:15px;cursor:pointer\"></td>' +\n    '<td style=\"text-align:center\"><button type=\"button\" class=\"btn-del\" data-id=\"' + id + '\" title=\"Supprimer\">' +\n      '<svg viewBox=\"0 0 12 12\" fill=\"none\"><path d=\"M2 2l8 8M10 2l-8 8\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg>' +\n    '</button></td>';\n  tbody.appendChild(tr);\n  renumberRows();\n}\n\nfunction escHtml(s) {\n  return String(s).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\n}\n\nfunction delRow(id) {\n  var row = document.getElementById('row_' + id);\n  if (row) row.remove();\n  renumberRows();\n}\n\nfunction renumberRows() {\n  document.querySelectorAll('#soumBody tr').forEach(function(r, i) {\n    r.querySelector('.row-num').textContent = i + 1;\n  });\n}\n\n/* \u2500\u2500 FEATURE 1 : TOGGLE + CHECKBOX METHODS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\nvar METHODE_LABELS = {\n  ecart25:    'Excl. > 25%',\n  ecart20:    'Excl. > 20%',\n  ecart15:    'Excl. > 15%',\n  ecartinf20: 'Excl. < 20% bas',\n  estimation: 'Mixte estim.'\n};\n\nfunction toggleMethodeList() {\n  var wrap   = document.getElementById('methodeListWrap');\n  var toggle = document.getElementById('methodeToggle');\n  var isOpen = wrap.classList.contains('open');\n  wrap.classList.toggle('open', !isOpen);\n  toggle.classList.toggle('open', !isOpen);\n}\n\nfunction updateMethodeSummary() {\n  var sel     = getSelectedMethodes();\n  var summary = document.getElementById('methodeSummary');\n  if (!summary) return;\n  if (sel.length === 0) {\n    summary.textContent = 'Aucune m\u00e9thode s\u00e9lectionn\u00e9e';\n    summary.classList.remove('has-selection');\n  } else {\n    summary.textContent = sel.map(function(v) { return METHODE_LABELS[v] || v; }).join(' + ');\n    summary.classList.add('has-selection');\n  }\n}\n\nfunction getSelectedMethodes() {\n  var selected = [];\n  document.querySelectorAll('#methodeCheckboxes input[type=\"checkbox\"]').forEach(function(cb) {\n    if (cb.checked) selected.push(cb.value);\n  });\n  return selected;\n}\n\nfunction updateMethodeInfo() {\n  var methodes = getSelectedMethodes();\n  var hasEstim = methodes.indexOf('estimation') !== -1;\n  document.getElementById('estimInfo').style.display = hasEstim ? 'block' : 'none';\n  updateMethodeSummary();\n}\n\n/* \u2500\u2500 HEADER & ESTIMATION \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\nfunction updateEstimation() {\n  var val = parseFloat(document.getElementById('prixEstimation').value);\n  var currency = document.getElementById('monnaie').value;\n  var preview = document.getElementById('estimPreview');\n  if (!isNaN(val) && val > 0) {\n    preview.style.display = 'block';\n    document.getElementById('estimDisplay').textContent = fmt(val) + ' ' + currency;\n  } else {\n    preview.style.display = 'none';\n  }\n}\n\nfunction updateHeader() {\n  var obj = document.getElementById('objetMarche').value.trim();\n  var ao  = document.getElementById('refAO').value.trim();\n  var hdr = document.getElementById('headerRef');\n  if (obj || ao) {\n    hdr.style.display = 'block';\n    document.getElementById('headerRefValue').textContent = obj || '\u2014';\n    document.getElementById('headerRefAO').textContent    = ao  || '\u2014';\n  } else {\n    hdr.style.display = 'none';\n  }\n}\n\n/* \u2500\u2500 FORMATAGE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\nfunction fmt(val, dec) {\n  if (dec === undefined) dec = 2;\n  if (isNaN(val)) return '\u2014';\n  return new Intl.NumberFormat('fr-MA', { minimumFractionDigits: dec, maximumFractionDigits: dec }).format(val);\n}\n\n/* \u2500\u2500 ALERTS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\nfunction showAlert(id, msg) {\n  var el = document.getElementById(id);\n  el.textContent = msg;\n  el.classList.add('visible');\n}\nfunction hideAlerts() {\n  document.getElementById('alertError').classList.remove('visible');\n  document.getElementById('alertInfo').classList.remove('visible');\n}\n\n/* \u2500\u2500 FEATURE 3 : MODAL OPEN/CLOSE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\nfunction openModal() {\n  var modal = document.getElementById('resultsModal');\n  modal.classList.add('open');\n  document.body.style.overflow = 'hidden';\n  modal.scrollTop = 0;\n}\n\nfunction closeModal() {\n  document.getElementById('resultsModal').classList.remove('open');\n  document.body.style.overflow = '';\n}\n\n// Close on backdrop click\ndocument.addEventListener('DOMContentLoaded', function() {\n  document.getElementById('resultsModal').addEventListener('click', function(e) {\n    if (e.target === this) closeModal();\n  });\n  // ESC key\n  document.addEventListener('keydown', function(e) {\n    if (e.key === 'Escape') closeModal();\n  });\n});\n\n/* \u2500\u2500 FEATURE 2 : IMPRIMER SEULEMENT LES R\u00c9SULTATS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 */\nfunction printResults() {\n  var currency = document.getElementById('monnaie').value;\n  var objet    = document.getElementById('objetMarche').value.trim();\n  var refAO    = document.getElementById('refAO').value.trim();\n\n  var winnerBannerHTML = document.getElementById('winnerBanner').outerHTML;\n  var metricsHTML      = document.querySelector('.metrics-row').outerHTML;\n  var tableHTML        = document.querySelector('.results-table').outerHTML;\n  var formulaEl        = document.getElementById('resultFormula');\n  var formulaHTML      = formulaEl.style.display !== 'none' ? formulaEl.outerHTML : '';\n  var prixRef          = document.getElementById('prixRefDisplay').textContent;\n  var prixEstimTxt     = document.getElementById('prixEstimDisplay').textContent;\n  var estimShown       = document.getElementById('estimBadgeWrap').style.display !== 'none';\n\n  var css = `\n    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');\n    :root {\n      --navy:#0D2240; --navy-mid:#1A3A5C; --navy-light:#2A5180;\n      --gold:#C9922A; --gold-light:#E8B84B; --gold-pale:#FDF3E0;\n      --green:#1A6B3A; --red:#8B1A1A; --red-light:#FDEAEA;\n      --bg:#F5F7FA; --surface:#FFFFFF; --border:#D8DDE6;\n      --border-strong:#B0BAC9; --text:#0D2240; --text-mid:#3A4F6B;\n      --text-muted:#6B7FA0; --radius:8px; --radius-lg:14px;\n    }\n    * { box-sizing:border-box; margin:0; padding:0; }\n    body { font-family:'IBM Plex Sans Arabic','Segoe UI',sans-serif; background:#FFF; color:var(--text); font-size:13px; padding:24px 32px; }\n    h1.print-title { font-size:18px; font-weight:700; color:var(--navy); margin-bottom:4px; }\n    .print-meta { font-size:11px; color:var(--text-muted); margin-bottom:20px; }\n    .print-ref-row { display:flex; align-items:center; gap:12px; background:var(--navy); color:#FFF; padding:14px 20px; border-radius:8px 8px 0 0; margin-bottom:0; }\n    .print-ref-row h2 { font-size:14px; font-weight:600; }\n    .prix-ref-badge { background:var(--gold); color:#FFF; font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; padding:4px 14px; border-radius:20px; margin-left:auto; }\n    .winner-banner { background:var(--green); color:#FFF; padding:14px 20px; border-radius:8px; margin-bottom:16px; display:flex; align-items:center; gap:14px; }\n    .winner-icon { width:36px; height:36px; background:rgba(255,255,255,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; }\n    .winner-label { font-size:9px; letter-spacing:0.1em; text-transform:uppercase; opacity:0.7; }\n    .winner-name { font-size:17px; font-weight:600; }\n    .winner-score { margin-left:auto; text-align:right; }\n    .winner-score-val { font-size:17px; font-weight:600; font-family:'IBM Plex Mono',monospace; }\n    .winner-score-label { font-size:9px; opacity:0.7; text-transform:uppercase; letter-spacing:0.08em; }\n    .metrics-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }\n    .metric-box { background:var(--surface); padding:12px 16px; text-align:center; }\n    .metric-label { font-size:9px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:3px; }\n    .metric-value { font-size:17px; font-weight:600; font-family:'IBM Plex Mono',monospace; color:var(--navy); }\n    .metric-value.gold { color:var(--gold); }\n    .metric-value.green { color:var(--green); }\n    .results-table { width:100%; border-collapse:collapse; border:1px solid var(--border); border-top:none; }\n    .results-table thead th { background:#F0F3F8; color:var(--text-mid); font-size:9px; font-weight:600; letter-spacing:0.09em; text-transform:uppercase; padding:9px 12px; text-align:center; border-bottom:1px solid var(--border); }\n    .results-table thead th:nth-child(2) { text-align:left; }\n    .results-table tbody td { padding:10px 12px; border-bottom:1px solid var(--border); text-align:center; font-size:12px; }\n    .results-table tbody td:nth-child(2) { text-align:left; }\n    .results-table tbody tr:last-child td { border-bottom:none; }\n    .winner-row { background:var(--gold-pale) !important; }\n    .winner-row td { font-weight:500; }\n    .rank-badge { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; font-size:11px; font-weight:600; }\n    .rank-1 { background:var(--gold); color:#FFF; }\n    .rank-2 { background:#B0BAC9; color:#FFF; }\n    .rank-3 { background:#C4884A; color:#FFF; }\n    .rank-n { background:var(--bg); color:var(--text-muted); border:1px solid var(--border); }\n    .tag { display:inline-block; font-size:8px; border-radius:3px; padding:1px 5px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; }\n    .tag-exclu   { background:var(--red-light); color:var(--red); border:1px solid #ECA8A8; }\n    .tag-inadmis { background:#F5F5F5; color:var(--text-muted); border:1px solid var(--border); }\n    .tag-dessus  { background:#FFF3E0; color:#8B4A00; border:1px solid #F4C06A; }\n    .formula-box { background:#EEF2F8; border-left:3px solid var(--navy-mid); border-radius:0 6px 6px 0; padding:10px 14px; margin-top:14px; font-size:11px; color:var(--text-mid); }\n    .formula-box strong { color:var(--navy); }\n    .formula-code { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--navy-mid); margin-top:3px; display:block; }\n    @media print { * { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }\n    @page { margin: 0; }\n    body { padding: 1cm 1.5cm; }\n  `;\n\n  var metaLine = [];\n  if (objet) metaLine.push('Objet : ' + objet);\n  if (refAO)  metaLine.push('R\u00e9f. AO : ' + refAO);\n  metaLine.push('Imprim\u00e9 le : ' + new Date().toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'}));\n\n  var html = '<!DOCTYPE html><html lang=\"fr\"><head><meta charset=\"UTF-8\"><title></title><style>' + css + '</style></head><body>' +\n    '<h1 class=\"print-title\">Tableau de d\u00e9pouillement des offres</h1>' +\n    '<p class=\"print-meta\">' + metaLine.join(' &nbsp;|&nbsp; ') + '</p>' +\n    winnerBannerHTML +\n    '<div class=\"print-ref-row\"><h2>Tableau de d\u00e9pouillement</h2><div style=\"display:flex;align-items:center;gap:12px;margin-left:auto\">' +\n      (estimShown ? '<span style=\"font-size:10px;color:rgba(255,255,255,0.6)\">P. estimation</span><span class=\"prix-ref-badge\" style=\"background:#1A3A5C;font-size:13px\">' + prixEstimTxt + '</span>' : '') +\n      '<span style=\"font-size:10px;color:rgba(255,255,255,0.6)\">P. r\u00e9f.</span><span class=\"prix-ref-badge\">' + prixRef + '</span>' +\n    '</div></div>' +\n    metricsHTML +\n    '<table class=\"results-table\">' + tableHTML.replace(/<table[^>]*>/,'').replace(/<\\/table>/,'') + '</table>' +\n    formulaHTML +\n    '";
+    (function(){
+
+var rowId = 0;
+
+/* ── ROWS ──────────────────────────────────────────────────────────────────── */
+function addRow(name, montant, admis) {
+  name    = (name    !== undefined) ? name    : '';
+  montant = (montant !== undefined) ? montant : '';
+  admis   = (admis   !== undefined) ? admis   : true;
+  rowId++;
+  var id = rowId;
+  var tbody = document.getElementById('soumBody');
+  var tr = document.createElement('tr');
+  tr.id = 'row_' + id;
+  tr.innerHTML =
+    '<td class="row-num">' + (tbody.rows.length + 1) + '</td>' +
+    '<td><input type="text" placeholder="Nom du soumissionnaire" value="' + escHtml(name) + '" id="name_' + id + '"></td>' +
+    '<td><input type="number" class="num-input" placeholder="0.00" min="0" step="0.01" value="' + montant + '" id="mont_' + id + '"></td>' +
+    '<td style="text-align:center"><input type="checkbox" ' + (admis ? 'checked' : '') + ' id="admis_' + id + '" style="accent-color:var(--navy);width:15px;height:15px;cursor:pointer"></td>' +
+    '<td style="text-align:center"><button type="button" class="btn-del" data-id="' + id + '" title="Supprimer">' +
+      '<svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>' +
+    '</button></td>';
+  tbody.appendChild(tr);
+  renumberRows();
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function delRow(id) {
+  var row = document.getElementById('row_' + id);
+  if (row) row.remove();
+  renumberRows();
+}
+
+function renumberRows() {
+  document.querySelectorAll('#soumBody tr').forEach(function(r, i) {
+    r.querySelector('.row-num').textContent = i + 1;
+  });
+}
+
+/* ── FEATURE 1 : TOGGLE + CHECKBOX METHODS ────────────────────────────────── */
+var METHODE_LABELS = {
+  ecart25:    'Excl. > 25%',
+  ecart20:    'Excl. > 20%',
+  ecart15:    'Excl. > 15%',
+  ecartinf20: 'Excl. < 20% bas',
+  estimation: 'Mixte estim.'
+};
+
+function toggleMethodeList() {
+  var wrap   = document.getElementById('methodeListWrap');
+  var toggle = document.getElementById('methodeToggle');
+  var isOpen = wrap.classList.contains('open');
+  wrap.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('open', !isOpen);
+}
+
+function updateMethodeSummary() {
+  var sel     = getSelectedMethodes();
+  var summary = document.getElementById('methodeSummary');
+  if (!summary) return;
+  if (sel.length === 0) {
+    summary.textContent = 'Aucune méthode sélectionnée';
+    summary.classList.remove('has-selection');
+  } else {
+    summary.textContent = sel.map(function(v) { return METHODE_LABELS[v] || v; }).join(' + ');
+    summary.classList.add('has-selection');
+  }
+}
+
+function getSelectedMethodes() {
+  var selected = [];
+  document.querySelectorAll('#methodeCheckboxes input[type="checkbox"]').forEach(function(cb) {
+    if (cb.checked) selected.push(cb.value);
+  });
+  return selected;
+}
+
+function updateMethodeInfo() {
+  var methodes = getSelectedMethodes();
+  var hasEstim = methodes.indexOf('estimation') !== -1;
+  document.getElementById('estimInfo').style.display = hasEstim ? 'block' : 'none';
+  updateMethodeSummary();
+}
+
+/* ── HEADER & ESTIMATION ───────────────────────────────────────────────────── */
+function updateEstimation() {
+  var val = parseFloat(document.getElementById('prixEstimation').value);
+  var currency = document.getElementById('monnaie').value;
+  var preview = document.getElementById('estimPreview');
+  if (!isNaN(val) && val > 0) {
+    preview.style.display = 'block';
+    document.getElementById('estimDisplay').textContent = fmt(val) + ' ' + currency;
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function updateHeader() {
+  var obj = document.getElementById('objetMarche').value.trim();
+  var ao  = document.getElementById('refAO').value.trim();
+  var hdr = document.getElementById('headerRef');
+  if (obj || ao) {
+    hdr.style.display = 'block';
+    document.getElementById('headerRefValue').textContent = obj || '—';
+    document.getElementById('headerRefAO').textContent    = ao  || '—';
+  } else {
+    hdr.style.display = 'none';
+  }
+}
+
+/* ── FORMATAGE ─────────────────────────────────────────────────────────────── */
+function fmt(val, dec) {
+  if (dec === undefined) dec = 2;
+  if (isNaN(val)) return '—';
+  return new Intl.NumberFormat('fr-MA', { minimumFractionDigits: dec, maximumFractionDigits: dec }).format(val);
+}
+
+/* ── ALERTS ────────────────────────────────────────────────────────────────── */
+function showAlert(id, msg) {
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('visible');
+}
+function hideAlerts() {
+  document.getElementById('alertError').classList.remove('visible');
+  document.getElementById('alertInfo').classList.remove('visible');
+}
+
+/* ── FEATURE 3 : MODAL OPEN/CLOSE ─────────────────────────────────────────── */
+function openModal() {
+  var modal = document.getElementById('resultsModal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  modal.scrollTop = 0;
+}
+
+function closeModal() {
+  document.getElementById('resultsModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on backdrop click
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('resultsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  // ESC key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+});
+
+/* ── FEATURE 2 : IMPRIMER SEULEMENT LES RÉSULTATS ─────────────────────────── */
+function printResults() {
+  var currency = document.getElementById('monnaie').value;
+  var objet    = document.getElementById('objetMarche').value.trim();
+  var refAO    = document.getElementById('refAO').value.trim();
+
+  var winnerBannerHTML = document.getElementById('winnerBanner').outerHTML;
+  var metricsHTML      = document.querySelector('.metrics-row').outerHTML;
+  var tableHTML        = document.querySelector('.results-table').outerHTML;
+  var formulaEl        = document.getElementById('resultFormula');
+  var formulaHTML      = formulaEl.style.display !== 'none' ? formulaEl.outerHTML : '';
+  var prixRef          = document.getElementById('prixRefDisplay').textContent;
+  var prixEstimTxt     = document.getElementById('prixEstimDisplay').textContent;
+  var estimShown       = document.getElementById('estimBadgeWrap').style.display !== 'none';
+
+  var css = `
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+    :root {
+      --navy:#0D2240; --navy-mid:#1A3A5C; --navy-light:#2A5180;
+      --gold:#C9922A; --gold-light:#E8B84B; --gold-pale:#FDF3E0;
+      --green:#1A6B3A; --red:#8B1A1A; --red-light:#FDEAEA;
+      --bg:#F5F7FA; --surface:#FFFFFF; --border:#D8DDE6;
+      --border-strong:#B0BAC9; --text:#0D2240; --text-mid:#3A4F6B;
+      --text-muted:#6B7FA0; --radius:8px; --radius-lg:14px;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'IBM Plex Sans Arabic','Segoe UI',sans-serif; background:#FFF; color:var(--text); font-size:13px; padding:24px 32px; }
+    h1.print-title { font-size:18px; font-weight:700; color:var(--navy); margin-bottom:4px; }
+    .print-meta { font-size:11px; color:var(--text-muted); margin-bottom:20px; }
+    .print-ref-row { display:flex; align-items:center; gap:12px; background:var(--navy); color:#FFF; padding:14px 20px; border-radius:8px 8px 0 0; margin-bottom:0; }
+    .print-ref-row h2 { font-size:14px; font-weight:600; }
+    .prix-ref-badge { background:var(--gold); color:#FFF; font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; padding:4px 14px; border-radius:20px; margin-left:auto; }
+    .winner-banner { background:var(--green); color:#FFF; padding:14px 20px; border-radius:8px; margin-bottom:16px; display:flex; align-items:center; gap:14px; }
+    .winner-icon { width:36px; height:36px; background:rgba(255,255,255,0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; }
+    .winner-label { font-size:9px; letter-spacing:0.1em; text-transform:uppercase; opacity:0.7; }
+    .winner-name { font-size:17px; font-weight:600; }
+    .winner-score { margin-left:auto; text-align:right; }
+    .winner-score-val { font-size:17px; font-weight:600; font-family:'IBM Plex Mono',monospace; }
+    .winner-score-label { font-size:9px; opacity:0.7; text-transform:uppercase; letter-spacing:0.08em; }
+    .metrics-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
+    .metric-box { background:var(--surface); padding:12px 16px; text-align:center; }
+    .metric-label { font-size:9px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-muted); margin-bottom:3px; }
+    .metric-value { font-size:17px; font-weight:600; font-family:'IBM Plex Mono',monospace; color:var(--navy); }
+    .metric-value.gold { color:var(--gold); }
+    .metric-value.green { color:var(--green); }
+    .results-table { width:100%; border-collapse:collapse; border:1px solid var(--border); border-top:none; }
+    .results-table thead th { background:#F0F3F8; color:var(--text-mid); font-size:9px; font-weight:600; letter-spacing:0.09em; text-transform:uppercase; padding:9px 12px; text-align:center; border-bottom:1px solid var(--border); }
+    .results-table thead th:nth-child(2) { text-align:left; }
+    .results-table tbody td { padding:10px 12px; border-bottom:1px solid var(--border); text-align:center; font-size:12px; }
+    .results-table tbody td:nth-child(2) { text-align:left; }
+    .results-table tbody tr:last-child td { border-bottom:none; }
+    .winner-row { background:var(--gold-pale) !important; }
+    .winner-row td { font-weight:500; }
+    .rank-badge { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; font-size:11px; font-weight:600; }
+    .rank-1 { background:var(--gold); color:#FFF; }
+    .rank-2 { background:#B0BAC9; color:#FFF; }
+    .rank-3 { background:#C4884A; color:#FFF; }
+    .rank-n { background:var(--bg); color:var(--text-muted); border:1px solid var(--border); }
+    .tag { display:inline-block; font-size:8px; border-radius:3px; padding:1px 5px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; }
+    .tag-exclu   { background:var(--red-light); color:var(--red); border:1px solid #ECA8A8; }
+    .tag-inadmis { background:#F5F5F5; color:var(--text-muted); border:1px solid var(--border); }
+    .tag-dessus  { background:#FFF3E0; color:#8B4A00; border:1px solid #F4C06A; }
+    .formula-box { background:#EEF2F8; border-left:3px solid var(--navy-mid); border-radius:0 6px 6px 0; padding:10px 14px; margin-top:14px; font-size:11px; color:var(--text-mid); }
+    .formula-box strong { color:var(--navy); }
+    .formula-code { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--navy-mid); margin-top:3px; display:block; }
+    @media print { * { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+    @page { margin: 0; }
+    body { padding: 1cm 1.5cm; }
+  `;
+
+  var metaLine = [];
+  if (objet) metaLine.push('Objet : ' + objet);
+  if (refAO)  metaLine.push('Réf. AO : ' + refAO);
+  metaLine.push('Imprimé le : ' + new Date().toLocaleDateString('fr-FR', {day:'2-digit',month:'long',year:'numeric'}));
+
+  var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title></title><style>' + css + '</style></head><body>' +
+    '<h1 class="print-title">Tableau de dépouillement des offres</h1>' +
+    '<p class="print-meta">' + metaLine.join(' &nbsp;|&nbsp; ') + '</p>' +
+    winnerBannerHTML +
+    '<div class="print-ref-row"><h2>Tableau de dépouillement</h2><div style="display:flex;align-items:center;gap:12px;margin-left:auto">' +
+      (estimShown ? '<span style="font-size:10px;color:rgba(255,255,255,0.6)">P. estimation</span><span class="prix-ref-badge" style="background:#1A3A5C;font-size:13px">' + prixEstimTxt + '</span>' : '') +
+      '<span style="font-size:10px;color:rgba(255,255,255,0.6)">P. réf.</span><span class="prix-ref-badge">' + prixRef + '</span>' +
+    '</div></div>' +
+    metricsHTML +
+    '<table class="results-table">' + tableHTML.replace(/<table[^>]*>/,'').replace(/<\/table>/,'') + '</table>' +
+    formulaHTML +
+    '</body></html>';
+
+  var win = window.open('', '_blank', 'width=960,height=700,scrollbars=yes,resizable=yes');
+  if (!win) { alert("Veuillez autoriser les fenêtres pop-up pour imprimer."); return; }
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(function() { win.print(); }, 800);
+}
+
+/* ── CALCUL PRINCIPAL ──────────────────────────────────────────────────────── */
+function calculate(openWindow) {
+  hideAlerts();
+  var rows = document.querySelectorAll('#soumBody tr');
+  if (rows.length < 2) { showAlert('alertError', 'Veuillez saisir au moins 2 soumissionnaires.'); return; }
+
+  var currency  = document.getElementById('monnaie').value;
+  var methodes  = getSelectedMethodes();
+  var hasEstim  = methodes.indexOf('estimation') !== -1;
+  var prixEstim = parseFloat(document.getElementById('prixEstimation').value);
+
+  if (hasEstim && (isNaN(prixEstim) || prixEstim <= 0)) {
+    showAlert('alertError', "La méthode mixte nécessite un prix d'estimation valide (valeur > 0).");
+    return;
+  }
+
+  var data = [];
+  var hasError = false;
+  rows.forEach(function(tr) {
+    var id      = tr.id.replace('row_', '');
+    var nameEl  = document.getElementById('name_'  + id);
+    var montEl  = document.getElementById('mont_'  + id);
+    var admisEl = document.getElementById('admis_' + id);
+    var name    = nameEl  ? nameEl.value.trim()       : '';
+    var mont    = montEl  ? parseFloat(montEl.value)  : NaN;
+    var admis   = admisEl ? admisEl.checked            : false;
+    if (!name || isNaN(mont) || mont <= 0) { hasError = true; return; }
+    data.push({ id: id, name: name, montant: mont, admis: admis });
+  });
+
+  if (hasError) { showAlert('alertError', "Veuillez remplir correctement tous les montants d'offre (valeur > 0)."); return; }
+
+  var admisData = data.filter(function(d) { return d.admis; });
+  if (admisData.length < 1) { showAlert('alertError', 'Aucune offre admissible. Veuillez cocher au moins une offre.'); return; }
+
+  var montants    = admisData.map(function(d) { return d.montant; });
+  var calcMoyenne = function(arr) { return arr.reduce(function(a, b) { return a + b; }, 0) / arr.length; };
+  var excluded    = new Set();
+  var pref;
+
+  var m1 = calcMoyenne(montants);
+
+  admisData.forEach(function(d) {
+    var ecartRel = (d.montant - m1) / m1;
+    if (methodes.indexOf('ecart25')    !== -1 && Math.abs(ecartRel) > 0.25) excluded.add(d.id);
+    if (methodes.indexOf('ecart20')    !== -1 && Math.abs(ecartRel) > 0.20) excluded.add(d.id);
+    if (methodes.indexOf('ecart15')    !== -1 && Math.abs(ecartRel) > 0.15) excluded.add(d.id);
+    if (methodes.indexOf('ecartinf20') !== -1 && ecartRel < -0.20)          excluded.add(d.id);
+  });
+
+  var kept = admisData.filter(function(d) { return !excluded.has(d.id); }).map(function(d) { return d.montant; });
+  if (kept.length === 0) {
+    excluded.clear();
+    kept = montants;
+    showAlert('alertInfo', 'Toutes les offres seraient exclues avec les conditions choisies. La moyenne simple est utilisée à la place.');
+  }
+  var moyConc = calcMoyenne(kept);
+  pref = hasEstim ? (prixEstim + moyConc) / 2 : moyConc;
+
+  var admisFiltered = admisData.filter(function(d) { return !excluded.has(d.id); });
+  var pmin = Math.min.apply(null, admisFiltered.map(function(d) { return d.montant; }));
+  var pmax = Math.max.apply(null, admisFiltered.map(function(d) { return d.montant; }));
+
+  // Classement
+  var grp1 = admisFiltered.filter(function(d) { return d.montant <= pref; });
+  var grp2 = admisFiltered.filter(function(d) { return d.montant >  pref; });
+  grp1.sort(function(a, b) { return (pref - a.montant) - (pref - b.montant); });
+  grp2.sort(function(a, b) { return (a.montant - pref) - (b.montant - pref); });
+
+  var rankMap = {};
+  grp1.forEach(function(d, i) { rankMap[d.id] = i + 1; });
+  grp2.forEach(function(d, i) { rankMap[d.id] = grp1.length + i + 1; });
+
+  var winner = grp1.length > 0 ? grp1[0] : (grp2.length > 0 ? grp2[0] : null);
+
+  // Metrics display
+  document.getElementById('prixRefDisplay').textContent = fmt(pref) + ' ' + currency;
+  document.getElementById('mNbAdmis').textContent = admisFiltered.length;
+  document.getElementById('mPrixMin').textContent  = fmt(pmin);
+  document.getElementById('mPrixMax').textContent  = fmt(pmax);
+  document.getElementById('mPrixRef').textContent  = fmt(pref);
+
+  // Estimation metric + badge
+  var estimBadge = document.getElementById('estimBadgeWrap');
+  var mEstim     = document.getElementById('mPrixEstim');
+  var thEstim    = document.getElementById('thEstim');
+  if (hasEstim && prixEstim > 0) {
+    document.getElementById('prixEstimDisplay').textContent = fmt(prixEstim) + ' ' + currency;
+    mEstim.textContent   = fmt(prixEstim);
+    mEstim.style.color   = '#7A5000';
+    if (estimBadge) estimBadge.style.display = 'flex';
+    if (thEstim)    thEstim.style.display = '';
+  } else {
+    document.getElementById('prixEstimDisplay').textContent = '—';
+    mEstim.textContent   = 'Non saisi';
+    mEstim.style.color   = 'var(--text-muted)';
+    mEstim.style.fontSize = '12px';
+    if (estimBadge) estimBadge.style.display = 'none';
+    if (thEstim)    thEstim.style.display = '';   // still show col, will show "—"
+  }
+
+  if (winner) {
+    document.getElementById('winnerBanner').style.display = 'flex';
+    document.getElementById('winnerName').textContent     = winner.name;
+    document.getElementById('winnerMontant').textContent  = fmt(winner.montant) + ' ' + currency;
+    var ecartW    = winner.montant - pref;
+    var pctW      = winner.montant / pref * 100 - 100;
+    var ecartWStr = (ecartW >= 0 ? '+' : '') + fmt(ecartW) + ' ' + currency +
+                    ' (' + (pctW >= 0 ? '+' : '') + fmt(pctW, 2) + '% du P. réf.)';
+    document.getElementById('winnerEcart').textContent = ecartWStr;
+  } else {
+    document.getElementById('winnerBanner').style.display = 'none';
+  }
+
+  /* ── FEATURE 4 : Tri par classement ──────────────────────────────────────── */
+  // Sort data: ranked entries first (by rank asc), then excluded, then non-admis
+  var sortedData = data.slice().sort(function(a, b) {
+    var ra = rankMap[a.id];
+    var rb = rankMap[b.id];
+    var aIsExcluded  = excluded.has(a.id);
+    var bIsExcluded  = excluded.has(b.id);
+    var aIsNonAdmis  = !a.admis;
+    var bIsNonAdmis  = !b.admis;
+
+    // Priority order: ranked → excluded → non-admis
+    var priorityA = ra ? 0 : (aIsExcluded ? 1 : 2);
+    var priorityB = rb ? 0 : (bIsExcluded ? 1 : 2);
+    if (priorityA !== priorityB) return priorityA - priorityB;
+    if (ra && rb) return ra - rb; // both ranked: sort by rank
+    return 0;
+  });
+
+  // Build results table (sorted)
+  var tbody = document.getElementById('resultsBody');
+  tbody.innerHTML = '';
+
+  sortedData.forEach(function(d) {
+    var isExcluded = excluded.has(d.id);
+    var isNonAdmis = !d.admis;
+    var isWinner   = winner && d.id === winner.id;
+    var rank       = rankMap[d.id];
+    var inGrp2     = d.admis && !isExcluded && d.montant > pref;
+
+    var ecart    = (d.admis && !isExcluded) ? (d.montant - pref) : null;
+    var pctRef   = (d.admis && !isExcluded) ? (d.montant / pref * 100 - 100) : null;
+
+    var pctSign  = pctRef !== null ? (pctRef > 0 ? '+' : '') : '';
+    var pctColor = pctRef !== null
+      ? (pctRef > 0 ? 'color:#8B4A00' : (pctRef === 0 ? 'color:var(--green)' : 'color:var(--navy-light)'))
+      : 'color:var(--text-muted)';
+    var pctHtml  = pctRef !== null
+      ? '<span style="' + pctColor + ';font-family:\'IBM Plex Mono\',monospace;font-size:13px;font-weight:600">' + pctSign + fmt(pctRef, 2) + '%</span>'
+      : '—';
+
+    var ecartAbs  = ecart !== null ? fmt(Math.abs(ecart)) : '—';
+    var ecartSign = ecart !== null ? (ecart > 0 ? '+' : ecart < 0 ? '-' : '') : '';
+    var ecartColor = ecart !== null
+      ? (ecart > 0 ? 'color:#8B4A00' : (ecart === 0 ? 'color:var(--green)' : 'color:var(--navy-light)'))
+      : 'color:var(--text-muted)';
+
+    var statutHtml;
+    if (isNonAdmis) {
+      statutHtml = '<span class="tag tag-inadmis">Non admis</span>';
+    } else if (isExcluded) {
+      statutHtml = '<span class="tag tag-exclu">Écarté</span>';
+    } else {
+      statutHtml = '<span style="color:var(--green);font-weight:600;font-size:12px">&#10003; Validé</span>';
+    }
+
+    var rankHtml;
+    if (!rank) {
+      rankHtml = '<span style="font-size:11px;color:var(--text-muted)">—</span>';
+    } else {
+      var cls = rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : 'rank-n';
+      rankHtml = '<span class="rank-badge ' + cls + '">' + rank + '</span>' +
+        (inGrp2 ? '<br><span style="font-size:9px;color:#8B4A00;letter-spacing:0.04em">SUPÉRIEUR</span>' : '');
+    }
+
+    var tr = document.createElement('tr');
+    if (isWinner) tr.className = 'winner-row';
+
+    // Estimation column
+    var estimHtml;
+    if (hasEstim && prixEstim > 0 && d.admis && !isExcluded) {
+      var pctE  = d.montant / prixEstim * 100 - 100;
+      var ecartE = d.montant - prixEstim;
+      var signE  = pctE >= 0 ? '+' : '';
+      var colorE = pctE > 0 ? '#8B4A00' : (pctE === 0 ? 'var(--green)' : 'var(--navy-light)');
+      estimHtml =
+        '<div style="font-family:\'IBM Plex Mono\',monospace; font-size:12px; font-weight:600; color:' + colorE + '">' + signE + fmt(pctE, 2) + '%</div>' +
+        '<div style="font-family:\'IBM Plex Mono\',monospace; font-size:10px; color:' + colorE + '; opacity:0.75">' + (ecartE >= 0 ? '+' : '') + fmt(ecartE) + '</div>';
+    } else {
+      estimHtml = '<span style="color:var(--text-muted);font-size:11px">—</span>';
+    }
+
+    tr.innerHTML =
+      '<td style="text-align:center">' + rankHtml + '</td>' +
+      '<td><span style="font-weight:' + (isWinner ? '600' : '400') + '">' + escHtml(d.name) + '</span>' +
+        (isExcluded ? ' <span class="tag tag-exclu">Écarté</span>' : '') + '</td>' +
+      '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:13px">' + fmt(d.montant) + ' ' + currency + '</td>' +
+      '<td style="text-align:center; background:#FFFBF0">' + estimHtml + '</td>' +
+      '<td style="text-align:center">' +
+        (ecart !== null
+          ? '<div style="' + pctColor + ';font-family:\'IBM Plex Mono\',monospace;font-size:13px;font-weight:600">' + pctSign + fmt(pctRef, 2) + '%</div>' +
+            '<div style="' + ecartColor + ';font-family:\'IBM Plex Mono\',monospace;font-size:10px;opacity:0.8;margin-top:1px">' + ecartSign + ecartAbs + ' ' + currency + '</div>'
+          : '—') +
+      '</td>' +
+      '<td>' + statutHtml + '</td>';
+    tbody.appendChild(tr);
+  });
+
+  // Formula box
+  document.getElementById('resultFormula').style.display = 'none';
+
+  // Store last calculation for archiving
+  var sortedRows = sortedData.map(function(d) {
+    var isExcl = excluded.has(d.id);
+    var ecart  = (d.admis && !isExcl) ? (d.montant - pref) : null;
+    var pctRef = (d.admis && !isExcl) ? (d.montant / pref * 100 - 100) : null;
+    return { name: d.name, montant: d.montant, admis: d.admis, excluded: isExcl, rank: rankMap[d.id] || null, ecart: ecart, pctRef: pctRef };
+  });
+  lastCalculated = {
+    pref: pref, prixEstim: hasEstim ? prixEstim : 0,
+    nbAdmis: admisFiltered.length, pmin: pmin, pmax: pmax,
+    winner: winner ? { name: winner.name, montant: winner.montant } : null,
+    sortedRows: sortedRows
+  };
+  if (archivesDirHandle) document.getElementById('btnArchive').disabled = false;
+
+  // FEATURE 3: Open modal window
+  if (openWindow !== false) {
+    openModal();
+  }
+}
+
+/* ── RESET ─────────────────────────────────────────────────────────────────── */
+function resetForm() {
+  if (!confirm('Réinitialiser toutes les données ?')) return;
+  try { localStorage.removeItem('marche_public_v3'); } catch(e) {}
+  document.getElementById('soumBody').innerHTML = '';
+  var ltEl = document.getElementById('lastSaveTime');
+  if (ltEl) ltEl.textContent = '—';
+  closeModal();
+  document.getElementById('winnerBanner').style.display = 'none';
+  hideAlerts();
+  rowId = 0;
+  addSampleData();
+}
+
+function addSampleData() {
+  addRow('Entreprise Alpha SARL', 450000);
+  addRow('Bureau Oméga', 512000);
+  addRow('Groupe Technic Maroc', 398000);
+  addRow('Constructions Réunies', 620000);
+  addRow('Société Atlas BTP', 475000);
+}
+
+/* ══════════════════════════════════ STOCKAGE AUTOMATIQUE TOUTES LES 30s ══ */
+
+var storageEnabled  = false;
+var _autoTimer      = null;
+var _countdown      = 30;
+var STORAGE_KEY     = 'marche_public_v3';
+var PREF_KEY        = 'marche_pref_v3';
+var CIRC            = 2 * Math.PI * 13;   // SVG circle r=13 → ≈81.68
+
+/* ── Collecter l'état complet ─────────── */
+function collectState() {
+  var rows = [];
+  document.querySelectorAll('#soumBody tr').forEach(function(tr) {
+    var id  = tr.id.replace('row_', '');
+    var nEl = document.getElementById('name_'  + id);
+    var mEl = document.getElementById('mont_'  + id);
+    var aEl = document.getElementById('admis_' + id);
+    rows.push({ name: nEl ? nEl.value : '', montant: mEl ? mEl.value : '', admis: aEl ? aEl.checked : true });
+  });
+  var selMethodes = [];
+  document.querySelectorAll('#methodeCheckboxes input[type="checkbox"]').forEach(function(cb, idx) {
+    if (cb.checked) selMethodes.push(idx);
+  });
+  return {
+    v:              3,
+    savedAt:        new Date().toISOString(),
+    objetMarche:    document.getElementById('objetMarche').value,
+    refAO:          document.getElementById('refAO').value,
+    monnaie:        document.getElementById('monnaie').value,
+    prixEstimation: document.getElementById('prixEstimation').value,
+    methodeIdx:     selMethodes,
+    rows:           rows
+  };
+}
+
+/* ── Écrire dans localStorage ─────────── */
+function saveData() {
+  if (!storageEnabled) return;
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState())); }
+  catch(e) { console.warn('Storage error:', e); }
+}
+
+/* ── Sauvegarde immédiate + feedback ──── */
+function saveNow() {
+  if (!storageEnabled) return;
+  saveData();
+  _countdown = 30;
+  setCountdownUI(30);
+  // Timestamp
+  var hms = new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+  var ltEl = document.getElementById('lastSaveTime');
+  var lastEl = document.getElementById('storageLast');
+  if (ltEl)   ltEl.textContent      = hms;
+  if (lastEl) lastEl.style.display  = 'flex';
+  // Toast
+  var toast = document.getElementById('storageToast');
+  if (toast) {
+    toast.classList.remove('show');
+    void toast.offsetWidth;
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); }, 2200);
+  }
+}
+
+/* ── Charger depuis localStorage ─────── */
+function loadData() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    var s = JSON.parse(raw);
+    if (s.v !== 3) return false;
+    document.getElementById('objetMarche').value    = s.objetMarche    || '';
+    document.getElementById('refAO').value          = s.refAO          || '';
+    document.getElementById('monnaie').value        = s.monnaie        || 'Dhs';
+    document.getElementById('prixEstimation').value = s.prixEstimation || '';
+    var cbs = document.querySelectorAll('#methodeCheckboxes input[type="checkbox"]');
+    cbs.forEach(function(cb) { cb.checked = false; });
+    (s.methodeIdx || []).forEach(function(idx) { if (cbs[idx]) cbs[idx].checked = true; });
+    if (s.savedAt) {
+      var hms = new Date(s.savedAt).toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+      var ltEl   = document.getElementById('lastSaveTime');
+      var lastEl = document.getElementById('storageLast');
+      if (ltEl)   ltEl.textContent     = hms;
+      if (lastEl) lastEl.style.display = 'flex';
+    }
+    if (s.rows && s.rows.length > 0) {
+      s.rows.forEach(function(r) { addRow(r.name, r.montant, r.admis); });
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+/* ── Effacer les données ──────────────── */
+function clearStoredData() {
+  if (!confirm('Effacer toutes les données sauvegardées dans le navigateur ?')) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  var ltEl   = document.getElementById('lastSaveTime');
+  var lastEl = document.getElementById('storageLast');
+  if (ltEl)   ltEl.textContent     = '—';
+  if (lastEl) lastEl.style.display = 'none';
+  var toast = document.getElementById('storageToast');
+  if (toast) {
+    toast.textContent = '🗑 Données effacées';
+    toast.classList.add('show');
+    setTimeout(function() { toast.classList.remove('show'); setTimeout(function() { toast.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Données sauvegardées'; }, 300); }, 2000);
+  }
+}
+
+/* ── Timer 30s (setInterval 1s) ──────── */
+function startTimer() {
+  stopTimer();
+  _countdown = 30;
+  setCountdownUI(30);
+  _autoTimer = setInterval(function() {
+    _countdown--;
+    setCountdownUI(_countdown);
+    if (_countdown <= 0) {
+      _countdown = 30;
+      saveNow();
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(_autoTimer);
+  _autoTimer = null;
+}
+
+/* ── Animer l'anneau SVG + chiffres ──── */
+function setCountdownUI(sec) {
+  var circle = document.getElementById('countdownCircle');
+  var numEl  = document.getElementById('countdownNum');
+  var secEl  = document.getElementById('countdownSec');
+  if (circle) {
+    var offset = CIRC * (sec / 30);          // plein = 30s, vide = 0s
+    circle.style.strokeDashoffset = offset;
+    circle.style.stroke = sec > 15 ? 'var(--green)' : sec > 7 ? 'var(--gold)' : '#E74C3C';
+  }
+  if (numEl) numEl.textContent = sec;
+  if (secEl) secEl.textContent = sec;
+}
+
+/* ── Toggle ON/OFF ────────────────────── */
+function onStorageToggle() {
+  storageEnabled = document.getElementById('storageEnabled').checked;
+  try { localStorage.setItem(PREF_KEY, storageEnabled ? '1' : '0'); } catch(e) {}
+
+  var countdown = document.getElementById('storageCountdown');
+  var btnSave   = document.getElementById('btnSaveNow');
+  var btnClear  = document.getElementById('btnClearStore');
+  var sub       = document.getElementById('storageSubLabel');
+  var lastEl    = document.getElementById('storageLast');
+
+  if (storageEnabled) {
+    if (sub)       sub.textContent        = 'Active — sauvegarde toutes les 30 secondes';
+    if (countdown) countdown.style.display = 'flex';
+    if (btnSave)   btnSave.style.display   = 'inline-flex';
+    if (btnClear)  btnClear.style.display  = 'inline-flex';
+    if (lastEl && document.getElementById('lastSaveTime').textContent !== '—')
+                   lastEl.style.display   = 'flex';
+    startTimer();
+    saveNow();     // sauvegarde immédiate
+  } else {
+    if (sub)       sub.textContent        = 'Désactivée — les données ne sont pas conservées';
+    if (countdown) countdown.style.display = 'none';
+    if (btnSave)   btnSave.style.display   = 'none';
+    if (btnClear)  btnClear.style.display  = 'none';
+    stopTimer();
+  }
+}
+
+/* ══════════════════════════════════════════════ ARCHIVES LOCALES (FSA API) */
+
+var rootDirHandle     = null;   // FileSystemDirectoryHandle racine
+var archivesDirHandle = null;   // sous-dossier "Marchés Publics - Archives"
+var lastCalculated    = null;   // résultats du dernier calcul
+
+function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+/* ── Détection support API ────────────────── */
+function checkFSASupport() {
+  if (!window.showDirectoryPicker) {
+    document.getElementById('archivesNoApi').style.display = 'flex';
+    document.getElementById('folderRow').style.display     = 'none';
+    document.getElementById('btnArchive').style.display    = 'none';
+    return false;
+  }
+  return true;
+}
+
+/* ── Choisir le dossier racine ────────────── */
+async function selectRootFolder() {
+  if (!checkFSASupport()) return;
+  try {
+    rootDirHandle = await window.showDirectoryPicker({ mode: 'readwrite', startIn: 'documents' });
+    // Créer le sous-dossier "Marchés Publics - Archives"
+    archivesDirHandle = await rootDirHandle.getDirectoryHandle('Marchés Publics - Archives', { create: true });
+
+    // UI : dossier connecté
+    var row = document.getElementById('folderRow');
+    var pathEl = document.getElementById('folderPathDisplay');
+    row.classList.add('connected');
+    pathEl.classList.remove('empty');
+    pathEl.textContent = rootDirHandle.name + ' › Marchés Publics - Archives';
+
+    // Afficher structure
+    var struct = document.getElementById('folderStructure');
+    var structTxt = document.getElementById('folderStructureText');
+    struct.style.display = 'block';
+    structTxt.innerHTML =
+      '📁 ' + rootDirHandle.name + '/<br>' +
+      '&nbsp;&nbsp;&nbsp;📁 <strong>Marchés Publics - Archives</strong>/<br>' +
+      '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 [AO_date_objet]/<br>' +
+      '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 données.json<br>' +
+      '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 rapport.html';
+
+    // Activer le bouton archiver si calcul déjà fait
+    document.getElementById('btnArchive').disabled = !lastCalculated;
+
+    // Charger la liste des archives existantes
+    await loadArchivesList();
+
+  } catch(e) {
+    if (e.name !== 'AbortError') {
+      alert('Erreur d\'accès au dossier : ' + e.message);
+    }
+  }
+}
+
+/* ── Générer un nom de dossier d'archive ──── */
+function generateArchiveName() {
+  var now    = new Date();
+  var d      = now.getFullYear() + '-' + pad2(now.getMonth()+1) + '-' + pad2(now.getDate());
+  var t      = pad2(now.getHours()) + 'h' + pad2(now.getMinutes());
+  var refAO  = (document.getElementById('refAO').value.trim()        || 'Sans-ref').substring(0, 20);
+  var objet  = (document.getElementById('objetMarche').value.trim()  || 'Sans-objet').substring(0, 30);
+  return (d + '_' + t + '_' + refAO + '_' + objet).replace(/[<>:"/\\|?*\r\n]/g, '-');
+}
+
+/* ── Archiver l'offre calculée ────────────── */
+async function archiveCurrentOffer() {
+  if (!archivesDirHandle || !lastCalculated) return;
+
+  var savingEl = document.getElementById('archiveSaving');
+  var btnEl    = document.getElementById('btnArchive');
+  savingEl.classList.add('visible');
+  btnEl.disabled = true;
+
+  try {
+    var folderName = generateArchiveName();
+    var archiveDir = await archivesDirHandle.getDirectoryHandle(folderName, { create: true });
+
+    // ── données.json ──────────
+    var state = collectState();
+    state.resultats = lastCalculated;
+    var jsonFile = await archiveDir.getFileHandle('données.json', { create: true });
+    var jsonW    = await jsonFile.createWritable();
+    await jsonW.write(JSON.stringify(state, null, 2));
+    await jsonW.close();
+
+    // ── rapport.html ──────────
+    var htmlFile = await archiveDir.getFileHandle('rapport.html', { create: true });
+    var htmlW    = await htmlFile.createWritable();
+    await htmlW.write(buildArchiveReportHtml(state));
+    await htmlW.close();
+
+    // Toast success
+    var toast = document.getElementById('storageToast');
+    if (toast) {
+      toast.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Archive créée : ' + folderName;
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 3000);
+    }
+
+    await loadArchivesList();
+
+  } catch(e) {
+    alert('Erreur lors de l\'archivage : ' + e.message);
+  } finally {
+    savingEl.classList.remove('visible');
+    btnEl.disabled = false;
+  }
+}
+
+/* ── Lire et afficher les archives existantes */
+async function loadArchivesList() {
+  if (!archivesDirHandle) return;
+  var items  = document.getElementById('archiveItems');
+  var empty  = document.getElementById('archiveListEmpty');
+  var badge  = document.getElementById('archiveCountBadge');
+  items.innerHTML = '';
+
+  var entries = [];
+  try {
+    for await (var [name, handle] of archivesDirHandle.entries()) {
+      if (handle.kind === 'directory') entries.push({ name: name, handle: handle });
+    }
+  } catch(e) { console.warn(e); }
+
+  // Sort newest first (folder name starts with date)
+  entries.sort(function(a, b) { return b.name.localeCompare(a.name); });
+
+  badge.textContent = entries.length;
+
+  if (entries.length === 0) {
+    empty.textContent = 'Aucune archive trouvée dans ce dossier.';
+    empty.style.display = 'block';
+    items.style.display  = 'none';
+    return;
+  }
+
+  empty.style.display  = 'none';
+  items.style.display  = 'flex';
+
+  entries.forEach(function(entry) {
+    // Parse name: YYYY-MM-DD_HHhMM_ref_objet
+    var parts   = entry.name.split('_');
+    var dateStr = parts[0] || '';
+    var timeStr = (parts[1] || '').replace('h', ':');
+    var ref     = parts.slice(2).join(' ');
+    var dateDisp = dateStr ? dateStr.split('-').reverse().join('/') + (timeStr ? ' à ' + timeStr : '') : entry.name;
+
+    var div = document.createElement('div');
+    div.className = 'archive-item';
+    div.innerHTML =
+      '<span class="archive-item-icon">📦</span>' +
+      '<div class="archive-item-info">' +
+        '<div class="archive-item-name" title="' + escHtml(entry.name) + '">' + escHtml(ref || entry.name) + '</div>' +
+        '<div class="archive-item-meta">📅 ' + escHtml(dateDisp) + '</div>' +
+      '</div>' +
+      '<button type="button" class="btn-restore" onclick="restoreArchive(\'' + escHtml(entry.name) + '\')">↩ Restaurer</button>' +
+      '<button type="button" class="btn-del-archive" title="Supprimer" onclick="deleteArchive(\'' + escHtml(entry.name) + '\')">' +
+        '<svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M3 4h10M6 4V3h4v1M5 4l1 9h4l1-9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '</button>';
+    items.appendChild(div);
+  });
+}
+
+/* ── Restaurer une archive dans le formulaire */
+async function restoreArchive(folderName) {
+  if (!archivesDirHandle) return;
+  if (!confirm('Restaurer l\'archive "' + folderName + '" ? Les données actuelles seront remplacées.')) return;
+  try {
+    var dir      = await archivesDirHandle.getDirectoryHandle(folderName);
+    var file     = await dir.getFileHandle('données.json');
+    var blob     = await file.getFile();
+    var text     = await blob.text();
+    var s        = JSON.parse(text);
+
+    document.getElementById('objetMarche').value    = s.objetMarche    || '';
+    document.getElementById('refAO').value          = s.refAO          || '';
+    document.getElementById('monnaie').value        = s.monnaie        || 'Dhs';
+    document.getElementById('prixEstimation').value = s.prixEstimation || '';
+    updateHeader(); updateEstimation();
+
+    var cbs = document.querySelectorAll('#methodeCheckboxes input[type="checkbox"]');
+    cbs.forEach(function(cb) { cb.checked = false; });
+    (s.methodeIdx || []).forEach(function(idx) { if (cbs[idx]) cbs[idx].checked = true; });
+    updateMethodeInfo();
+
+    document.getElementById('soumBody').innerHTML = '';
+    rowId = 0;
+    (s.rows || []).forEach(function(r) { addRow(r.name, r.montant, r.admis); });
+
+    var toast = document.getElementById('storageToast');
+    if (toast) {
+      toast.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Archive restaurée';
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 2500);
+    }
+    scheduleCalc();
+
+  } catch(e) { alert('Erreur de restauration : ' + e.message); }
+}
+
+/* ── Supprimer une archive ─────────────────── */
+async function deleteArchive(folderName) {
+  if (!archivesDirHandle) return;
+  if (!confirm('Supprimer définitivement l\'archive "' + folderName + '" ?')) return;
+  try {
+    await archivesDirHandle.removeEntry(folderName, { recursive: true });
+    await loadArchivesList();
+  } catch(e) { alert('Erreur de suppression : ' + e.message); }
+}
+
+/* ── Générer le HTML du rapport d'archive ──── */
+function buildArchiveReportHtml(state) {
+  var res = state.resultats || {};
+  var currency = state.monnaie || 'Dhs';
+  var now = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+  var rowsHtml = '';
+  (res.sortedRows || []).forEach(function(d, i) {
+    var ecart = d.ecart !== undefined ? d.ecart : null;
+    var pct   = d.pctRef !== undefined ? d.pctRef : null;
+    var sign  = pct !== null ? (pct >= 0 ? '+' : '') : '';
+    var color = pct !== null ? (pct > 0 ? '#8B4A00' : (pct < 0 ? '#2A5180' : '#1A6B3A')) : '#6B7FA0';
+    rowsHtml +=
+      '<tr>' +
+      '<td style="text-align:center;font-weight:700">' + (d.rank || '—') + '</td>' +
+      '<td>' + escHtml(d.name || '') + (d.excluded ? ' <span style="background:#FDEAEA;color:#8B1A1A;font-size:9px;padding:1px 5px;border-radius:3px">Écarté</span>' : '') + '</td>' +
+      '<td style="font-family:monospace;text-align:right">' + fmt(d.montant) + ' ' + currency + '</td>' +
+      '<td style="font-family:monospace;text-align:center;color:' + color + ';font-weight:600">' + (pct !== null ? sign + fmt(pct, 2) + '%' : '—') + '</td>' +
+      '<td style="font-family:monospace;text-align:right;color:' + color + '">' + (ecart !== null ? (ecart >= 0 ? '+' : '') + fmt(ecart) : '—') + '</td>' +
+      '<td style="text-align:center">' + (d.admis && !d.excluded ? '✓ Validé' : (d.excluded ? 'Écarté' : 'Non admis')) + '</td>' +
+      '</tr>';
+  });
+
+  return '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title></title>' +
+    '<style>@page{margin:0}body{font-family:Arial,sans-serif;padding:1cm 1.5cm;color:#0D2240;font-size:13px}' +
+    'h1{font-size:18px;margin-bottom:4px}' +
+    '.meta{font-size:11px;color:#6B7FA0;margin-bottom:20px}' +
+    '.ref-row{background:#0D2240;color:#FFF;padding:12px 18px;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:space-between}' +
+    '.badge{background:#C9922A;color:#FFF;font-family:monospace;font-size:14px;font-weight:700;padding:4px 14px;border-radius:16px}' +
+    '.metrics{display:flex;gap:1px;background:#D8DDE6;border:1px solid #D8DDE6;border-top:none}' +
+    '.m{flex:1;background:#FFF;padding:12px;text-align:center}.ml{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6B7FA0;margin-bottom:3px}' +
+    '.mv{font-size:16px;font-weight:700;font-family:monospace;color:#0D2240}' +
+    'table{width:100%;border-collapse:collapse;margin-top:0;border:1px solid #D8DDE6;border-top:none}' +
+    'th{background:#F0F3F8;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;text-align:center;border-bottom:1px solid #D8DDE6}' +
+    'th:nth-child(2){text-align:left}td{padding:9px 12px;border-bottom:1px solid #D8DDE6;text-align:center}' +
+    'td:nth-child(2){text-align:left}tr:last-child td{border-bottom:none}' +
+    '@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}' +
+    '</style></head><body>' +
+    '<h1>Tableau de dépouillement des offres</h1>' +
+    '<p class="meta">Objet : <strong>' + escHtml(state.objetMarche||'—') + '</strong> &nbsp;|&nbsp; Réf. AO : <strong>' + escHtml(state.refAO||'—') + '</strong> &nbsp;|&nbsp; Généré le : ' + now + '</p>' +
+    '<div class="ref-row"><span>Tableau de dépouillement</span><span class="badge">P. réf. : ' + fmt(res.pref||0) + ' ' + currency + '</span></div>' +
+    '<div class="metrics">' +
+      '<div class="m"><div class="ml">Offres admises</div><div class="mv">' + (res.nbAdmis||'—') + '</div></div>' +
+      '<div class="m"><div class="ml">Offre min.</div><div class="mv" style="color:#C9922A">' + fmt(res.pmin||0) + '</div></div>' +
+      '<div class="m"><div class="ml">Offre max.</div><div class="mv">' + fmt(res.pmax||0) + '</div></div>' +
+      '<div class="m"><div class="ml">P. estimation</div><div class="mv" style="font-size:13px">' + (res.prixEstim > 0 ? fmt(res.prixEstim) : '—') + '</div></div>' +
+      '<div class="m"><div class="ml">Prix de référence</div><div class="mv" style="color:#1A6B3A">' + fmt(res.pref||0) + '</div></div>' +
+    '</div>' +
+    '<table><thead><tr><th style="width:60px">Rang</th><th style="text-align:left">Soumissionnaire</th><th>Montant HT</th><th>% / P. réf.</th><th>Écart / P. réf.</th><th>Statut</th></tr></thead><tbody>' +
+    rowsHtml +
+    '</tbody></table></body></html>';
+}
+
+/* ── AUTO-CALC (debounce 700ms) ─────────────────────────────────────────── */
+
+var _importParsed = [];
+
+function openImportModal() {
+  document.getElementById('importOverlay').classList.add('open');
+  document.getElementById('importTextarea').value = '';
+  document.getElementById('importError').classList.remove('visible');
+  document.getElementById('importPreview').style.display = 'none';
+  document.getElementById('importPreviewBody').innerHTML = '';
+  document.getElementById('btnImportConfirm').disabled = true;
+  document.getElementById('importBtnCount').textContent = '';
+  _importParsed = [];
+  setTimeout(function() { document.getElementById('importTextarea').focus(); }, 120);
+}
+
+function closeImportModal() {
+  document.getElementById('importOverlay').classList.remove('open');
+}
+
+/* ── Convertit "2 059 112,40" → 2059112.40 */
+function parseFrenchNumber(str) {
+  if (!str) return null;
+  var s = str.trim();
+  if (s === '-' || s === '—' || s === '' || /^[a-zA-ZÀ-ÿ\s]+$/.test(s)) return null;
+  s = s.replace(/\s/g, '').replace(/,/g, '.').replace(/[^\d.]/g, '');
+  if (!s) return null;
+  var n = parseFloat(s);
+  return isNaN(n) ? null : n;
+}
+
+/* ── Parser principal */
+function parseImportText(raw) {
+  var lines = raw.split(/\r?\n/).map(function(l) { return l.trim(); }).filter(Boolean);
+  var results = [];
+
+  lines.forEach(function(line) {
+    // Tab-separated (Excel paste) first; fallback to 2+ spaces
+    var cols = line.indexOf('\t') !== -1
+      ? line.split('\t')
+      : line.split(/  +/);
+    cols = cols.map(function(c) { return c.trim(); });
+
+    // Skip header rows
+    var first = cols[0].toLowerCase();
+    if (!cols[0] || first === 'entreprise' || first === 'société' || first === 'soumissionnaire') return;
+
+    var name  = cols[0];
+    var admis = true;
+
+    // Col 1 → admissibilité
+    if (cols.length >= 2) {
+      var col1 = cols[1].toLowerCase();
+      admis = col1.indexOf('non') === -1 && col1.indexOf('inadmis') === -1;
+    }
+
+    // Chercher le montant : priorité col[3] (index 3), sinon premier nombre valide après col[0]
+    var montant = null;
+    if (cols.length >= 4) montant = parseFrenchNumber(cols[3]);  // Avant Correction
+    if (montant === null || montant <= 0) {
+      for (var i = 1; i < cols.length; i++) {
+        var m = parseFrenchNumber(cols[i]);
+        if (m !== null && m > 0) { montant = m; break; }
+      }
+    }
+
+    results.push({ name: name, montant: montant, admis: admis, valid: montant !== null && montant > 0 });
+  });
+
+  return results;
+}
+
+/* ── Mise à jour en temps réel */
+function onImportInput() {
+  var raw    = document.getElementById('importTextarea').value;
+  var errEl  = document.getElementById('importError');
+  errEl.classList.remove('visible');
+
+  if (!raw.trim()) {
+    document.getElementById('importPreview').style.display  = 'none';
+    document.getElementById('btnImportConfirm').disabled    = true;
+    document.getElementById('importBtnCount').textContent   = '';
+    _importParsed = [];
+    return;
+  }
+
+  var rows   = parseImportText(raw);
+  _importParsed = rows.filter(function(r) { return r.valid; });
+
+  var previewBody = document.getElementById('importPreviewBody');
+  var countEl     = document.getElementById('importPreviewCount');
+  var preview     = document.getElementById('importPreview');
+  var confirmBtn  = document.getElementById('btnImportConfirm');
+  var cntBtn      = document.getElementById('importBtnCount');
+
+  previewBody.innerHTML = '';
+  rows.forEach(function(r) {
+    var div = document.createElement('div');
+    div.className = 'import-preview-row ' + (r.valid ? 'row-ok' : 'row-skip');
+    var sBadge = r.valid
+      ? '<span class="ipv-status ' + (r.admis ? 'ok' : 'skip') + '">' + (r.admis ? 'Admis' : 'Non admis') + '</span>'
+      : '<span class="ipv-status noamt">Montant absent</span>';
+    var amt = r.valid
+      ? '<span class="ipv-amount">' + fmt(r.montant) + '</span>'
+      : '<span style="color:var(--text-muted);font-size:11px">—</span>';
+    div.innerHTML = '<span class="ipv-name">' + escHtml(r.name) + '</span>' + amt + sBadge;
+    previewBody.appendChild(div);
+  });
+
+  var valid = _importParsed.length;
+  countEl.textContent   = valid + ' valide(s) sur ' + rows.length;
+  cntBtn.textContent    = '(' + valid + ')';
+  preview.style.display = rows.length > 0 ? 'block' : 'none';
+  confirmBtn.disabled   = valid === 0;
+
+  if (rows.length > 0 && valid === 0) {
+    errEl.textContent = "Aucun montant détecté. Vérifiez que la colonne 4 contient bien les montants HT.";
+    errEl.classList.add('visible');
+  }
+}
+
+/* ── Confirmer l'import */
+function confirmImport() {
+  if (_importParsed.length === 0) return;
+  var mode = document.querySelector('input[name="importMode"]:checked').value;
+  if (mode === 'replace') { document.getElementById('soumBody').innerHTML = ''; rowId = 0; }
+  _importParsed.forEach(function(r) { addRow(r.name, r.montant, r.admis); });
+  closeImportModal();
+  var toast = document.getElementById('storageToast');
+  if (toast) {
+    toast.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ' + _importParsed.length + ' soumissionnaire(s) importé(s)';
+    toast.classList.add('show');
+    setTimeout(function() {
+      toast.classList.remove('show');
+      setTimeout(function() { toast.innerHTML = '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Données sauvegardées'; }, 300);
+    }, 2500);
+  }
+  _importParsed = [];
+  scheduleCalc();
+}
+
+/* ── AUTO-CALC (debounce 700ms) ──────── */
+var _calcTimer = null;
+function scheduleCalc() {
+  clearTimeout(_calcTimer);
+  var indicator = document.getElementById('calcIndicator');
+  indicator.classList.add('visible');
+  _calcTimer = setTimeout(function() {
+    indicator.classList.remove('visible');
+    var rows = document.querySelectorAll('#soumBody tr');
+    if (rows.length < 2) return;
+    var allFilled = true;
+    rows.forEach(function(tr) {
+      var id = tr.id.replace('row_', '');
+      var v  = parseFloat(document.getElementById('mont_' + id).value);
+      if (isNaN(v) || v <= 0) allFilled = false;
+    });
+    if (allFilled) {
+      var isOpen = document.getElementById('resultsModal').classList.contains('open');
+      calculate(isOpen);
+    }
+  }, 700);
+}
+
+/* ── INIT ────────────────────────────── */
+document.addEventListener('DOMContentLoaded', function() {
+
+  // Restaurer préférence stockage
+  try {
+    var pref = localStorage.getItem(PREF_KEY);
+    if (pref === '1') {
+      storageEnabled = true;
+      document.getElementById('storageEnabled').checked = true;
+    }
+  } catch(e) {}
+
+  // Charger données si stockage actif
+  var loaded = false;
+  if (storageEnabled) {
+    loaded = loadData();
+    document.getElementById('storageCountdown').style.display = 'flex';
+    document.getElementById('btnSaveNow').style.display   = 'inline-flex';
+    document.getElementById('btnClearStore').style.display = 'inline-flex';
+    document.getElementById('storageSubLabel').textContent = 'Active — sauvegarde toutes les 30 secondes';
+    startTimer();
+  }
+  if (!loaded) addSampleData();
+
+  updateMethodeInfo();
+  updateHeader();
+  updateEstimation();
+
+  // Fermer liste méthodes si clic en dehors
+  document.addEventListener('click', function(e) {
+    var wrap   = document.getElementById('methodeListWrap');
+    var toggle = document.getElementById('methodeToggle');
+    if (wrap && toggle && !wrap.contains(e.target) && !toggle.contains(e.target)) {
+      wrap.classList.remove('open');
+      toggle.classList.remove('open');
+    }
+  });
+
+  // Check File System Access API support
+  checkFSASupport();
+
+  document.getElementById('btnAdd').addEventListener('click', function() { addRow(); });
+  document.getElementById('btnCalc').addEventListener('click', function() { calculate(true); });
+  document.getElementById('btnReset').addEventListener('click', resetForm);
+
+  document.getElementById('objetMarche').addEventListener('input', function() { updateHeader(); });
+  document.getElementById('refAO').addEventListener('input', function() { updateHeader(); });
+  document.getElementById('methodeCheckboxes').addEventListener('change', function() { updateMethodeInfo(); scheduleCalc(); });
+  document.getElementById('prixEstimation').addEventListener('input', function() { updateEstimation(); scheduleCalc(); });
+  document.getElementById('monnaie').addEventListener('change', updateEstimation);
+
+  document.getElementById('soumBody').addEventListener('input', scheduleCalc);
+  document.getElementById('soumBody').addEventListener('change', scheduleCalc);
+
+  document.getElementById('soumBody').addEventListener('click', function(e) {
+    var btn = e.target.closest('.btn-del');
+    if (btn) delRow(btn.getAttribute('data-id'));
+  });
+
+  // Sauvegarder avant de quitter la page
+  window.addEventListener('beforeunload', function() { saveData(); });
+});
+
+    })();
+  }, 0);
+}
 
 </script>
 

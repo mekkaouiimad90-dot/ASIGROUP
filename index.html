@@ -69,12 +69,282 @@
 }
 body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-size:13px;background:var(--surf)}
 
+/* ═══════════════════════════════════════════════════════
+   THÈME BLEU CLAIR — Override global
+   ═══════════════════════════════════════════════════════ */
+
+/* Variables overrides */
+:root {
+  --b50:#E1F5FE;--b100:#B3E5FC;--b200:#81D4FA;--b400:#29B6F6;--b600:#039BE5;--b800:#0277BD;--b900:#01579B;
+  --surf:#EEF6FC;--bdr:#B3E5FC;
+}
+
+/* ── Sidebar : Noir / Anthracite ── */
+.SB, #AS .SB {
+  background: linear-gradient(180deg, #1C1C1E 0%, #141416 100%) !important;
+  border-right: 1px solid rgba(255,255,255,.06) !important;
+  box-shadow: 2px 0 12px rgba(0,0,0,.35) !important;
+}
+
+/* ── Topbar : PREMIUM ── */
+.TB, #AS .TB {
+  background: linear-gradient(135deg, #0A1628 0%, #0D2144 40%, #0F2D5E 100%) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.06) inset,
+    0 4px 24px rgba(0,0,0,.35),
+    0 1px 4px rgba(0,0,0,.2) !important;
+  border-bottom: 1px solid rgba(255,255,255,.07) !important;
+  height: 58px !important;
+  backdrop-filter: blur(12px) !important;
+  position: relative !important;
+}
+/* Ligne lumineuse bleue sous la topbar */
+.TB::after, #AS .TB::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: 0 !important; left: 0 !important; right: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(41,182,246,.6) 20%,
+    rgba(3,155,229,1) 50%,
+    rgba(41,182,246,.6) 80%,
+    transparent 100%) !important;
+  display: block !important;
+}
+
+/* Texte de la topbar */
+.TB *, #AS .TB * {
+  color: #fff !important;
+}
+.TB svg, #AS .TB svg {
+  stroke: rgba(255,255,255,.75) !important;
+}
+
+/* Logo "A" avatar premium */
+.TBM {
+  background: linear-gradient(135deg, #29B6F6, #0288D1) !important;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.15), 0 4px 12px rgba(2,136,209,.5) !important;
+  border-radius: 10px !important;
+}
+
+/* Titre */
+.TBN {
+  background: linear-gradient(90deg, #fff 0%, #B3E5FC 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: -.02em !important;
+}
+.TBT {
+  color: rgba(179,229,252,.5) !important;
+  font-size: 9px !important;
+}
+
+/* Boutons droite premium */
+.BLO {
+  background: rgba(255,255,255,.07) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  color: rgba(255,255,255,.85) !important;
+  border-radius: 9px !important;
+  backdrop-filter: blur(8px) !important;
+  transition: all .18s !important;
+}
+.BLO:hover {
+  background: rgba(41,182,246,.18) !important;
+  border-color: rgba(41,182,246,.4) !important;
+  color: #fff !important;
+}
+
+/* Avatar utilisateur */
+.TAV {
+  background: linear-gradient(135deg, #29B6F6, #0277BD) !important;
+  border: 2px solid rgba(255,255,255,.25) !important;
+  box-shadow: 0 0 0 3px rgba(41,182,246,.2) !important;
+}
+
+/* Bouton toggle sidebar */
+#sbToggleBtn {
+  background: rgba(255,255,255,.07) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 9px !important;
+}
+#sbToggleBtn:hover {
+  background: rgba(41,182,246,.2) !important;
+  border-color: rgba(41,182,246,.4) !important;
+}
+
+/* Barre de recherche premium */
+#searchGlobal {
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+}
+#searchGlobal::placeholder { color: rgba(255,255,255,.4) !important; }
+#searchGlobal:focus {
+  background: rgba(255,255,255,.12) !important;
+  border-color: rgba(41,182,246,.6) !important;
+  box-shadow: 0 0 0 3px rgba(41,182,246,.15) !important;
+}
+
+/* Boutons icônes (dark mode, calc) */
+#darkModeBtn, [onclick*="_openCalc"] {
+  background: rgba(255,255,255,.07) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  border-radius: 9px !important;
+  transition: all .18s !important;
+}
+#darkModeBtn:hover, [onclick*="_openCalc"]:hover {
+  background: rgba(41,182,246,.2) !important;
+  border-color: rgba(41,182,246,.4) !important;
+}
+
+/* Badge cloche */
+#tbBell {
+  background: rgba(255,255,255,.07) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  border-radius: 9px !important;
+}
+#tbBell:hover {
+  background: rgba(41,182,246,.2) !important;
+  border-color: rgba(41,182,246,.35) !important;
+}
+
+/* Horloge */
+#tbClockTime {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: .05em !important;
+  color: #fff !important;
+}
+#tbClockDate {
+  color: rgba(179,229,252,.55) !important;
+}
+
+/* Séparateur horloge */
+#tbClock {
+  border-left: 1px solid rgba(255,255,255,.1) !important;
+}
+
+/* Sync bar */
+#syncBar {
+  background: rgba(0,172,193,.12) !important;
+  border: 1px solid rgba(0,172,193,.3) !important;
+  border-radius: 10px !important;
+}
+
+/* Auto-save badge */
+#_asStat {
+  background: rgba(255,255,255,.07) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  border-radius: 9px !important;
+  color: rgba(255,255,255,.8) !important;
+}
+/* ══ FIN TOPBAR PREMIUM ══ */
+
+/* ── Titres de section nav ── */
+.HSB {
+  color: rgba(255,255,255,.3) !important;
+  letter-spacing: .12em !important;
+}
+
+/* ── Items de nav ── */
+.NI, .NIS {
+  color: rgba(255,255,255,.65) !important;
+}
+.NI:hover, .NIS:hover {
+  background: rgba(255,255,255,.07) !important;
+  color: #fff !important;
+}
+.NI.active, .NIS.active {
+  background: linear-gradient(135deg, rgba(41,182,246,.18), rgba(2,136,209,.12)) !important;
+  border-left: 3px solid #29B6F6 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+}
+.NI svg, .NIS svg {
+  stroke: rgba(255,255,255,.45) !important;
+}
+.NI.active svg, .NIS.active svg {
+  stroke: #29B6F6 !important;
+}
+
+/* ── Icône hamburger ── */
+#AS .SB svg[stroke="#1565C0"] {
+  stroke: rgba(255,255,255,.6) !important;
+}
+
+/* ── En-têtes de page (PH) ── */
+.PH {
+  background: linear-gradient(135deg, #0288D1 0%, #29B6F6 100%) !important;
+  box-shadow: 0 4px 20px rgba(2,136,209,.3) !important;
+}
+
+/* ── Titres de cards ── */
+.CDT {
+  color: #01579B !important;
+}
+
+/* ── Boutons principaux ── */
+.B.BP, .B.BL, .B.BW {
+  background: linear-gradient(135deg, #039BE5, #0288D1) !important;
+  border-color: #0288D1 !important;
+}
+
+/* ── Modales header ── */
+.MOH {
+  background: linear-gradient(135deg, #0288D1, #29B6F6) !important;
+}
+
+/* ── En-tête navigation label ── */
+#_navLabel, .nav-label, [id*="nav-title"] {
+  color: #fff !important;
+}
+
+/* ── Fond général de l'app ── */
+#AS > .MA, #MC {
+  background: #EEF6FC !important;
+}
+
+/* ── Statut sidebar ── */
+.SB [class*="statut"], .SB [class*="STATUT"],
+.SB > div:last-child {
+  background: rgba(255,255,255,.05) !important;
+  border: 1px solid rgba(255,255,255,.09) !important;
+  color: rgba(255,255,255,.8) !important;
+}
+.SB > div:last-child * {
+  color: rgba(255,255,255,.7) !important;
+}
+
+/* ── Scrollbar sidebar ── */
+.SB::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.1) !important;
+}
+
+/* ── Cards hover ── */
+.CD:hover {
+  box-shadow: 0 6px 20px rgba(2,119,189,.14), 0 2px 6px rgba(2,119,189,.08) !important;
+}
+
+/* ── Icônes nav SVG ── */
+.SB svg[stroke="#1565C0"],
+.SB svg[stroke="#042C53"],
+.SB svg[fill="#1565C0"] {
+  stroke: rgba(255,255,255,.5) !important;
+  fill: none !important;
+}
+/* ══════════════════════════════════════════════════════ */
+
 /* ═══════════════════════════════════════════
    PAGE LOGIN — STYLE ZOOM
    ═══════════════════════════════════════════ */
 #LS{
   display:flex;align-items:stretch;justify-content:center;
-  min-height:100vh;background:#020e1f;overflow:hidden;position:relative;
+  min-height:100vh;background:linear-gradient(135deg,#0277BD 0%,#29B6F6 60%,#E1F5FE 100%);overflow:hidden;position:relative;
 }
 
 /* Fond lumineux animé */
@@ -1221,7 +1491,7 @@ body { background: var(--sur0) !important; color: var(--ink); }
 /* ══════════ TABLES ══════════ */
 table { border-spacing: 0 !important; }
 th {
-  background: linear-gradient(90deg,var(--ink),#1a3c60) !important;
+  background: linear-gradient(90deg,#1b5e20,#2e7d32) !important;
   color: rgba(255,255,255,.92) !important;
   font-size: 10px !important;
   font-weight: 700 !important;
@@ -2229,8 +2499,8 @@ input::placeholder, textarea::placeholder { color: var(--neo-ink4) !important; }
 ════════════════════════════════════════════ */
 table { border-spacing: 0 !important; width: 100%; border-collapse: separate !important; border-spacing: 0 3px !important; }
 th {
-  background: var(--neo-bg2) !important;
-  color: var(--neo-ink2) !important;
+  background: linear-gradient(90deg,#1b5e20,#2e7d32) !important;
+  color: rgba(255,255,255,.92) !important;
   font-size: 9.5px !important;
   font-weight: 800 !important;
   letter-spacing: .1em !important;
@@ -3329,8 +3599,8 @@ body[data-dark="1"] .dp-day.selected { background:#2196F3 !important; color:#fff
 .CD:hover{box-shadow:0 6px 20px rgba(4,44,83,.09),0 2px 6px rgba(4,44,83,.05)!important}
 .CDH{background:linear-gradient(135deg,#F8FBFF,#EEF4FD)!important;border-bottom:1px solid rgba(21,101,192,.1)!important;border-radius:16px 16px 0 0!important}
 .CDT{font-size:12px!important;font-weight:800!important;color:#0d1b2a!important;letter-spacing:-.01em!important}
-table thead tr{background:linear-gradient(135deg,#0d1b2a,#1565C0)!important}
-table thead tr th{color:#fff!important;font-size:9.5px!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.05em!important;padding:9px 12px!important;border:none!important}
+table thead tr{background:linear-gradient(135deg,#c8e6c9,#a5d6a7)!important}
+table thead tr th{color:rgba(255,255,255,.92)!important;font-size:9.5px!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.05em!important;padding:9px 12px!important;border:none!important;border-bottom:2px solid rgba(255,255,255,.25)!important}
 table thead tr th:first-child{border-radius:10px 0 0 0!important}table thead tr th:last-child{border-radius:0 10px 0 0!important}
 table tbody tr{transition:background .12s!important}table tbody tr:hover{background:rgba(21,101,192,.04)!important}
 table tbody tr td{padding:9px 12px!important;border-bottom:1px solid rgba(21,101,192,.06)!important;font-size:11.5px!important}
@@ -7198,8 +7468,8 @@ function pgDocumentsLegaux(){
 function showAddDocLegal(){var f=document.getElementById("addDocLegalForm");if(f)f.style.display=f.style.display==="none"?"block":"none";}
 function saveDocLegal(){
   if(!S.docsLegaux)S.docsLegaux=[];
-  S.docsLegaux.push({type:document.getElementById("dlType").value,numero:(document.getElementById("dlNum").value||"").trim(),organisme:(document.getElementById("dlOrg").value||"").trim(),dateDel:document.getElementById("dlDatDel").value,dateExp:document.getElementById("dlDatExp").value,statut:document.getElementById("dlStatut").value,notes:(document.getElementById("dlNotes").value||"").trim()});
-  sv();_showToast("Document ajouté ✅","ok");pgDocumentsLegaux();
+  S.docsLegaux.push({type:document.getElementById("dlType").value,numero:(document.getElementById("dlNum").value||"").trim(),organisme:(document.getElementById("dlOrg").value||"").trim(),dateDel:document.getElementById("dlDatDel").value,dateExp:document.getElementById("dlDatExp").value,statut:document.getElementById("dlStatut").value,notes:(document.getElementById("dlNotes").value||"").trim(),alerteDismissedDate:""});
+  sv();_showToast("Document ajouté ✅","ok");pgDocumentsLegaux();updAlertBadge();
 }
 function editDocLegal(i){
   var d=S.docsLegaux[i];if(!d)return;
@@ -7220,7 +7490,7 @@ function saveEditDocLegal(i){
   S.docsLegaux[i].dateExp=document.getElementById("edlExp").value;
   S.docsLegaux[i].statut=document.getElementById("edlStat").value;
   S.docsLegaux[i].notes=(document.getElementById("edlNotes").value||"").trim();
-  sv();cM();_showToast("Document mis à jour ✅","ok");pgDocumentsLegaux();
+  sv();cM();_showToast("Document mis à jour ✅","ok");pgDocumentsLegaux();updAlertBadge();
 }
 function delDocLegal(i){if(!confirm("Supprimer ce document ?"))return;S.docsLegaux.splice(i,1);sv();pgDocumentsLegaux();}
 
@@ -13448,17 +13718,33 @@ function _docNonDismis(d){
   return d.alerteDismissedDate!==_todayStr();
 }
 
+/* ── Vérifie si un doc légal doit déclencher une alerte (expiration <= 60j) ── */
+function _docsLegauxAlerteActive(d){
+  if(!d.dateExp)return false;
+  var today=new Date();today.setHours(0,0,0,0);
+  var exp=new Date(d.dateExp);exp.setHours(0,0,0,0);
+  var diff=Math.ceil((exp-today)/86400000);
+  return diff<=60; /* expiré ou expire dans 60 jours */
+}
+function _docsLegauxNonDismis(d){
+  return d.alerteDismissedDate!==_todayStr();
+}
+
 /* Calcul du nombre d'alertes actives (badge nav) */
 function _countAlerts(){
   if(!S.documents)S.documents=[];
   var count=0;
+  /* Docs du module Alertes */
   S.documents.forEach(function(d){
     if(_docAlerteActive(d))count++;
+  });
+  /* Docs légaux expirant dans 60 jours ou déjà expirés */
+  (S.docsLegaux||[]).forEach(function(d){
+    if(_docsLegauxAlerteActive(d)&&_docsLegauxNonDismis(d))count++;
   });
   /* Règlements impayés dont la date prévue est dans 7 jours ou passée */
   var d7=7*24*3600*1000;
   var now=Date.now();
-  var todayStr=new Date().toISOString().split("T")[0];
   var in7Str=new Date(now+d7).toISOString().split("T")[0];
   (S.reglements||[]).forEach(function(r){
     if(r.statut==="regle")return;
@@ -13527,8 +13813,14 @@ function _renderBellDD(){
   var today=_todayStr();
   var now=Date.now(),d30=30*24*3600*1000;
 
-  /* Docs avec alerte active (dateAlerte <= aujourd'hui) */
+  /* Docs module Alertes avec alerte active */
   var actifs=S.documents.filter(function(d){return _docAlerteActive(d);});
+
+  /* Docs légaux expirant dans <= 60 jours ou expirés */
+  var docsLegActifs=(S.docsLegaux||[]).filter(function(d){
+    return _docsLegauxAlerteActive(d)&&_docsLegauxNonDismis(d);
+  });
+
   /* Règlements impayés à échéance <= 7 jours */
   var d7=7*24*3600*1000;
   var in7Str=new Date(now+d7).toISOString().split("T")[0];
@@ -13536,7 +13828,7 @@ function _renderBellDD(){
     return r.statut!=="regle"&&r.datePrevue&&r.datePrevue<=in7Str;
   });
 
-  if(actifs.length===0&&rglA.length===0){
+  if(actifs.length===0&&docsLegActifs.length===0&&rglA.length===0){
     body.innerHTML='<div style="text-align:center;padding:24px 16px;color:var(--b400)">'+
       '<div style="font-size:28px;margin-bottom:6px">✅</div>'+
       '<div style="font-size:11px;font-weight:600">Aucune alerte active</div>'+
@@ -13545,6 +13837,8 @@ function _renderBellDD(){
   }
 
   var html="";
+
+  /* ── Docs module Alertes ── */
   actifs.forEach(function(d){
     var st=_alertStatus(d.dateExpiration);
     var ico=(_DOC_TYPES[d.type]||"📁 Autre").split(" ")[0];
@@ -13568,6 +13862,35 @@ function _renderBellDD(){
     '</div>';
   });
 
+  /* ── Docs légaux expiration ── */
+  docsLegActifs.forEach(function(d,i){
+    var realIdx=(S.docsLegaux||[]).indexOf(d);
+    var today2=new Date();today2.setHours(0,0,0,0);
+    var exp=new Date(d.dateExp);exp.setHours(0,0,0,0);
+    var diff=Math.ceil((exp-today2)/86400000);
+    var st=_alertStatus(d.dateExp);
+    var dismissed=d.alerteDismissedDate===today;
+    html+='<div style="display:flex;align-items:flex-start;gap:9px;background:'+(dismissed?"#F8FAF8":st.bg)+';border:1px solid rgba(0,0,0,.06);border-radius:9px;padding:9px 11px;margin-bottom:7px;'+(dismissed?"opacity:.5":"")+'">'+
+      '<div style="font-size:18px;line-height:1;flex-shrink:0;margin-top:1px">📄</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div style="font-size:11px;font-weight:700;color:'+st.cl+';white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(d.type||"Document légal")+'</div>'+
+        '<div style="font-size:9.5px;color:'+st.cl+';opacity:.8;margin-top:2px">'+
+          (d.numero?esc(d.numero)+' · ':'')+
+          (d.dateExp?'Expire le '+new Date(d.dateExp).toLocaleDateString("fr-FR"):'')+
+        '</div>'+
+        '<div style="margin-top:5px;display:flex;align-items:center;gap:5px">'+
+          '<span style="font-size:9px;font-weight:700;color:'+st.cl+';background:rgba(0,0,0,.08);padding:1px 7px;border-radius:20px">'+st.label+'</span>'+
+          (dismissed?
+            '<span style="font-size:9px;color:#27500A;background:#EAF3DE;padding:1px 7px;border-radius:20px;font-weight:600">✓ Vu</span>':
+            '<button onclick="_dismissDocLegal('+realIdx+');_renderBellDD()" style="font-size:9px;padding:1px 7px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.1);border-radius:20px;cursor:pointer;font-family:inherit;color:'+st.cl+';font-weight:600">✓ Vu</button>'
+          )+
+          '<button onclick="go(\'documents_legaux\');_closeBellDD()" style="font-size:9px;padding:1px 7px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.1);border-radius:20px;cursor:pointer;font-family:inherit;color:'+st.cl+';font-weight:600">Voir →</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  });
+
+  /* ── Règlements ── */
   rglA.forEach(function(r){
     var st=_alertStatus(r.datePrevue);
     var retard=r.datePrevue<today;
@@ -13596,9 +13919,13 @@ function _checkAlerteMessages(){
   if(!S.documents)S.documents=[];
   var today=_todayStr();
 
-  /* Docs dont l'alerte est active ET pas encore dismissée aujourd'hui */
+  /* Docs module Alertes actifs et non dismissés */
   var actifs=S.documents.filter(function(d){
     return _docAlerteActive(d)&&_docNonDismis(d);
+  });
+  /* Docs légaux expirant dans 60j et non dismissés */
+  var docsLegA=(S.docsLegaux||[]).filter(function(d){
+    return _docsLegauxAlerteActive(d)&&_docsLegauxNonDismis(d);
   });
   /* Règlements impayés à échéance <= 7 jours */
   var d7=7*24*3600*1000;
@@ -13608,10 +13935,12 @@ function _checkAlerteMessages(){
     return r.statut!=="regle"&&r.datePrevue&&r.datePrevue<=in7Str;
   });
 
-  if(actifs.length===0&&rglA.length===0)return;
+  if(actifs.length===0&&docsLegA.length===0&&rglA.length===0)return;
 
   /* Construction du contenu du popup */
   var rows="";
+
+  /* Docs module Alertes */
   actifs.forEach(function(d){
     var st=_alertStatus(d.dateExpiration);
     var ico=(_DOC_TYPES[d.type]||"📁 Autre").split(" ")[0];
@@ -13627,6 +13956,27 @@ function _checkAlerteMessages(){
         '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">'+
           '<span style="font-size:10px;font-weight:700;color:'+st.cl+';background:rgba(0,0,0,.09);padding:2px 9px;border-radius:20px">'+st.label+'</span>'+
           '<button onclick="_dismissDocAlerte(\''+d.id+'\')" style="font-size:9.5px;padding:2px 9px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.1);border-radius:20px;cursor:pointer;font-family:inherit;color:'+st.cl+';font-weight:600">✓ Vu pour aujourd\'hui</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  });
+
+  /* Docs légaux expirant */
+  docsLegA.forEach(function(d){
+    var realIdx=(S.docsLegaux||[]).indexOf(d);
+    var st=_alertStatus(d.dateExp);
+    rows+='<div id="alrt_dl_'+realIdx+'" style="display:flex;align-items:flex-start;gap:11px;background:'+st.bg+';border:1px solid rgba(0,0,0,.07);border-radius:10px;padding:11px 13px;margin-bottom:8px">'+
+      '<div style="font-size:22px;line-height:1;flex-shrink:0">📄</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div style="font-size:12px;font-weight:800;color:'+st.cl+'">'+esc(d.type||"Document légal")+'</div>'+
+        '<div style="font-size:10px;color:'+st.cl+';opacity:.8;margin-top:2px">'+
+          (d.numero?'Réf. '+esc(d.numero)+' · ':'')+
+          (d.dateExp?'Expiration : <strong>'+new Date(d.dateExp).toLocaleDateString("fr-FR")+'</strong>':'')+
+        '</div>'+
+        '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">'+
+          '<span style="font-size:10px;font-weight:700;color:'+st.cl+';background:rgba(0,0,0,.09);padding:2px 9px;border-radius:20px">'+st.label+'</span>'+
+          '<button onclick="_dismissDocLegal('+realIdx+')" style="font-size:9.5px;padding:2px 9px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.1);border-radius:20px;cursor:pointer;font-family:inherit;color:'+st.cl+';font-weight:600">✓ Vu</button>'+
+          '<button onclick="go(\'documents_legaux\');document.getElementById(\'_alertMsgDlg\').remove()" style="font-size:9.5px;padding:2px 9px;background:rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.1);border-radius:20px;cursor:pointer;font-family:inherit;color:'+st.cl+';font-weight:600">Voir →</button>'+
         '</div>'+
       '</div>'+
     '</div>';
@@ -13663,7 +14013,7 @@ function _checkAlerteMessages(){
         '<div style="width:38px;height:38px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔔</div>'+
         '<div style="flex:1">'+
           '<div style="font-size:14px;font-weight:800;color:#fff">Alertes documents</div>'+
-          '<div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:1px">'+(actifs.length+rglA.length)+' alerte(s) active(s) aujourd\'hui</div>'+
+          '<div style="font-size:10px;color:rgba(255,255,255,.6);margin-top:1px">'+(actifs.length+docsLegA.length+rglA.length)+' alerte(s) active(s) aujourd\'hui</div>'+
         '</div>'+
         '<button onclick="document.getElementById(\'_alertMsgDlg\').remove()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:8px;color:rgba(255,255,255,.7);cursor:pointer;font-size:16px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-family:inherit">✕</button>'+
       '</div>'+
@@ -13680,7 +14030,7 @@ function _checkAlerteMessages(){
 
 /* Dismiss un document pour aujourd'hui */
 function _dismissDocAlerte(id){
-  var d=S.documents.find(function(x){return x.id==id;});
+  var d=(S.documents||[]).find(function(x){return x.id==id;});
   if(!d)return;
   d.alerteDismissedDate=_todayStr();
   sv();
@@ -13688,11 +14038,23 @@ function _dismissDocAlerte(id){
   if(el){el.style.transition="opacity .3s";el.style.opacity="0";setTimeout(function(){el.remove();_refreshAlertPopupCount();},300);}
 }
 
+/* Dismiss un doc légal (par index dans S.docsLegaux) */
+function _dismissDocLegal(idx){
+  var d=(S.docsLegaux||[])[idx];
+  if(!d)return;
+  d.alerteDismissedDate=_todayStr();
+  sv();updAlertBadge();
+}
+
 /* Dismiss tous les docs actifs pour aujourd'hui */
 function _dismissAllAlertes(){
   var today=_todayStr();
   (S.documents||[]).forEach(function(d){
     if(_docAlerteActive(d))d.alerteDismissedDate=today;
+  });
+  /* Aussi les docs légaux expirant */
+  (S.docsLegaux||[]).forEach(function(d){
+    if(_docsLegauxAlerteActive(d))d.alerteDismissedDate=today;
   });
   sv();updAlertBadge();
   var dlg=document.getElementById("_alertMsgDlg");if(dlg)dlg.remove();
@@ -16879,7 +17241,7 @@ function pgPointageOuvriers(){
     joursHdr+='<th style="min-width:22px;padding:4px 2px;font-size:8px;text-align:center;font-weight:700;color:#111;background:'+(isWE?"#FAEEDA":"var(--b50)")+'">'+d+'</th>';
   }
   joursHdr+='<th style="min-width:38px;font-size:8px;text-align:center">Total J</th>'+
-    '<th style="min-width:44px;font-size:8px;text-align:right">H.Sup.</th>'+
+    '<th style="min-width:78px;font-size:8px;text-align:right">H.Sup.</th>'+
     '<th style="min-width:70px;font-size:8px;text-align:right">Prix Total</th>'+
     '<th style="min-width:24px;font-size:8px"></th>';
 
@@ -16925,8 +17287,9 @@ function pgPointageOuvriers(){
       '<td style="padding:5px 7px;text-align:center;font-weight:700;color:var(--b600);font-size:12px">'+totalJ+'</td>'+
       '<td style="padding:5px 7px;text-align:right;font-size:10px">'+
         '<input type="number" min="0" step="0.5" value="'+(hSup||"")+'" placeholder="0" '+
-        'style="width:44px;padding:2px 4px;border:1px solid var(--bdr);border-radius:4px;font-size:10px;text-align:right;background:var(--b50);outline:none" '+
-        'onchange="svPoHS('+oi+',this.value)">'+
+        'style="width:70px;padding:4px 7px;border:1.5px solid var(--bdr);border-radius:6px;font-size:11px;font-weight:600;text-align:right;background:#fff;outline:none;box-shadow:0 1px 4px rgba(55,138,221,.10);transition:border-color .15s" '+
+        'onfocus="this.style.borderColor=\'var(--b400)\'" onblur="this.style.borderColor=\'var(--bdr)\'" '+
+        'oninput="svPoHS('+oi+',this.value)" onchange="svPoHS('+oi+',this.value)">'+
       '</td>'+
       '<td style="padding:5px 7px;text-align:right;font-weight:700;color:var(--b800);font-size:11px" id="poTot_'+oi+'">'+fm(prixTotal)+'</td>'+
       '<td style="padding:5px 4px">'+
@@ -17121,8 +17484,55 @@ function togPoJ(oi,jour){
   if(!ouv.pointage[_poAnnee][_poMois])ouv.pointage[_poAnnee][_poMois]={};
   var cur=ouv.pointage[_poAnnee][_poMois][jour]||0;
   /* Cycle : 0 (vide) → 1 (présent) → 2 (absence) → 0 */
-  ouv.pointage[_poAnnee][_poMois][jour]=(cur+1)%3;
-  sv();pgPointageOuvriers();
+  var next=(cur+1)%3;
+  ouv.pointage[_poAnnee][_poMois][jour]=next;
+  sv();
+  /* ── Mise à jour en place (sans re-rendre la page, sans perdre le focus) ── */
+  var dayOfWeek=new Date(_poAnnee,_poMois-1,jour).getDay();
+  var isWE=(dayOfWeek===0||dayOfWeek===6);
+  var bg=next===1?"#EAF3DE":next===2?"#FAEEDA":isWE?"#FEF9F0":"var(--b50)";
+  var fc=next===1?"#111111":next===2?"#854F0B":"var(--b200)";
+  var symb=next===1?"●":next===2?"A":"·";
+  /* Trouver et mettre à jour la cellule cliquée */
+  var allTds=document.querySelectorAll('td[onclick]');
+  for(var i=0;i<allTds.length;i++){
+    var at=allTds[i].getAttribute('onclick')||'';
+    if(at.indexOf('togPoJ('+oi+','+jour+')')!==-1){
+      allTds[i].style.background=bg;
+      var sp=allTds[i].querySelector('span');
+      if(sp){sp.style.color=fc;sp.textContent=symb;}
+      break;
+    }
+  }
+  /* Recalculer Total J pour cet ouvrier */
+  var nbJM=_nbrJoursMois(_poMois,_poAnnee);
+  var mPts=(ouv.pointage[_poAnnee][_poMois])||{};
+  var totalJ=0;for(var d=1;d<=nbJM;d++)if(mPts[d]===1)totalJ++;
+  var pJ=parseFloat(ouv.prixJour||0);
+  var pH=pJ/9;
+  var hS=parseFloat(ouv.hSup&&ouv.hSup[_poAnnee]&&ouv.hSup[_poAnnee][_poMois]||0);
+  var prixTotal=pJ*totalJ+pH*hS;
+  /* Mettre à jour cellule Total J (5 colonnes fixes + nbJM jours = index 5+nbJM) */
+  var totEl=document.getElementById("poTot_"+oi);
+  if(totEl){
+    var row=totEl.parentNode;
+    var cells=row.querySelectorAll('td');
+    var tjIdx=5+nbJM;
+    if(cells[tjIdx])cells[tjIdx].textContent=totalJ;
+    totEl.textContent=prixTotal.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" Dhs";
+  }
+  /* Recalculer le total général */
+  var totG=0;
+  (S.ouvriers||[]).forEach(function(o2){
+    var p2=o2.pointage||{};
+    var m2=(p2[_poAnnee]&&p2[_poAnnee][_poMois])||{};
+    var tj=0;for(var d2=1;d2<=nbJM;d2++)if(m2[d2]===1)tj++;
+    var pj2=parseFloat(o2.prixJour||0);
+    var hs2=parseFloat(o2.hSup&&o2.hSup[_poAnnee]&&o2.hSup[_poAnnee][_poMois]||0);
+    totG+=pj2*tj+(pj2/9)*hs2;
+  });
+  var totGenEl=document.getElementById("poTotGen");
+  if(totGenEl)totGenEl.textContent=totG.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" Dhs";
 }
 
 /* ════════════════════════════════════════════════════════
@@ -17683,17 +18093,18 @@ function pgPointagePermanents(){
         '<span style="font-size:9px;font-weight:600;color:'+fc+'">'+symb+'</span></td>';
     }
     return '<tr style="border-bottom:1px solid var(--bdr)">'+
-      '<td style="padding:5px 7px;font-weight:600;color:var(--b900);font-size:11px;white-space:nowrap">'+esc(perm.nom)+'</td>'+
-      '<td style="padding:5px 7px;font-size:10px;color:var(--b400)">'+esc(perm.poste||"—")+'</td>'+
+      '<td id="ppC_'+pi+'_nm" ondblclick="_ppDblCell(\'ppC_'+pi+'_nm\',\'text\','+pi+',\'nom\')" title="Double-clic pour modifier" style="padding:5px 7px;font-weight:600;color:var(--b900);font-size:11px;white-space:nowrap;cursor:pointer" data-raw="'+esc(perm.nom||'')+'" onmouseenter="this.style.background=\'rgba(55,138,221,.07)\'" onmouseleave="this.style.background=\'\'">'+esc(perm.nom)+'</td>'+
+      '<td id="ppC_'+pi+'_ps" ondblclick="_ppDblCell(\'ppC_'+pi+'_ps\',\'text\','+pi+',\'poste\')" title="Double-clic pour modifier" style="padding:5px 7px;font-size:10px;color:var(--b400);cursor:pointer" data-raw="'+esc(perm.poste||'')+'" onmouseenter="this.style.background=\'rgba(55,138,221,.07)\'" onmouseleave="this.style.background=\'\'">'+esc(perm.poste||"—")+'</td>'+
       '<td style="padding:5px 7px">'+chantierCell+'</td>'+
-      '<td style="padding:5px 7px;text-align:right;font-size:10px;font-weight:600">'+fm(salaireMois)+'</td>'+
+      '<td id="ppC_'+pi+'_sm" ondblclick="_ppDblCell(\'ppC_'+pi+'_sm\',\'number\','+pi+',\'salaireMois\',\'right\')" title="Double-clic pour modifier" style="padding:5px 7px;text-align:right;font-size:10px;font-weight:600;cursor:pointer" data-raw="'+(perm.salaireMois||'')+'" onmouseenter="this.style.background=\'rgba(55,138,221,.07)\'" onmouseleave="this.style.background=\'\'">'+fm(salaireMois)+'</td>'+
       '<td style="padding:5px 7px;text-align:right;font-size:10px;color:var(--b600);font-weight:600">'+fm(tauxJour)+'</td>'+
       jsCells+
       '<td style="padding:5px 7px;text-align:center;font-weight:700;color:var(--b600);font-size:12px">'+totalJ+'</td>'+
       '<td style="padding:5px 7px;text-align:right;font-size:10px">'+
         '<input type="number" min="0" step="0.5" value="'+(hSup||"")+'" placeholder="0" '+
-        'style="width:44px;padding:2px 4px;border:1px solid var(--bdr);border-radius:4px;font-size:10px;text-align:right;background:var(--b50);outline:none" '+
-        'onchange="svPpHS('+pi+',this.value)">'+
+        'style="width:70px;padding:4px 7px;border:1.5px solid var(--bdr);border-radius:6px;font-size:11px;font-weight:600;text-align:right;background:#fff;outline:none;box-shadow:0 1px 4px rgba(55,138,221,.10);transition:border-color .15s" '+
+        'onfocus="this.style.borderColor=\'var(--b400)\'" onblur="this.style.borderColor=\'var(--bdr)\'" '+
+        'oninput="svPpHS('+pi+',this.value)" onchange="svPpHS('+pi+',this.value)">'+
       '</td>'+
       '<td style="padding:5px 7px;text-align:right;font-weight:700;color:var(--b800);font-size:11px" id="ppTot_'+pi+'">'+fm(salaireNet)+'</td>'+
       '<td style="padding:5px 4px">'+
@@ -17751,6 +18162,7 @@ function pgPointagePermanents(){
     '<div><div class="PT">Pointage des Salariés Permanents</div>'+
     '<div class="PS">'+(S.permanents.length)+' salarié(s) permanent(s) — '+moisNoms[_ppMois]+' '+_ppAnnee+'</div></div>'+
     '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+
+    '<button class="B BW" onclick="ppAutoPanel()" style="background:linear-gradient(135deg,#FAEEDA,#FFF3BF);border-color:#FAC775;color:#854F0B;font-weight:700;display:flex;align-items:center;gap:5px">⚡ Auto-Pointage</button>'+
     '<button class="B BP" onclick="opPpAdd()">+ Ajouter un salarié permanent</button>'+
     '</div>'+
     '</div>'+
@@ -17777,7 +18189,7 @@ function pgPointagePermanents(){
       '<tbody>'+rows+'</tbody>'+
       '<tfoot><tr style="background:var(--b50)">'+
         '<td colspan="5" style="padding:6px 9px;font-weight:700;color:var(--b800)">Total général du mois</td>'+
-        '<td colspan="'+(nbJ+3)+'" style="padding:6px 9px;text-align:right;font-weight:700;color:var(--b600);font-size:13px">'+fm(totGeneral)+'</td>'+
+        '<td colspan="'+(nbJ+3)+'" style="padding:6px 9px;text-align:right;font-weight:700;color:var(--b600);font-size:13px" id="ppTotGen">'+fm(totGeneral)+'</td>'+
         '<td></td></tr></tfoot>'+
       '</table></div>'+legende+'</div>':
       '<div class="CD" style="margin-bottom:.625rem"><div style="text-align:center;padding:2rem;color:var(--b200);font-size:12px">Aucun salarié permanent pour ce filtre.</div></div>')+
@@ -17795,8 +18207,206 @@ function pgPointagePermanents(){
     '<div class="CD">'+
     '<div class="CDH"><span class="CDT">Exporter le pointage</span></div>'+
     '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+    '<button class="B BSm BD" onclick="expPpPDF()">📄 Exporter PDF complet</button>'+
+    '<button class="B BSm BP" onclick="expPpSimplifiePDF()">📋 PDF Synthèse (Nom · Poste · Jours · H.Sup · Total)</button>'+
     '<button class="B BSm BW" onclick="expPpCSV()">📊 Exporter Excel/CSV</button>'+
+    '<button class="B BSm BL" onclick="pgPpRecapAnnuel()">📅 Récap annuel</button>'+
     '</div></div>');
+}
+
+/* ── Double-clic édition inline permanents ── */
+function _ppDblCell(cellId,type,pi,field,align){
+  _inlineEdit(cellId,type,function(v){
+    var p=(S.permanents||[])[pi];if(!p)return;
+    if(field==='nom'){v=v.trim();if(!v)return;p.nom=v;}
+    else if(field==='poste'){p.poste=v.trim();}
+    else if(field==='salaireMois'){var s=parseFloat(v);if(isNaN(s)||s<0)return;p.salaireMois=s;}
+    _showToast('Salarié permanent modifié','ok');sv();pgPointagePermanents();
+  },align);
+}
+
+/* ── Auto-Pointage panel permanents ── */
+function ppAutoPanel(){
+  var moisNoms=["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  var today=new Date();
+  var todayD=today.getDate(),todayM=today.getMonth()+1,todayY=today.getFullYear();
+  var isMoisActuel=(todayY===_ppAnnee&&todayM===_ppMois);
+  var nbJ=_nbrJoursMois(_ppMois,_ppAnnee);
+  var joursOuvres=0;for(var d=1;d<=nbJ;d++){var dw=new Date(_ppAnnee,_ppMois-1,d).getDay();if(dw!==0&&dw!==6)joursOuvres++;}
+  var perms=(_ppFiltProjet&&_ppFiltProjet!=="__none__")?(S.permanents||[]).filter(function(p){return String(p.projetId||"")===_ppFiltProjet;}):
+    (_ppFiltProjet==="__none__")?(S.permanents||[]).filter(function(p){return !p.projetId;}):
+    (S.permanents||[]);
+  showM(
+    '<div class="MOH"><span class="MOT">⚡ Pointage Automatique — Permanents</span><button class="B BSm" onclick="cM()">Fermer</button></div>'+
+    '<div style="background:linear-gradient(135deg,var(--b50),#EAF3DE);border:1px solid var(--b200);border-radius:10px;padding:12px 14px;margin-bottom:14px">'+
+      '<div style="font-size:11px;font-weight:700;color:var(--b800);margin-bottom:3px">📅 '+moisNoms[_ppMois]+' '+_ppAnnee+' — '+perms.length+' salarié(s) affiché(s)</div>'+
+      '<div style="font-size:10px;color:var(--b600)">'+joursOuvres+' jours ouvrés (Lun–Ven) dans ce mois</div>'+
+    '</div>'+
+    '<div style="display:flex;flex-direction:column;gap:8px">'+
+    (isMoisActuel?
+      '<button onclick="cM();ppAutoAujourdhui()" style="padding:11px 14px;background:linear-gradient(135deg,#27500A,#3B6D11);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:9px;text-align:left">'+
+        '<span style="font-size:20px">📅</span>'+
+        '<div><div>Pointer tous présents — Aujourd\'hui ('+todayD+'/'+todayM+')</div>'+
+        '<div style="font-size:9.5px;opacity:.8;font-weight:400">Marque tous les salariés affichés Présents pour aujourd\'hui seulement</div></div>'+
+      '</button>':"")+
+    '<button onclick="cM();ppAutoMoisComplet()" style="padding:11px 14px;background:linear-gradient(135deg,#185FA5,#378ADD);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:9px;text-align:left">'+
+      '<span style="font-size:20px">📆</span>'+
+      '<div><div>Pointer tous présents — Mois complet (jours ouvrés)</div>'+
+      '<div style="font-size:9.5px;opacity:.8;font-weight:400">Rempli automatiquement tous les Lun–Ven pour les salariés affichés. Les absences déjà saisies sont préservées.</div></div>'+
+    '</button>'+
+    '<button onclick="cM();ppResetMoisAll()" style="padding:11px 14px;background:linear-gradient(135deg,#791F1F,#A32D2D);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:9px;text-align:left">'+
+      '<span style="font-size:20px">🗑</span>'+
+      '<div><div>Effacer le pointage du mois (tous)</div>'+
+      '<div style="font-size:9.5px;opacity:.8;font-weight:400">Supprime tout le pointage des salariés affichés pour ce mois. Irréversible.</div></div>'+
+    '</button>'+
+    '</div>'+
+    '<div style="margin-top:14px;padding:9px 12px;background:#FAEEDA;border:1px solid #FAC775;border-radius:8px;font-size:10px;color:#633806">'+
+      '💡 <strong>Conseil :</strong> Pour pointer un salarié spécifique sur tout le mois, utilisez le bouton <strong>⚡</strong> sur sa ligne dans le tableau.'+
+    '</div>'
+  );
+}
+
+function ppAutoAujourdhui(){
+  var today=new Date();var d=today.getDate(),m=today.getMonth()+1,y=today.getFullYear();
+  if(y!==_ppAnnee||m!==_ppMois){_showToast("Le mois affiché n'est pas le mois en cours","err");return;}
+  var perms=(_ppFiltProjet&&_ppFiltProjet!=="__none__")?(S.permanents||[]).filter(function(p){return String(p.projetId||"")===_ppFiltProjet;}):
+    (_ppFiltProjet==="__none__")?(S.permanents||[]).filter(function(p){return !p.projetId;}):(S.permanents||[]);
+  perms.forEach(function(p){
+    if(!p.pointage)p.pointage={};
+    if(!p.pointage[y])p.pointage[y]={};
+    if(!p.pointage[y][m])p.pointage[y][m]={};
+    p.pointage[y][m][d]=1;
+  });
+  sv();pgPointagePermanents();_showToast("Tous présents aujourd'hui ✓","ok");
+}
+
+function ppAutoMoisComplet(){
+  var perms=(_ppFiltProjet&&_ppFiltProjet!=="__none__")?(S.permanents||[]).filter(function(p){return String(p.projetId||"")===_ppFiltProjet;}):
+    (_ppFiltProjet==="__none__")?(S.permanents||[]).filter(function(p){return !p.projetId;}):(S.permanents||[]);
+  var nbJ=_nbrJoursMois(_ppMois,_ppAnnee);
+  perms.forEach(function(p){
+    if(!p.pointage)p.pointage={};
+    if(!p.pointage[_ppAnnee])p.pointage[_ppAnnee]={};
+    if(!p.pointage[_ppAnnee][_ppMois])p.pointage[_ppAnnee][_ppMois]={};
+    for(var d=1;d<=nbJ;d++){
+      var dw=new Date(_ppAnnee,_ppMois-1,d).getDay();
+      if(dw!==0&&dw!==6&&p.pointage[_ppAnnee][_ppMois][d]!==2)p.pointage[_ppAnnee][_ppMois][d]=1;
+    }
+  });
+  sv();pgPointagePermanents();_showToast("Mois complet pointé ✓","ok");
+}
+
+function ppResetMoisAll(){
+  var moisNoms=["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  var perms=(_ppFiltProjet&&_ppFiltProjet!=="__none__")?(S.permanents||[]).filter(function(p){return String(p.projetId||"")===_ppFiltProjet;}):
+    (_ppFiltProjet==="__none__")?(S.permanents||[]).filter(function(p){return !p.projetId;}):(S.permanents||[]);
+  _confirmDlg("Effacer tout le pointage — "+moisNoms[_ppMois]+" "+_ppAnnee,
+    perms.length+" salarié(s) : tout le pointage de ce mois sera supprimé.",function(){
+      perms.forEach(function(p){if(p.pointage&&p.pointage[_ppAnnee])p.pointage[_ppAnnee][_ppMois]={};});
+      sv();pgPointagePermanents();_showToast("Pointage du mois effacé","ok");
+    });
+}
+
+/* ── Récap annuel permanents ── */
+function pgPpRecapAnnuel(){
+  var moisNoms=["Jan","Fév","Mar","Avr","Mai","Jun","Jul","Aoû","Sep","Oct","Nov","Déc"];
+  var year=_ppAnnee;
+  if(!S.permanents||!S.permanents.length){_showToast("Aucun salarié permanent","err");return;}
+  var rows=S.permanents.map(function(perm){
+    var totalAn=0,totalSal=0;
+    var mCells=moisNoms.map(function(mn,mi){
+      var m=mi+1;
+      var nbJ2=_nbrJoursMois(m,year);
+      var mPts=((perm.pointage||{})[year]||{})[m]||{};
+      var j=0;for(var d=1;d<=nbJ2;d++)if(mPts[d]===1)j++;
+      var sal=parseFloat(perm.salaireMois||0);
+      var tJ=nbJ2>0?(sal/nbJ2):0;
+      var hS=parseFloat((perm.hSup&&perm.hSup[year]&&perm.hSup[year][m])||0);
+      var net=tJ*j+(tJ/8)*hS;
+      totalAn+=j;totalSal+=net;
+      return '<td style="text-align:center;padding:5px 4px;font-size:10px;color:'+(j>0?'var(--b800)':'var(--b200)')+'">'+j+'</td>';
+    }).join("");
+    return '<tr>'+
+      '<td style="padding:6px 9px;font-weight:600;white-space:nowrap">'+esc(perm.nom||"")+'</td>'+
+      '<td style="padding:6px 9px;font-size:10px;color:var(--b400)">'+esc(perm.poste||"—")+'</td>'+
+      mCells+
+      '<td style="text-align:center;font-weight:700;color:var(--b600);padding:6px 4px">'+totalAn+'</td>'+
+      '<td style="text-align:right;font-weight:700;color:var(--b800);padding:6px 9px">'+fm(totalSal)+'</td></tr>';
+  }).join("");
+  showM('<div class="MOH"><span class="MOT">📅 Récap annuel Permanents '+year+'</span><button class="B BSm" onclick="cM()">Fermer</button></div>'+
+    '<div style="overflow-x:auto;max-height:420px">'+
+    '<table style="min-width:700px"><thead><tr>'+
+    '<th style="text-align:left;padding:6px 9px">Salarié</th>'+
+    '<th style="text-align:left;padding:6px 9px">Poste</th>'+
+    moisNoms.map(function(m){return'<th style="text-align:center;padding:5px 4px;font-size:9px">'+m+'</th>';}).join("")+
+    '<th style="text-align:center;padding:5px 4px">Total J</th>'+
+    '<th style="text-align:right;padding:6px 9px">Total Sal.</th>'+
+    '</tr></thead><tbody>'+rows+'</tbody></table></div>');
+}
+
+/* ── Export CSV permanents (existant) ── */
+
+/* ── Export PDF complet permanents ── */
+function expPpPDF(){
+  var moisNoms=["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  var nbJ=_nbrJoursMois(_ppMois,_ppAnnee);
+  var w=window.open('','_blank');
+  var hdr='<tr><th>Nom & Prénom</th><th>Poste</th><th>Salaire/Mois</th><th>Taux/Jour</th>';
+  for(var d=1;d<=nbJ;d++)hdr+='<th>'+d+'</th>';
+  hdr+='<th>Total J</th><th>H.Sup.</th><th>Salaire Net</th></tr>';
+  var rows2='';var totG=0;
+  (S.permanents||[]).forEach(function(perm){
+    var mPts=((perm.pointage||{})[_ppAnnee]||{})[_ppMois]||{};
+    var totalJ=0;for(var d2=1;d2<=nbJ;d2++)if(mPts[d2]===1)totalJ++;
+    var sal=parseFloat(perm.salaireMois||0);var nbJ2=_nbrJoursMois(_ppMois,_ppAnnee);
+    var tJ=nbJ2>0?(sal/nbJ2):0;
+    var hS=parseFloat((perm.hSup&&perm.hSup[_ppAnnee]&&perm.hSup[_ppAnnee][_ppMois])||0);
+    var net=tJ*totalJ+(tJ/8)*hS;totG+=net;
+    var cells='';
+    for(var d3=1;d3<=nbJ;d3++){var e=mPts[d3]||0;cells+='<td style="text-align:center;font-size:9px;padding:2px">'+(e===1?'●':e===2?'A':'')+'</td>';}
+    rows2+='<tr><td>'+esc(perm.nom||"")+'</td><td>'+esc(perm.poste||"")+'</td><td style="text-align:right">'+fm(sal)+'</td><td style="text-align:right">'+fm(tJ)+'</td>'+cells+'<td style="text-align:center;font-weight:700">'+totalJ+'</td><td style="text-align:center">'+hS+'</td><td style="text-align:right;font-weight:700">'+fm(net)+'</td></tr>';
+  });
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Pointage Permanents '+moisNoms[_ppMois]+' '+_ppAnnee+'</title>'+
+    '<style>body{font-family:system-ui,sans-serif;font-size:9pt;color:#042C53;margin:15pt}'+
+    'h2{color:#1b5e20;font-size:13pt;margin-bottom:4pt}'+
+    'table{border-collapse:collapse;width:100%}th{background:#1b5e20;color:#fff;padding:5px 6px;font-size:8pt;text-align:left}'+
+    'td{padding:3px 5px;border-bottom:1px solid #e8ecf2;font-size:8pt}'+
+    'tr:nth-child(even)td{background:#f5f9f5}tfoot td{font-weight:700;background:#e8f5e9}</style></head><body>'+
+    '<h2>📋 Pointage des Salariés Permanents — '+moisNoms[_ppMois]+' '+_ppAnnee+'</h2>'+
+    '<p style="font-size:9pt;color:#666;margin-bottom:10pt">'+(S.soc&&S.soc.nom?S.soc.nom:'')+(S.soc&&S.soc.nom?' · ':'')+nbJ+' jours dans le mois</p>'+
+    '<table><thead>'+hdr+'</thead><tbody>'+rows2+'</tbody>'+
+    '<tfoot><tr><td colspan="12" style="padding:5px 6px">Total général</td><td style="text-align:right;color:#1b5e20">'+fm(totG)+'</td></tr></tfoot></table>'+
+    '</body></html>');
+  w.document.close();setTimeout(function(){w.print();},400);
+}
+
+/* ── Export PDF synthèse permanents ── */
+function expPpSimplifiePDF(){
+  var moisNoms=["","Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  var w=window.open('','_blank');
+  var rows2='';var totG=0;
+  (S.permanents||[]).forEach(function(perm){
+    var nbJ2=_nbrJoursMois(_ppMois,_ppAnnee);
+    var mPts=((perm.pointage||{})[_ppAnnee]||{})[_ppMois]||{};
+    var totalJ=0;for(var d=1;d<=nbJ2;d++)if(mPts[d]===1)totalJ++;
+    var sal=parseFloat(perm.salaireMois||0);var tJ=nbJ2>0?(sal/nbJ2):0;
+    var hS=parseFloat((perm.hSup&&perm.hSup[_ppAnnee]&&perm.hSup[_ppAnnee][_ppMois])||0);
+    var net=tJ*totalJ+(tJ/8)*hS;totG+=net;
+    rows2+='<tr><td>'+esc(perm.nom||"")+'</td><td>'+esc(perm.poste||"")+'</td><td style="text-align:center;font-weight:700">'+totalJ+'</td><td style="text-align:center">'+hS+'</td><td style="text-align:right;font-weight:700;color:#1b5e20">'+fm(net)+'</td></tr>';
+  });
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Synthèse Permanents '+moisNoms[_ppMois]+' '+_ppAnnee+'</title>'+
+    '<style>body{font-family:system-ui,sans-serif;font-size:10pt;color:#042C53;margin:20pt}'+
+    'h2{color:#1b5e20;font-size:14pt}table{border-collapse:collapse;width:100%;max-width:500pt}'+
+    'th{background:#1b5e20;color:#fff;padding:7px 10px;font-size:9pt;text-align:left}'+
+    'td{padding:5px 9px;border-bottom:1px solid #e0f2e0;font-size:9.5pt}'+
+    'tr:nth-child(even)td{background:#f5f9f5}tfoot td{font-weight:700;background:#e8f5e9;font-size:10pt}</style></head><body>'+
+    '<h2>📋 Synthèse Salariés Permanents — '+moisNoms[_ppMois]+' '+_ppAnnee+'</h2>'+
+    '<p style="font-size:9pt;color:#666;margin-bottom:10pt">'+(S.soc&&S.soc.nom?S.soc.nom:'')+'</p>'+
+    '<table><thead><tr><th>Nom & Prénom</th><th>Poste</th><th style="text-align:center">Jours</th><th style="text-align:center">H.Sup.</th><th style="text-align:right">Salaire Net</th></tr></thead>'+
+    '<tbody>'+rows2+'</tbody>'+
+    '<tfoot><tr><td colspan="4">TOTAL</td><td style="text-align:right;color:#1b5e20">'+fm(totG)+'</td></tr></tfoot></table>'+
+    '</body></html>');
+  w.document.close();setTimeout(function(){w.print();},400);
 }
 
 function togPpJ(pi,jour){
@@ -17806,8 +18416,68 @@ function togPpJ(pi,jour){
   if(!perm.pointage[_ppAnnee])perm.pointage[_ppAnnee]={};
   if(!perm.pointage[_ppAnnee][_ppMois])perm.pointage[_ppAnnee][_ppMois]={};
   var cur=perm.pointage[_ppAnnee][_ppMois][jour]||0;
-  perm.pointage[_ppAnnee][_ppMois][jour]=(cur+1)%3;
-  sv();pgPointagePermanents();
+  var next=(cur+1)%3;
+  perm.pointage[_ppAnnee][_ppMois][jour]=next;
+  sv();
+
+  /* ── Mise à jour en place de la cellule cliquée ── */
+  var dow=new Date(_ppAnnee,_ppMois-1,jour).getDay();
+  var isWE=(dow===0||dow===6);
+  var bg=next===1?"#EAF3DE":next===2?"#FAEEDA":isWE?"#FEF9F0":"var(--b50)";
+  var fc=next===1?"#111111":next===2?"#854F0B":"var(--b200)";
+  var symb=next===1?"●":next===2?"A":"·";
+  var allTds=document.querySelectorAll('td[onclick]');
+  for(var i=0;i<allTds.length;i++){
+    var at=allTds[i].getAttribute('onclick')||'';
+    if(at.indexOf('togPpJ('+pi+','+jour+')')!==-1){
+      allTds[i].style.background=bg;
+      var sp=allTds[i].querySelector('span');
+      if(sp){sp.style.color=fc;sp.textContent=symb;}
+      break;
+    }
+  }
+
+  /* ── Recalculer Total J et Salaire Net de la ligne ── */
+  var nbJM=_nbrJoursMois(_ppMois,_ppAnnee);
+  var mPts=(perm.pointage[_ppAnnee][_ppMois])||{};
+  var totalJ=0;for(var d=1;d<=nbJM;d++)if(mPts[d]===1)totalJ++;
+  var sal=parseFloat(perm.salaireMois||0);
+  var tJ=nbJM>0?(sal/nbJM):0;
+  var hS=parseFloat(perm.hSup&&perm.hSup[_ppAnnee]&&perm.hSup[_ppAnnee][_ppMois]||0);
+  var net=tJ*totalJ+(tJ/8)*hS;
+  var totEl=document.getElementById("ppTot_"+pi);
+  if(totEl){
+    var row=totEl.parentNode;
+    var cells=row.querySelectorAll('td');
+    var tjIdx=5+nbJM;  /* 5 colonnes fixes (nom,poste,chantier,salaire/mois,taux/jour) */
+    if(cells[tjIdx])cells[tjIdx].textContent=totalJ;
+    totEl.textContent=net.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" Dhs";
+  }
+
+  /* ── Recalculer le total général du pied de tableau ── */
+  var totG=0;
+  (S.permanents||[]).forEach(function(p2){
+    var nbJM2=_nbrJoursMois(_ppMois,_ppAnnee);
+    var m2=((p2.pointage||{})[_ppAnnee]||{})[_ppMois]||{};
+    var tj2=0;for(var d2=1;d2<=nbJM2;d2++)if(m2[d2]===1)tj2++;
+    var sal2=parseFloat(p2.salaireMois||0);
+    var tJ2=nbJM2>0?(sal2/nbJM2):0;
+    var hs2=parseFloat(p2.hSup&&p2.hSup[_ppAnnee]&&p2.hSup[_ppAnnee][_ppMois]||0);
+    totG+=tJ2*tj2+(tJ2/8)*hs2;
+  });
+  var totGenEl=document.getElementById("ppTotGen");
+  if(!totGenEl){
+    /* Chercher la cellule de total dans le tfoot */
+    var tfoots=document.querySelectorAll('tfoot td');
+    for(var k=0;k<tfoots.length;k++){
+      if(tfoots[k].id==="ppTotGen"||(tfoots[k].colSpan>1&&tfoots[k].style.textAlign==="right")){
+        tfoots[k].textContent=totG.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" Dhs";
+        break;
+      }
+    }
+  } else {
+    totGenEl.textContent=totG.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" Dhs";
+  }
 }
 
 function svPpHS(pi,val){
@@ -17817,6 +18487,28 @@ function svPpHS(pi,val){
   if(!perm.hSup[_ppAnnee])perm.hSup[_ppAnnee]={};
   perm.hSup[_ppAnnee][_ppMois]=parseFloat(val)||0;
   sv();
+  /* Mise à jour en place de la cellule Salaire Net */
+  var nbJM=_nbrJoursMois(_ppMois,_ppAnnee);
+  var mPts=((perm.pointage||{})[_ppAnnee]||{})[_ppMois]||{};
+  var totalJ=0;for(var d=1;d<=nbJM;d++)if(mPts[d]===1)totalJ++;
+  var sal=parseFloat(perm.salaireMois||0);
+  var tJ=nbJM>0?(sal/nbJM):0;
+  var hS=parseFloat(val)||0;
+  var net=tJ*totalJ+(tJ/8)*hS;
+  var totEl=document.getElementById("ppTot_"+pi);
+  if(totEl)totEl.textContent=net.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" Dhs";
+  /* Recalculer total général */
+  var totG=0;
+  (S.permanents||[]).forEach(function(p2){
+    var nbJM2=_nbrJoursMois(_ppMois,_ppAnnee);
+    var m2=((p2.pointage||{})[_ppAnnee]||{})[_ppMois]||{};
+    var tj2=0;for(var d2=1;d2<=nbJM2;d2++)if(m2[d2]===1)tj2++;
+    var sal2=parseFloat(p2.salaireMois||0);var tJ2=nbJM2>0?(sal2/nbJM2):0;
+    var hs2=parseFloat(p2.hSup&&p2.hSup[_ppAnnee]&&p2.hSup[_ppAnnee][_ppMois]||0);
+    totG+=tJ2*tj2+(tJ2/8)*hs2;
+  });
+  var totGenEl=document.getElementById("ppTotGen");
+  if(totGenEl)totGenEl.textContent=totG.toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" Dhs";
 }
 
 function ppAutoMois(pi){
@@ -19509,33 +20201,208 @@ function drUpdateRecu(respId,recuId){
 function drOpenAddDep(id){
   var r=(S.depResponsables||[]).find(function(x){return x.id===id;});if(!r)return;
   var solde=_drReste(r);
-  var typeOpts=_depAllTypes().map(function(t){return'<option>'+esc(t)+'</option>';}).join("");
-  var catOpts=['Main d\'œuvre','Matériaux','Équipement','Transport','Sous-traitance','Divers'].map(function(c){return'<option>'+c+'</option>';}).join("");
+  var soldePct=_drPct(_drTotalDep(r),_drTotalRecu(r));
+  var typeOpts=_depAllTypes().map(function(t){return'<option>'+esc(t)+'</option>';}).join('');
   var allProj=S.projects.concat(S.completed||[]);
   var marcheOpts='<option value="">— Sélectionner un marché —</option>'+
     allProj.map(function(p){
       var sel=(r.numMarche&&r.numMarche===(p.numMarche||''))?' selected':'';
       var label=(p.numMarche?esc(p.numMarche)+' — ':'')+esc(p.name);
       return'<option value="'+(p.numMarche||p.id)+'"'+sel+'>'+label+'</option>';
-    }).join("");
+    }).join('');
+
+  /* ── Suggestions désignation depuis l'historique ── */
+  var pastDesig=[];var seen={};
+  (S.depResponsables||[]).forEach(function(resp){
+    (resp.depenses||[]).forEach(function(d){
+      if(d.designation&&!d.isTransfer&&!seen[d.designation]){seen[d.designation]=1;pastDesig.push(d.designation);}
+    });
+  });
+
+  /* ── Chips catégorie ── */
+  var catDef=[
+    {c:'Main d\'œuvre',ic:'👷'},
+    {c:'Matériaux',ic:'🧱'},
+    {c:'Équipement',ic:'⚙️'},
+    {c:'Transport',ic:'🚛'},
+    {c:'Sous-traitance',ic:'🤝'},
+    {c:'Divers',ic:'📦'}
+  ];
+  var catChips=catDef.map(function(x,i){
+    var isLast=(i===catDef.length-1);
+    return '<button type="button" class="drCatChip" data-cat="'+esc(x.c)+'" onclick="drPickCat(this,\''+esc(x.c)+'\')"'+
+      ' style="display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;'+
+      (isLast?'background:#1565C0;border:1.5px solid #1565C0;color:#fff':'background:#E3F2FD;border:1.5px solid #BBDEFB;color:#1565C0')+'">'+
+      x.ic+' '+x.c+'</button>';
+  }).join('');
+
+  /* ── Montants rapides ── */
+  var quickAmts=[500,1000,2000,5000,10000];
+  var quickBtns=quickAmts.map(function(v){
+    return '<button type="button" onclick="(function(){var inp=document.getElementById(\'drDepMnt\');if(inp){inp.value='+v+';drDepChkMnt('+v+','+JSON.stringify(solde)+')}})();"'+
+      ' style="padding:4px 12px;border:1.5px solid #BBDEFB;border-radius:20px;background:#E3F2FD;color:#1565C0;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .12s"'+
+      ' onmouseover="this.style.background=\'#1565C0\';this.style.color=\'#fff\';this.style.borderColor=\'#1565C0\'"'+
+      ' onmouseout="this.style.background=\'#E3F2FD\';this.style.color=\'#1565C0\';this.style.borderColor=\'#BBDEFB\'">'+
+      v.toLocaleString('fr-FR')+'</button>';
+  }).join('');
+
+  var barColor=soldePct<60?'#66BB6A':soldePct<85?'#FFA726':'#EF5350';
+  var soldeValColor=solde>0?'#A5D6A7':'#EF9A9A';
+
   showM(
-    '<div class="MOH"><span class="MOT">💸 Saisir une Dépense — '+esc(r.nom)+'</span><button class="B BSm" onclick="cM()">Fermer</button></div>'+
-    '<div class="'+(solde>0?"ALS":"ALD")+'" style="margin-bottom:8px">Solde disponible : <strong>'+fm(solde)+'</strong></div>'+
-    '<div class="FR">'+
-    '<div class="FG"><label>Catégorie</label>'+
-    '<select id="drDepCat" style="padding:6px 9px;border:1.5px solid var(--bdr);border-radius:7px;background:var(--b50);font-size:11px;outline:none;font-family:inherit">'+catOpts+'</select></div>'+
-    '<div class="FG" style="max-width:140px"><label>Date</label><input type="date" lang="fr-FR" id="drDepDate" value="'+new Date().toISOString().split("T")[0]+'"></div>'+
+    /* ── Header premium ── */
+    '<div style="background:linear-gradient(135deg,#1565C0 0%,#0D47A1 100%);padding:15px 18px 14px;margin:-1px -1px 0;border-radius:13px 13px 0 0">'+
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">'+
+    '<div style="display:flex;align-items:center;gap:11px">'+
+    '<div style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.17);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">💸</div>'+
+    '<div>'+
+    '<div style="font-size:14px;font-weight:800;color:#fff;letter-spacing:-.01em">Saisir une Dépense</div>'+
+    '<div style="font-size:11px;color:rgba(255,255,255,.72);margin-top:1px">'+esc(r.nom)+' · <em>'+esc(r.projet)+'</em></div>'+
+    '</div></div>'+
+    '<button onclick="cM()" style="width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.14);border:none;color:rgba(255,255,255,.9);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">✕</button>'+
     '</div>'+
-    '<div class="FG" style="margin-bottom:8px"><label>Désignation</label><input id="drDepDes" placeholder="Ex: Achat ciment 40 sacs…"></div>'+
-    '<div class="FR">'+
-    '<div class="FG"><label>Montant (Dhs)</label><input type="number" id="drDepMnt" placeholder="0" min="0"></div>'+
-    '<div class="FG"><label>Type comptable</label>'+
-    '<select id="drDepType" style="padding:6px 9px;border:1.5px solid var(--bdr);border-radius:7px;background:var(--b50);font-size:11px;outline:none;font-family:inherit">'+typeOpts+'</select></div>'+
+    /* mini barre solde dans header */
+    '<div style="background:rgba(0,0,0,.22);border-radius:10px;padding:9px 12px">'+
+    '<div style="display:flex;justify-content:space-between;margin-bottom:5px">'+
+    '<span style="font-size:9.5px;color:rgba(255,255,255,.75);font-weight:700;text-transform:uppercase;letter-spacing:.07em">Solde disponible</span>'+
+    '<span style="font-size:13px;font-weight:800;color:'+soldeValColor+'">'+fm(solde)+'</span>'+
     '</div>'+
-    '<div class="FG" style="margin-bottom:8px"><label>🏷️ N° Marché affecté</label>'+
-    '<select id="drDepMarche" style="width:100%;padding:6px 9px;border:1.5px solid var(--bdr);border-radius:7px;background:var(--b50);font-size:11px;outline:none;font-family:inherit;font-weight:600">'+marcheOpts+'</select></div>'+
-    '<button class="B BP" style="width:100%;margin-top:10px" onclick="drSaveDep('+id+')">Enregistrer</button>'
+    '<div style="height:5px;background:rgba(255,255,255,.18);border-radius:3px;overflow:hidden">'+
+    '<div style="height:100%;width:'+soldePct+'%;background:'+barColor+';border-radius:3px"></div>'+
+    '</div>'+
+    '<div style="font-size:9px;color:rgba(255,255,255,.5);margin-top:4px">'+soldePct+'% du budget utilisé</div>'+
+    '</div>'+
+    '</div>'+
+
+    /* ── Body ── */
+    '<div style="padding:15px 18px 18px">'+
+
+    /* Catégorie chips */
+    '<div style="margin-bottom:13px">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px">📂 Catégorie</label>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px" id="drCatChipWrap">'+catChips+'</div>'+
+    '<input type="hidden" id="drDepCat" value="Divers">'+
+    '</div>'+
+
+    /* Désignation + autocomplete */
+    '<div style="margin-bottom:12px;position:relative">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">✏️ Désignation <span style="color:#E53935">*</span></label>'+
+    '<input id="drDepDes" placeholder="Ex: Achat ciment 40 sacs, carburant engin 200L…" autocomplete="off"'+
+    ' oninput="drDepSuggest(this.value)"'+
+    ' onfocus="drDepSuggest(this.value)"'+
+    ' onblur="setTimeout(function(){var d=document.getElementById(\'drDepSugDd\');if(d)d.style.display=\'none\'},200)"'+
+    ' onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();drSaveDep('+id+');}if(event.key===\'Escape\'){var d=document.getElementById(\'drDepSugDd\');if(d)d.style.display=\'none\';}"'+
+    ' style="width:100%;padding:9px 13px;border:1.5px solid #BBDEFB;border-radius:9px;font-size:12px;font-family:inherit;outline:none;background:#F8FBFF;transition:border-color .15s;box-sizing:border-box"'+
+    ' onfocusin="this.style.borderColor=\'#1976D2\';this.style.boxShadow=\'0 0 0 3px rgba(21,101,192,.1)\'"'+
+    ' onfocusout="this.style.borderColor=\'#BBDEFB\';this.style.boxShadow=\'none\'">'+
+    '<div id="drDepSugDd" style="display:none;position:absolute;left:0;right:0;top:calc(100% + 3px);background:#fff;border:1.5px solid #BBDEFB;border-radius:10px;box-shadow:0 8px 28px rgba(4,44,83,.13);z-index:700;max-height:168px;overflow-y:auto"></div>'+
+    '</div>'+
+
+    /* Montant + Date */
+    '<div style="display:flex;gap:10px;margin-bottom:6px">'+
+    '<div style="flex:1">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">💰 Montant (Dhs) <span style="color:#E53935">*</span></label>'+
+    '<input type="number" id="drDepMnt" placeholder="0.00" min="0" step="0.01"'+
+    ' oninput="drDepChkMnt(parseFloat(this.value)||0,'+JSON.stringify(solde)+')"'+
+    ' onkeydown="if(event.key===\'Enter\'){event.preventDefault();drSaveDep('+id+');}"'+
+    ' style="width:100%;padding:9px 13px;border:1.5px solid #BBDEFB;border-radius:9px;font-size:14px;font-weight:700;font-family:inherit;outline:none;background:#F8FBFF;transition:border-color .15s,box-shadow .15s;box-sizing:border-box"'+
+    ' onfocusin="this.style.borderColor=\'#1976D2\';this.style.boxShadow=\'0 0 0 3px rgba(21,101,192,.1)\'"'+
+    ' onfocusout="this.style.borderColor=\'#BBDEFB\';this.style.boxShadow=\'none\'">'+
+    '</div>'+
+    '<div style="max-width:148px">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">📅 Date</label>'+
+    '<input type="date" lang="fr-FR" id="drDepDate" value="'+new Date().toISOString().split('T')[0]+'"'+
+    ' style="width:100%;padding:9px 11px;border:1.5px solid #BBDEFB;border-radius:9px;font-size:11px;font-family:inherit;outline:none;background:#F8FBFF;transition:border-color .15s;box-sizing:border-box"'+
+    ' onfocusin="this.style.borderColor=\'#1976D2\'" onfocusout="this.style.borderColor=\'#BBDEFB\'">'+
+    '</div>'+
+    '</div>'+
+
+    /* Feedback montant */
+    '<div id="drDepMntFb" style="font-size:9.5px;color:#90A4AE;min-height:16px;margin-bottom:10px;padding-left:2px"></div>'+
+
+    /* Montants rapides */
+    '<div style="margin-bottom:13px">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">⚡ Montants rapides</label>'+
+    '<div style="display:flex;gap:5px;flex-wrap:wrap">'+quickBtns+'</div>'+
+    '</div>'+
+
+    /* Type + Marché */
+    '<div style="display:flex;gap:10px;margin-bottom:16px">'+
+    '<div style="flex:1">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">📋 Type comptable</label>'+
+    '<select id="drDepType" style="width:100%;padding:9px 12px;border:1.5px solid #BBDEFB;border-radius:9px;background:#F8FBFF;font-size:11px;outline:none;font-family:inherit;box-sizing:border-box">'+typeOpts+'</select>'+
+    '</div>'+
+    '<div style="flex:1">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">🏷️ N° Marché</label>'+
+    '<select id="drDepMarche" style="width:100%;padding:9px 12px;border:1.5px solid #BBDEFB;border-radius:9px;background:#F8FBFF;font-size:11px;outline:none;font-family:inherit;font-weight:600;box-sizing:border-box">'+marcheOpts+'</select>'+
+    '</div>'+
+    '</div>'+
+
+    /* Suggestions data */
+    '<script type="application/json" id="_drSugData">'+JSON.stringify(pastDesig.slice(0,40))+'<\/script>'+
+
+    /* Bouton enregistrer */
+    '<button onclick="drSaveDep('+id+')"'+
+    ' style="width:100%;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#1976D2,#0D47A1);color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(13,71,161,.28);transition:opacity .15s"'+
+    ' onmouseover="this.style.opacity=\'.88\'" onmouseout="this.style.opacity=\'1\'">'+
+    '💾 Enregistrer la dépense'+
+    '</button>'+
+    '</div>'
   );
+
+  /* ── Initialisation JS post-affichage ── */
+  setTimeout(function(){
+    /* Auto-focus désignation */
+    var inp=document.getElementById('drDepDes');
+    if(inp)inp.focus();
+
+    /* Chip sélection */
+    window.drPickCat=function(btn,cat){
+      document.querySelectorAll('.drCatChip').forEach(function(b){
+        b.style.background='#E3F2FD';b.style.borderColor='#BBDEFB';b.style.color='#1565C0';
+      });
+      btn.style.background='#1565C0';btn.style.borderColor='#1565C0';btn.style.color='#fff';
+      var h=document.getElementById('drDepCat');if(h)h.value=cat;
+    };
+
+    /* Autocomplete désignation */
+    window.drDepSuggest=function(q){
+      var dd=document.getElementById('drDepSugDd');if(!dd)return;
+      var dataEl=document.getElementById('_drSugData');
+      var all=[];try{all=JSON.parse(dataEl?dataEl.textContent:'[]');}catch(e){}
+      var qLow=(q||'').toLowerCase().trim();
+      if(!qLow||qLow.length<2){dd.style.display='none';return;}
+      var matches=all.filter(function(s){return s.toLowerCase().indexOf(qLow)>=0;}).slice(0,8);
+      if(!matches.length){dd.style.display='none';return;}
+      dd.innerHTML=matches.map(function(s){
+        var hi=s.replace(new RegExp('('+qLow.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<strong style="color:#1565C0">$1</strong>');
+        return '<div onclick="document.getElementById(\'drDepDes\').value='+JSON.stringify(s)+';document.getElementById(\'drDepSugDd\').style.display=\'none\'"'+
+          ' style="padding:8px 13px;cursor:pointer;font-size:11px;color:#334155;border-bottom:1px solid #E3F2FD;display:flex;align-items:center;gap:7px"'+
+          ' onmouseover="this.style.background=\'#E3F2FD\'" onmouseout="this.style.background=\'\'">'+
+          '<span style="color:#90CAF9;font-size:10px">🔍</span>'+hi+'</div>';
+      }).join('');
+      dd.style.display='block';
+    };
+
+    /* Feedback montant temps réel */
+    window.drDepChkMnt=function(mnt,solde){
+      var fb=document.getElementById('drDepMntFb');
+      var inp=document.getElementById('drDepMnt');
+      if(!fb||!inp)return;
+      if(!mnt||mnt<=0){fb.textContent='';inp.style.borderColor='#BBDEFB';return;}
+      var reste=solde-mnt;
+      if(mnt>solde&&solde>=0){
+        fb.innerHTML='⚠️ Dépasse le solde de <strong style="color:#C62828">'+fm(mnt-solde)+'</strong>';
+        inp.style.borderColor='#EF5350';inp.style.boxShadow='0 0 0 3px rgba(239,83,80,.12)';
+      } else if(mnt>solde*0.8&&solde>0){
+        fb.innerHTML='⚡ Solde restant : <strong style="color:#E65100">'+fm(reste)+'</strong>';
+        inp.style.borderColor='#FF9800';inp.style.boxShadow='0 0 0 3px rgba(255,152,0,.1)';
+      } else {
+        fb.innerHTML='✓ Solde restant : <strong style="color:#2E7D32">'+fm(reste)+'</strong>';
+        inp.style.borderColor='#66BB6A';inp.style.boxShadow='0 0 0 3px rgba(102,187,106,.1)';
+      }
+    };
+  },80);
 }
 function drSaveDep(id){
   var r=(S.depResponsables||[]).find(function(x){return x.id===id;});if(!r)return;
@@ -19570,8 +20437,7 @@ function drDelDep(respId,depId){
 function drOpenEditDep(respId,depId){
   var r=(S.depResponsables||[]).find(function(x){return x.id===respId;});if(!r)return;
   var dep=(r.depenses||[]).find(function(x){return x.id===depId;});if(!dep||dep.isTransfer)return;
-  var catOpts=['Main d\'œuvre','Matériaux','Équipement','Transport','Sous-traitance','Divers'].map(function(c){return'<option'+(dep.cat===c?" selected":"")+'>'+c+'</option>';}).join("");
-  var typeOpts=_depAllTypes().map(function(t){return'<option'+(dep.type===t?" selected":"")+'>'+esc(t)+'</option>';}).join("");
+  var typeOpts=_depAllTypes().map(function(t){return'<option'+(dep.type===t?' selected':'')+'>'+esc(t)+'</option>';}).join('');
   var allProj=S.projects.concat(S.completed||[]);
   var curMarche=dep.numMarche||dep.chantierMarche||r.numMarche||'';
   var marcheOptsEdit='<option value="">— Sélectionner un marché —</option>'+
@@ -19581,24 +20447,108 @@ function drOpenEditDep(respId,depId){
       var sel=(matchById||matchByMarche)?' selected':'';
       var label=(p.numMarche?esc(p.numMarche)+' — ':'')+esc(p.name);
       return'<option value="'+p.id+'"'+sel+'>'+label+'</option>';
-    }).join("");
+    }).join('');
+
+  /* Chips catégorie avec préselection */
+  var catDef=[
+    {c:'Main d\'œuvre',ic:'👷'},{c:'Matériaux',ic:'🧱'},{c:'Équipement',ic:'⚙️'},
+    {c:'Transport',ic:'🚛'},{c:'Sous-traitance',ic:'🤝'},{c:'Divers',ic:'📦'}
+  ];
+  var curCat=dep.cat||'Divers';
+  var catChipsE=catDef.map(function(x){
+    var active=(x.c===curCat);
+    return '<button type="button" class="drCatChipE" data-cat="'+esc(x.c)+'" onclick="drPickCatE(this,\''+esc(x.c)+'\')"'+
+      ' style="display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:20px;font-size:10.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;'+
+      (active?'background:#1565C0;border:1.5px solid #1565C0;color:#fff':'background:#E3F2FD;border:1.5px solid #BBDEFB;color:#1565C0')+'">'+
+      x.ic+' '+x.c+'</button>';
+  }).join('');
+
+  /* Style helper */
+  var fldStyle='width:100%;padding:9px 13px;border:1.5px solid #BBDEFB;border-radius:9px;font-size:12px;font-family:inherit;outline:none;background:#F8FBFF;transition:border-color .15s;box-sizing:border-box';
+  var focIn='this.style.borderColor=\'#1976D2\';this.style.boxShadow=\'0 0 0 3px rgba(21,101,192,.1)\'';
+  var focOut='this.style.borderColor=\'#BBDEFB\';this.style.boxShadow=\'none\'';
+
   showM(
-    '<div class="MOH"><span class="MOT">✏️ Modifier Dépense — '+esc(r.nom)+'</span><button class="B BSm" onclick="cM()">Fermer</button></div>'+
-    '<div class="FR">'+
-    '<div class="FG"><label>Catégorie</label>'+
-    '<select id="drDepCat" style="padding:6px 9px;border:1.5px solid var(--bdr);border-radius:7px;background:var(--b50);font-size:11px;outline:none;font-family:inherit">'+catOpts+'</select></div>'+
-    '<div class="FG" style="max-width:140px"><label>Date</label><input type="date" lang="fr-FR" id="drDepDate" value="'+esc(dep.date||"")+'"></div>'+
+    /* Header */
+    '<div style="background:linear-gradient(135deg,#4A148C 0%,#1565C0 100%);padding:15px 18px 14px;margin:-1px -1px 0;border-radius:13px 13px 0 0">'+
+    '<div style="display:flex;align-items:center;justify-content:space-between">'+
+    '<div style="display:flex;align-items:center;gap:11px">'+
+    '<div style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.17);display:flex;align-items:center;justify-content:center;font-size:22px">✏️</div>'+
+    '<div>'+
+    '<div style="font-size:14px;font-weight:800;color:#fff">Modifier la Dépense</div>'+
+    '<div style="font-size:11px;color:rgba(255,255,255,.72);margin-top:1px">'+esc(r.nom)+' · '+esc(dep.designation||'...')+'</div>'+
+    '</div></div>'+
+    '<button onclick="cM()" style="width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.14);border:none;color:rgba(255,255,255,.9);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>'+
     '</div>'+
-    '<div class="FG" style="margin-bottom:8px"><label>Désignation</label><input id="drDepDes" value="'+esc(dep.designation||"")+'"></div>'+
-    '<div class="FG" style="margin-bottom:8px"><label>🏷️ N° Marché affecté</label>'+
-    '<select id="drDepMarche" style="width:100%;padding:6px 9px;border:1.5px solid var(--bdr);border-radius:7px;background:var(--b50);font-size:11px;outline:none;font-family:inherit;font-weight:600">'+marcheOptsEdit+'</select></div>'+
-    '<div class="FR">'+
-    '<div class="FG"><label>Montant (Dhs)</label><input type="number" id="drDepMnt" value="'+esc(dep.montant||0)+'" min="0"></div>'+
-    '<div class="FG"><label>Type comptable</label>'+
-    '<select id="drDepType" style="padding:6px 9px;border:1.5px solid var(--bdr);border-radius:7px;background:var(--b50);font-size:11px;outline:none;font-family:inherit">'+typeOpts+'</select></div>'+
     '</div>'+
-    '<button class="B BP" style="width:100%;margin-top:10px" onclick="drUpdateDep('+respId+',\''+depId+'\')">Enregistrer</button>'
+
+    /* Body */
+    '<div style="padding:15px 18px 18px">'+
+
+    /* Catégorie chips */
+    '<div style="margin-bottom:13px">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px">📂 Catégorie</label>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px">'+catChipsE+'</div>'+
+    '<input type="hidden" id="drDepCat" value="'+esc(curCat)+'">'+
+    '</div>'+
+
+    /* Désignation */
+    '<div style="margin-bottom:12px">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">✏️ Désignation <span style="color:#E53935">*</span></label>'+
+    '<input id="drDepDes" value="'+esc(dep.designation||'')+'"'+
+    ' onkeydown="if(event.key===\'Enter\'){event.preventDefault();drUpdateDep('+respId+',\''+depId+'\');}"'+
+    ' style="'+fldStyle+'" onfocusin="'+focIn+'" onfocusout="'+focOut+'">'+
+    '</div>'+
+
+    /* Montant + Date */
+    '<div style="display:flex;gap:10px;margin-bottom:14px">'+
+    '<div style="flex:1">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">💰 Montant (Dhs) <span style="color:#E53935">*</span></label>'+
+    '<input type="number" id="drDepMnt" value="'+esc(dep.montant||0)+'" min="0" step="0.01"'+
+    ' onkeydown="if(event.key===\'Enter\'){event.preventDefault();drUpdateDep('+respId+',\''+depId+'\');}"'+
+    ' style="'+fldStyle+';font-size:14px;font-weight:700" onfocusin="'+focIn+'" onfocusout="'+focOut+'">'+
+    '</div>'+
+    '<div style="max-width:148px">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">📅 Date</label>'+
+    '<input type="date" lang="fr-FR" id="drDepDate" value="'+esc(dep.date||'')+'"'+
+    ' style="'+fldStyle+';font-size:11px" onfocusin="'+focIn.replace('13px','11px')+'" onfocusout="'+focOut+'">'+
+    '</div>'+
+    '</div>'+
+
+    /* Type + Marché */
+    '<div style="display:flex;gap:10px;margin-bottom:16px">'+
+    '<div style="flex:1">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">📋 Type comptable</label>'+
+    '<select id="drDepType" style="'+fldStyle+';font-size:11px">'+typeOpts+'</select>'+
+    '</div>'+
+    '<div style="flex:1">'+
+    '<label style="display:block;font-size:9.5px;font-weight:800;color:#4A7AB5;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">🏷️ N° Marché</label>'+
+    '<select id="drDepMarche" style="'+fldStyle+';font-size:11px;font-weight:600">'+marcheOptsEdit+'</select>'+
+    '</div>'+
+    '</div>'+
+
+    /* Bouton */
+    '<button onclick="drUpdateDep('+respId+',\''+depId+'\')"'+
+    ' style="width:100%;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#6A1B9A,#1565C0);color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(106,27,154,.25);transition:opacity .15s"'+
+    ' onmouseover="this.style.opacity=\'.88\'" onmouseout="this.style.opacity=\'1\'">'+
+    '💾 Enregistrer les modifications'+
+    '</button>'+
+    '</div>'
   );
+
+  setTimeout(function(){
+    /* Auto-focus désignation */
+    var inp=document.getElementById('drDepDes');
+    if(inp){inp.focus();inp.select();}
+    /* Chip selection pour edit */
+    window.drPickCatE=function(btn,cat){
+      document.querySelectorAll('.drCatChipE').forEach(function(b){
+        b.style.background='#E3F2FD';b.style.borderColor='#BBDEFB';b.style.color='#1565C0';
+      });
+      btn.style.background='#1565C0';btn.style.borderColor='#1565C0';btn.style.color='#fff';
+      var h=document.getElementById('drDepCat');if(h)h.value=cat;
+    };
+  },80);
 }
 function drUpdateDep(respId,depId){
   var r=(S.depResponsables||[]).find(function(x){return x.id===respId;});if(!r)return;
@@ -20890,7 +21840,7 @@ body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
    TABLE — PREMIUM STYLE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 th {
-  background: linear-gradient(90deg, #042C53, #0C447C);
+  background: linear-gradient(90deg, #1b5e20, #2e7d32);
   color: rgba(255,255,255,.85) !important;
   font-size: 9.5px; letter-spacing: .07em;
   padding: 9px 10px;
@@ -21329,7 +22279,7 @@ tr:hover td {
 /* ─── Tables ─── */
 table { border-spacing: 0; border-collapse: collapse; width: 100%; }
 th {
-  background: linear-gradient(90deg,#042C53,#0D4B82) !important;
+  background: linear-gradient(90deg,#1b5e20,#2e7d32) !important;
   color: rgba(255,255,255,.9) !important;
   font-size: 9.5px !important; font-weight: 700 !important;
   letter-spacing: .08em !important; padding: 10px 12px !important;
@@ -24356,264 +25306,7 @@ function _animCount(el,target,duration){
 console.log('%c✅ ASI GROUP BTP — Améliorations Premium activées','color:#4ADE80;font-weight:700;font-size:13px');
 </script>
 
-<!-- ═══════════════════════════════════════════════════════════════════
-     BARRE D'ACTIONS GLOBALE — Modifier · Partager · Retour
-     ═══════════════════════════════════════════════════════════════════ -->
-<style>
-/* ── Barre d'actions flottante ── */
-#_globalActionBar {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 8000;
-  display: none; /* caché par défaut, affiché après login */
-  align-items: center;
-  gap: 6px;
-  background: rgba(4,44,83,.92);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(55,138,221,.3);
-  border-radius: 50px;
-  padding: 7px 10px;
-  box-shadow: 0 12px 40px rgba(4,44,83,.45), 0 2px 8px rgba(4,44,83,.25), 0 0 0 1px rgba(255,255,255,.06);
-  transition: opacity .25s, transform .25s;
-}
-#_globalActionBar.hidden {
-  opacity: 0;
-  transform: translateX(-50%) translateY(14px);
-  pointer-events: none;
-}
-
-/* ── Boutons de la barre ── */
-.gab-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 40px;
-  font-size: 11.5px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: inherit;
-  letter-spacing: .02em;
-  transition: all .18s cubic-bezier(.22,.8,.4,1);
-  white-space: nowrap;
-}
-.gab-btn:hover { transform: translateY(-2px); }
-.gab-btn:active { transform: scale(.95); }
-
-/* Retour */
-#_gabBack {
-  background: rgba(255,255,255,.10);
-  color: rgba(255,255,255,.80);
-  border: 1px solid rgba(255,255,255,.12);
-}
-#_gabBack:hover {
-  background: rgba(255,255,255,.18);
-  color: #fff;
-  border-color: rgba(255,255,255,.25);
-}
-
-/* Modifier */
-#_gabEdit {
-  background: linear-gradient(135deg,#1565C0,#1976D2);
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(21,101,192,.4);
-}
-#_gabEdit:hover {
-  background: linear-gradient(135deg,#1976D2,#2196F3);
-  box-shadow: 0 6px 20px rgba(21,101,192,.55);
-}
-
-/* Partager */
-#_gabShare {
-  background: linear-gradient(135deg,#00897B,#00ACC1);
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(0,172,193,.35);
-}
-#_gabShare:hover {
-  background: linear-gradient(135deg,#00ACC1,#26C6DA);
-  box-shadow: 0 6px 20px rgba(0,172,193,.5);
-}
-
-/* Séparateur */
-.gab-sep {
-  width: 1px;
-  height: 24px;
-  background: rgba(255,255,255,.12);
-  flex-shrink: 0;
-  margin: 0 2px;
-}
-
-/* Page indicator */
-#_gabPageLbl {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: rgba(255,255,255,.45);
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  padding: 0 6px 0 8px;
-  max-width: 140px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ── Modal Partager ── */
-#_shareModal {
-  position: fixed;
-  inset: 0;
-  z-index: 9500;
-  display: none;
-  align-items: flex-end;
-  justify-content: center;
-  background: rgba(4,44,83,.5);
-  backdrop-filter: blur(4px);
-  padding: 0 0 80px;
-}
-#_shareModal.open { display: flex; }
-#_sharePanel {
-  background: #fff;
-  border-radius: 20px 20px 16px 16px;
-  padding: 20px;
-  width: min(100%, 400px);
-  box-shadow: 0 -8px 40px rgba(4,44,83,.2);
-  animation: shareSlide .22s cubic-bezier(.22,.8,.4,1) both;
-}
-@keyframes shareSlide {
-  from { opacity:0; transform:translateY(20px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-.share-opt {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background .12s;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: #042C53;
-}
-.share-opt:hover { background: #E3F2FD; }
-.share-opt-ico {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-/* ── Modal Modifier ── */
-#_editModal {
-  position: fixed;
-  inset: 0;
-  z-index: 9500;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(4,44,83,.55);
-  backdrop-filter: blur(2px);
-  padding: 1rem;
-}
-#_editModal.open { display: flex; }
-#_editPanel {
-  background: #fff;
-  border-radius: 18px;
-  padding: 22px;
-  width: min(100%, 440px);
-  box-shadow: 0 20px 60px rgba(4,44,83,.3);
-  animation: shareSlide .22s cubic-bezier(.22,.8,.4,1) both;
-}
-.edit-action-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background .12s;
-  font-size: 12px;
-  font-weight: 600;
-  color: #042C53;
-  border: 1px solid transparent;
-}
-.edit-action-row:hover { background: #E3F2FD; border-color: #BBDEFB; }
-.edit-action-ico {
-  width: 38px;
-  height: 38px;
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-</style>
-
-<!-- Barre d'actions flottante -->
-<div id="_globalActionBar">
-  <span id="_gabPageLbl">Accueil</span>
-  <div class="gab-sep"></div>
-
-  <!-- Retour -->
-  <button id="_gabBack" class="gab-btn" onclick="_gabGoBack()" title="Retour à la page précédente">
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10 4L6 8l4 4"/></svg>
-    Retour
-  </button>
-
-  <!-- Modifier -->
-  <button id="_gabEdit" class="gab-btn" onclick="_gabOpenEdit()" title="Modifier / Actions rapides">
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11.5 2.5l2 2-9 9H2.5v-2l9-9z"/></svg>
-    Modifier
-  </button>
-
-  <!-- Partager -->
-  <button id="_gabShare" class="gab-btn" onclick="_gabOpenShare()" title="Partager / Exporter">
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="4" r="1.8"/><circle cx="4" cy="8" r="1.8"/><circle cx="12" cy="12" r="1.8"/><path d="M10.3 4.9L5.7 7.1M5.7 8.9l4.6 2.2"/></svg>
-    Partager
-  </button>
-</div>
-
-<!-- Modal Partager -->
-<div id="_shareModal" onclick="if(event.target===this)_gabCloseShare()">
-  <div id="_sharePanel">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div style="font-size:14px;font-weight:800;color:#042C53">Partager / Exporter</div>
-      <button onclick="_gabCloseShare()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#90A4AE;padding:2px">✕</button>
-    </div>
-    <div id="_shareOptions"></div>
-  </div>
-</div>
-
-<!-- Modal Modifier -->
-<div id="_editModal" onclick="if(event.target===this)_gabCloseEdit()">
-  <div id="_editPanel">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div>
-        <div style="font-size:14px;font-weight:800;color:#042C53">Actions rapides</div>
-        <div id="_editPageTitle" style="font-size:10px;color:#90A4AE;margin-top:2px"></div>
-      </div>
-      <button onclick="_gabCloseEdit()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#90A4AE;padding:2px">✕</button>
-    </div>
-    <div id="_editOptions"></div>
-  </div>
-</div>
-
 <script>
-/* ═══════════════════════════════════════════════════════════════════
-   BARRE D'ACTIONS GLOBALE — Logique JS
-   ═══════════════════════════════════════════════════════════════════ */
-
-/* ── Historique de navigation ── */
-
-
 /* ══════════════════════════════════════════════════════════════════════
    MODULE COMPTABILITÉ COMPLET — ASI GROUP BTP
    Pages : Tableau de bord · Journal · Grand livre · Balance · Bilan
@@ -26161,284 +26854,8 @@ window._calViewEvt = function(id) {
   document.body.appendChild(modal);
 };
 
-
-var _gabHistory = [];
-var _gabCurrentPage = '';
-var _gabPageLabels = {
-  accueil:'Accueil',projets:'Projets en cours',realises:'Projets réalisés',
-  factures:'Factures',bc:'Bons de commande',bl:'Bons de livraison',
-  clients:'Clients',societe:'Société',users:'Utilisateurs',
-  contact:'Contact',materiels:'Matériels',vehicules:'Véhicules',
-  stockage:'Stockage',pointage_ouvriers:'Pointage temporaires',
-  pointage_permanents:'Pointage permanents',depenses:'Dépenses',
-  alertes:'Alertes',reglement:'Règlements',ao:'AO (ancien)',
-  appels_offres:'Appels d\'offres',finance_globale:'Finance globale',
-  planning_presence:'Planning présence',prix_unitaires:'Prix unitaires',
-  cautions:'Cautions & garanties',tresorerie:'Trésorerie',stock:'Stock',
-  rh:'Ressources humaines',documents_legaux:'Documents légaux',
-  archivage:'Archivage',rapports:'Rapports',calendrier:'Calendrier',galerie_chantier:'Galerie chantier',
-  carte_chantiers:'Carte chantiers',fiche_paie:'Fiche de paie',
-  classement:'Classement',
-};
-
-/* ── Intercepter go() pour mettre à jour la barre ── */
-(function(){
-  var _origGo = window.go;
-  if(!_origGo) return;
-  window.go = function(p) {
-    /* Empiler dans l'historique si page différente */
-    if (_gabCurrentPage && _gabCurrentPage !== p) {
-      _gabHistory.push(_gabCurrentPage);
-      if (_gabHistory.length > 30) _gabHistory.shift();
-    }
-    _gabCurrentPage = p;
-    _gabUpdateBar(p);
-    _origGo.call(window, p);
-  };
-})();
-
-/* ── Afficher / mettre à jour la barre ── */
-function _gabUpdateBar(page) {
-  var bar = document.getElementById('_globalActionBar');
-  if (!bar) return;
-  bar.style.display = 'flex';
-  var lbl = document.getElementById('_gabPageLbl');
-  if (lbl) lbl.textContent = _gabPageLabels[page] || page;
-  /* Bouton Retour : grisé si pas d'historique */
-  var backBtn = document.getElementById('_gabBack');
-  if (backBtn) {
-    backBtn.style.opacity = _gabHistory.length ? '1' : '0.4';
-    backBtn.style.cursor = _gabHistory.length ? 'pointer' : 'default';
-  }
-}
-
-/* ── Retour ── */
-function _gabGoBack() {
-  if (!_gabHistory.length) {
-    _showToast && _showToast('Vous êtes déjà à la première page', 'warn');
-    return;
-  }
-  var prev = _gabHistory.pop();
-  _gabCurrentPage = prev;
-  _gabUpdateBar(prev);
-  /* Appeler l'original go() sans re-empiler */
-  var _origGo = window._gabOrigGo || window.go;
-  if (typeof _origGo === 'function') {
-    /* Appel direct sans passer par notre wrapper */
-    var bar = document.getElementById('_globalActionBar');
-    _gabCurrentPage = prev;
-    /* Réutiliser le go() courant mais sans empiler */
-    var ps = {accueil:(typeof pgHome!=='undefined'?pgHome:null),classement:pgClassement,projets:function(){pgProjUnified('en_cours');},realises:function(){pgProjUnified('acheve');},bc:pgBC,bl:pgBL,factures:pgFact,clients:pgCli,societe:pgSoc,users:pgUsers,contact:pgCont,materiels:pgMat,vehicules:pgMatVeh,stockage:pgStorage,pointage_ouvriers:pgPointageOuvriers,pointage_permanents:pgPointagePermanents,depenses:pgDepensesGlobales,alertes:pgAlertes,reglement:pgReglement,ao:pgAO,appels_offres:pgAppelsOffres,finance_globale:pgFinanceGlobale,planning_presence:pgPlanningPresence,prix_unitaires:pgPrixUnitaires,cautions:pgCautions,tresorerie:pgTresorerie,stock:pgStock,rh:pgRH,documents_legaux:pgDocumentsLegaux,archivage:pgArchivage,rapports:pgRapports,calendrier:pgCalendrier,calendrier:pgCalendrier,galerie_chantier:pgGalerieChantier,carte_chantiers:pgCarteChantiers,fiche_paie:pgFichePaie,compta_journal:pgComptaJournal,compta_grandlivre:pgComptaGrandLivre,compta_balance:pgComptaBalance,compta_bilan:pgComptaBilan,compta_cpc:pgComptaCPC,compta_tva:pgComptaTVA,compta_rapprochement:pgComptaRapprochement,compta_plan:pgComptaPlan,carte_visite:pgCarteVisite,arrets:pgArrets,demande_caution:pgDemandeCaution};
-    if (ps[prev]) {
-      /* Mettre à jour nav sans re-empiler */
-      document.querySelectorAll('.NI,.NIS').forEach(function(el){el.classList.remove('active');});
-      var n = document.getElementById('nav-'+prev); if (n) n.classList.add('active');
-      ps[prev]();
-    }
-    var backBtn = document.getElementById('_gabBack');
-    if (backBtn) {
-      backBtn.style.opacity = _gabHistory.length ? '1' : '0.4';
-      backBtn.style.cursor = _gabHistory.length ? 'pointer' : 'default';
-    }
-  }
-}
-
-/* ═══ MODAL PARTAGER ═══ */
-var _shareOptionsMap = {
-  accueil: [
-    {ico:'📊',bg:'#E3F2FD',lbl:'Exporter le tableau de bord',sub:'Capture PDF du récap',fn:'_gabShareDashboard'},
-    {ico:'📋',bg:'#E8F5E9',lbl:'Copier le lien de la page',sub:'Partager la section',fn:'_gabCopyLink'},
-    {ico:'🖨',bg:'#FFF3E0',lbl:'Imprimer la page',sub:'Impression directe',fn:'_gabPrint'},
-  ],
-  projets: [
-    {ico:'📄',bg:'#E3F2FD',lbl:'Exporter les projets en PDF',sub:'Liste complète des projets',fn:'_gabExportProjPDF'},
-    {ico:'📊',bg:'#E8F5E9',lbl:'Exporter en Excel (CSV)',sub:'Télécharger tableur',fn:'_gabExportCSV'},
-    {ico:'📋',bg:'#EDE7F6',lbl:'Copier le résumé',sub:'Copier dans le presse-papier',fn:'_gabCopyResume'},
-    {ico:'🖨',bg:'#FFF3E0',lbl:'Imprimer',sub:'Impression directe',fn:'_gabPrint'},
-  ],
-  factures: [
-    {ico:'📄',bg:'#E3F2FD',lbl:'Exporter les factures PDF',sub:'Toutes les factures',fn:'_gabPrint'},
-    {ico:'📊',bg:'#E8F5E9',lbl:'Export CSV',sub:'Télécharger en tableur',fn:'_gabExportCSV'},
-    {ico:'🖨',bg:'#FFF3E0',lbl:'Imprimer',sub:'Impression directe',fn:'_gabPrint'},
-  ],
-  _default: [
-    {ico:'📋',bg:'#E3F2FD',lbl:'Copier le lien de la page',sub:'Partager cette section',fn:'_gabCopyLink'},
-    {ico:'🖨',bg:'#FFF3E0',lbl:'Imprimer la page',sub:'Impression directe',fn:'_gabPrint'},
-    {ico:'📸',bg:'#E8F5E9',lbl:'Capture d\'écran',sub:'Copier en image',fn:'_gabScreenshot'},
-  ]
-};
-
-function _gabOpenShare() {
-  var modal = document.getElementById('_shareModal');
-  var opts = document.getElementById('_shareOptions');
-  if (!modal || !opts) return;
-  var list = _shareOptionsMap[_gabCurrentPage] || _shareOptionsMap['_default'];
-  opts.innerHTML = list.map(function(o) {
-    return '<div class="share-opt" onclick="'+o.fn+'();_gabCloseShare()">'+
-      '<div class="share-opt-ico" style="background:'+o.bg+'">'+o.ico+'</div>'+
-      '<div><div>'+o.lbl+'</div><div style="font-size:10px;color:#90A4AE;font-weight:500;margin-top:1px">'+o.sub+'</div></div>'+
-    '</div>';
-  }).join('');
-  modal.classList.add('open');
-}
-function _gabCloseShare() {
-  var modal = document.getElementById('_shareModal');
-  if (modal) modal.classList.remove('open');
-}
-
-/* ═══ MODAL MODIFIER ═══ */
-var _editOptionsMap = {
-  projets: [
-    {ico:'➕',bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)',lbl:'Nouveau projet',sub:'Créer un projet en cours',fn:"showM?showM(null):null;document.querySelector('[onclick*=\"opNewProj\"]')&&document.querySelector('[onclick*=\"opNewProj\"]').click()"},
-    {ico:'✎',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',lbl:'Modifier un projet',sub:'Sélectionnez un projet à modifier',fn:"go('projets')"},
-    {ico:'✅',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',lbl:'Marquer comme achevé',sub:'Clore un projet en cours',fn:"go('projets')"},
-    {ico:'🔄',bg:'linear-gradient(135deg,#EDE7F6,#CE93D8)',lbl:'Actualiser la liste',sub:'Recharger les données',fn:"go('projets')"},
-  ],
-  factures: [
-    {ico:'➕',bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)',lbl:'Nouvelle facture',sub:'Créer une facture',fn:"document.querySelector('.B.BP')&&document.querySelector('.B.BP').click()"},
-    {ico:'🔄',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',lbl:'Actualiser',sub:'Recharger les factures',fn:"go('factures')"},
-  ],
-  clients: [
-    {ico:'➕',bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)',lbl:'Nouveau client',sub:'Ajouter un client',fn:"document.querySelector('[onclick*=\"opNewCli\"]')&&document.querySelector('[onclick*=\"opNewCli\"]').click()"},
-    {ico:'🔄',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',lbl:'Actualiser',sub:'Recharger',fn:"go('clients')"},
-  ],
-  materiels: [
-    {ico:'➕',bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)',lbl:'Nouveau matériel',sub:'Ajouter un matériel',fn:"document.querySelector('[onclick*=\"opMatAdd\"]')&&document.querySelector('[onclick*=\"opMatAdd\"]').click()"},
-    {ico:'🔄',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',lbl:'Actualiser',sub:'Recharger',fn:"go('materiels')"},
-  ],
-  vehicules: [
-    {ico:'➕',bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)',lbl:'Nouveau véhicule',sub:'Ajouter un véhicule',fn:"document.querySelector('[onclick*=\"opVehAdd\"]')&&document.querySelector('[onclick*=\"opVehAdd\"]').click()"},
-    {ico:'🔄',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',lbl:'Actualiser',sub:'Recharger',fn:"go('vehicules')"},
-  ],
-  depenses: [
-    {ico:'➕',bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)',lbl:'Nouvelle dépense',sub:'Ajouter une dépense',fn:"document.querySelector('[onclick*=\"opDepAdd\"],.dep-btn-add')&&(document.querySelector('[onclick*=\"opDepAdd\"],.dep-btn-add')).click()"},
-    {ico:'🔄',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',lbl:'Actualiser',sub:'Recharger',fn:"go('depenses')"},
-  ],
-  stock: [
-    {ico:'➕',bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)',lbl:'Nouvel article',sub:'Ajouter un article',fn:"showAddStock&&showAddStock()"},
-    {ico:'🔄',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',lbl:'Mouvement de stock',sub:'Entrée / Sortie',fn:"showMvtForm&&showMvtForm()"},
-  ],
-  _default: [
-    {ico:'🔄',bg:'linear-gradient(135deg,#E3F2FD,#BBDEFB)',lbl:'Actualiser la page',sub:'Recharger les données',fn:"go(_gabCurrentPage)"},
-    {ico:'💾',bg:'linear-gradient(135deg,#E8F5E9,#A5D6A7)',lbl:'Sauvegarder',sub:'Enregistrer les modifications',fn:"sv&&sv();_showToast&&_showToast('Données sauvegardées ✅','ok')"},
-    {ico:'🏠',bg:'linear-gradient(135deg,#FFF3E0,#FFCC80)',lbl:'Retour à l\'accueil',sub:'Aller au tableau de bord',fn:"go('accueil')"},
-  ]
-};
-
-function _gabOpenEdit() {
-  var modal = document.getElementById('_editModal');
-  var opts = document.getElementById('_editOptions');
-  var titleEl = document.getElementById('_editPageTitle');
-  if (!modal || !opts) return;
-  if (titleEl) titleEl.textContent = 'Page : ' + (_gabPageLabels[_gabCurrentPage] || _gabCurrentPage);
-  var list = _editOptionsMap[_gabCurrentPage] || _editOptionsMap['_default'];
-  opts.innerHTML = list.map(function(o) {
-    return '<div class="edit-action-row" onclick="(function(){try{'+o.fn+';}catch(e){}});_gabCloseEdit()">'+
-      '<div class="edit-action-ico" style="background:'+o.bg+'">'+o.ico+'</div>'+
-      '<div><div>'+o.lbl+'</div><div style="font-size:10px;color:#90A4AE;font-weight:500;margin-top:1px">'+o.sub+'</div></div>'+
-    '</div>';
-  }).join('');
-  modal.classList.add('open');
-}
-function _gabCloseEdit() {
-  var modal = document.getElementById('_editModal');
-  if (modal) modal.classList.remove('open');
-}
-
-/* ═══ Actions Partager ═══ */
-function _gabPrint() { window.print(); }
-
-function _gabCopyLink() {
-  var url = window.location.href;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(function() {
-      _showToast && _showToast('🔗 Lien copié !', 'ok');
-    });
-  } else {
-    _showToast && _showToast('🔗 ' + url, 'ok');
-  }
-}
-
-function _gabCopyResume() {
-  var mc = document.getElementById('MC');
-  if (!mc) return;
-  var text = mc.innerText.substring(0, 2000);
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(function() {
-      _showToast && _showToast('📋 Résumé copié !', 'ok');
-    });
-  }
-}
-
-function _gabExportCSV() {
-  /* Export générique : tente d'exporter le tableau visible */
-  var tables = document.querySelectorAll('#MC table');
-  if (!tables.length) { _showToast && _showToast('Aucun tableau à exporter', 'warn'); return; }
-  var table = tables[0];
-  var rows = Array.from(table.querySelectorAll('tr'));
-  var csv = rows.map(function(r) {
-    return Array.from(r.querySelectorAll('th,td')).map(function(c) {
-      return '"' + (c.innerText||'').replace(/"/g,'""').replace(/\n/g,' ') + '"';
-    }).join(';');
-  }).join('\n');
-  var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'export_' + (_gabCurrentPage||'page') + '_' + new Date().toISOString().slice(0,10) + '.csv';
-  a.click();
-  _showToast && _showToast('📊 Export CSV téléchargé', 'ok');
-}
-
-function _gabExportProjPDF() {
-  /* Tente d'appeler la fonction PDF existante si disponible */
-  if (typeof exportProjPDF === 'function') { exportProjPDF(); return; }
-  _gabPrint();
-}
-
-function _gabShareDashboard() { _gabPrint(); }
-
-function _gabScreenshot() {
-  _showToast && _showToast('📸 Utilisez la touche Impr Écran pour capturer', 'ok');
-}
-
-/* ── Afficher la barre dès le login ── */
-(function(){
-  var origDoLogin = window._doLogin;
-  /* Patch via MutationObserver sur #AS display */
-  var _gabObserver = new MutationObserver(function() {
-    var as = document.getElementById('AS');
-    if (as && as.style.display !== 'none' && as.style.display !== '') {
-      var bar = document.getElementById('_globalActionBar');
-      if (bar) {
-        bar.style.display = 'flex';
-        _gabUpdateBar(_gabCurrentPage || 'accueil');
-      }
-      _gabObserver.disconnect();
-    }
-  });
-  var as = document.getElementById('AS');
-  if (as) _gabObserver.observe(as, { attributes: true, attributeFilter: ['style'] });
-  else document.addEventListener('DOMContentLoaded', function() {
-    var as2 = document.getElementById('AS');
-    if (as2) _gabObserver.observe(as2, { attributes: true, attributeFilter: ['style'] });
-  });
-})();
-
-/* ── Raccourci clavier : Échap ferme les modals ── */
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    _gabCloseShare();
-    _gabCloseEdit();
-  }
-  /* Alt+← = Retour */
-  if (e.altKey && e.key === 'ArrowLeft') {
-    _gabGoBack();
-    e.preventDefault();
-  }
-});
-
-console.log('%c🎯 Barre d\'actions globale activée (Modifier · Partager · Retour)', 'color:#42A5F5;font-weight:700;font-size:12px');
 </script>
+
 
 <script>
 /* ══════════════════════════════════════════════════════════════════════
